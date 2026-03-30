@@ -44,5 +44,5 @@ This project is developed as part of a Web Programming course using JavaScript, 
 ## Development Method
 This project is developed using the **Scrum methodology**, with tasks organized into sprints and managed through GitHub Issues and Project Board.
 
-## 📌 Status
+## Status
 Project is currently under development.
