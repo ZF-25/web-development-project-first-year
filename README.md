@@ -9,6 +9,7 @@ This project is developed as part of a Web Programming course using JavaScript, 
 * Create and view posts
 * Categories and subcategories
 * Search and filtering
+* Add to favourites (library)
 * User profile and settings
 
 ## Technologies Used
@@ -39,7 +40,7 @@ This project is developed as part of a Web Programming course using JavaScript, 
 
 * **Zainab** – Project Board Management, Backend Setup, Database Setup, User Registration & Login, Integration, Testing, Deployment
 * **Marina** – Subjects, Subcategories, Topics, Filtering, Rating
-* **Ruvindra** – Posts System, User Settings
+* **Ruvindra** – Posts System, Library, User Settings
 
 ## Development Method
 This project is developed using the **Scrum methodology**, with tasks organized into sprints and managed through GitHub Issues and Project Board.
