@@ -1,0 +1,151 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial;
+}
+
+body {
+  background: #1c1c1c;
+}
+
+/* HEADER + FOOTER */
+.custom-header {
+  background: #5A9EA4;
+}
+
+/* LOGO */
+.logo {
+  height: 55px;
+}
+
+.logo-text {
+  font-size: 34px;
+  color: #0d2b3e;
+  font-weight: bold;
+}
+
+/* CONTENT */
+.content {
+  background:
+    linear-gradient(rgba(90,158,164,0.25), rgba(90,158,164,0.25)),
+    url("./images/app-background-image.jpg");
+
+  background-size: 500px;
+  background-repeat: repeat;
+}
+
+/* CARD */
+.login-card {
+  width: 90%;
+  max-width: 360px;
+  padding: 26px;
+
+  background: rgba(255,255,255,0.85);
+  border-radius: 20px;
+
+  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  animation: fadeIn 0.5s ease;
+}
+
+/* TITLE */
+.form-title {
+  text-align: center;
+  color: #0d2b3e;
+  font-size: 22px;
+}
+
+/* INPUTS */
+.form-control {
+  padding: 12px !important;
+  font-size: 14px;
+
+  border-radius: 12px !important;
+  border: 2px solid #5A9EA4 !important;
+
+  background: #dcdcdc;
+  text-align: center;
+}
+
+/* DATE FIX */
+input[type="date"] {
+  padding: 10px !important;
+}
+
+/* INPUT FOCUS */
+.form-control:focus {
+  border-color: #5A9EA4 !important;
+  box-shadow: 0 0 8px rgba(90,158,164,0.5);
+  transform: scale(1.02);
+}
+
+/* BUTTON */
+.login-btn {
+  padding: 12px;
+  border-radius: 12px;
+
+  background: #5A9EA4;
+  color: white;
+
+  border: none;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.login-btn:hover {
+  background: #4a8b90;
+  transform: translateY(-2px);
+}
+
+/* LINKS */
+.register {
+  font-size: 14px;
+}
+
+.register a {
+  font-weight: bold;
+  color: #0d2b3e;
+  text-decoration: none;
+}
+
+.register a:hover {
+  text-decoration: underline;
+}
+
+/* ERROR */
+.error {
+  color: red;
+  text-align: center;
+  min-height: 18px;
+}
+
+/* FOOTER */
+footer a {
+  color: #0d2b3e;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
