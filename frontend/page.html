@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+</head>
+    <link rel="stylesheet" href="page.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Worm — Humanities</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    </style>
+</head>
+<body>
+     <!--looooooolllllll-->
+    <!-- ШАПКА -->
+<!-- ШАПКА -->
+<header class="category-header">
+  <div class="container-fluid">
+    <div class="header-content">
+
+      <!-- Логотип (brain worm) -->
+      <div class="logo">
+        <div class="category-icon">
+          <img src="C:\Users\marin\OneDrive - University of Oulu and Oamk\project\web-development-project-first-year\frontend\images\app-logo-image.png" alt="Brain Worm">
+        </div>
+      </div>
+
+      <!-- Заголовок PHYSICS по центру -->
+      <div class="category-title-wrapper">
+        <div class="category-badge">OPTICS</div>
+      </div>
+
+      <!-- Аватарка справа -->
+      <div class="profile-avatar">
+        <img src="C:\Users\marin\OneDrive - University of Oulu and Oamk\project\web-development-project-first-year\frontend\images\pfp.jpg" alt="Profile">
+      </div>
+
+    </div>
+  </div>
+</header>
+   <div class="background">
+    <!-- ПОИСК + ДОМ -->
+<div class="sub-bar d-flex flex-column flex-md-row align-items-center gap-2">
+  <button class="home-btn" aria-label="home-page">
+   <a href="project.html" class="home-btn"> <img src="C:\Users\marin\OneDrive - University of Oulu and Oamk\project\web-development-project-first-year\frontend\images\home.png" alt="" width="28" height="28"></a>
+  </button>
+
+  <div class="search-container">
+    <span class="search-icon">
+      <img src="C:\Users\marin\OneDrive - University of Oulu and Oamk\project\web-development-project-first-year\frontend\images\search.png" alt="Поиск" width="24" height="24">
+    </span>
+    <input type="text" class="search-input" placeholder="post search...">
+    <!-- После строки поиска добавь эту кнопку -->
+<button id="filter-btn" class="filter-button">Filter</button>
+
+<!-- Сам дропдаун с чекбоксами -->
+<div id="filter-dropdown" class="filter-dropdown">
+  <h4>Chose your topic:</h4>
+  <label><input type="checkbox" value="friction" class="tag-checkbox">Friction</label>
+  <label><input type="checkbox" value="newton" class="tag-checkbox"> Force</label>
+  <label><input type="checkbox" value="mechanics" class="tag-checkbox">Mechanics</label>
+  <label><input type="checkbox" value="electromagnetism" class="tag-checkbox">Electromagnetism</label>
+  <label><input type="checkbox" value="thermodynamics" class="tag-checkbox">Thermodynamics</label>
+  <label><input type="checkbox" value="optics" class="tag-checkbox">Optics</label>
+  
+  <button id="apply-filters" class="apply-btn">Apply</button>
+  <button id="reset-filters" class="reset-btn">Reset</button>
+</div>
+  </div>
+</div>
+  
+    <!-- СПИСОК ПОСТОВ -->
+    <div class="posts-container">
+        <!-- Пост 1 -->
+        <div class="post-row">
+            <div class="post-title"><a href="post.html" class="post-title">name of the post</a></div>
+            <div class="post-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been...</div>
+            <div class="rating">
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+            </div>
+            <div class="author">
+                <span class="author-name">igor</span>
+                <img src="https://i.pravatar.cc/38?u=igor" alt="" class="avatar">
+            </div>
+        </div>
+
+        <!-- Пост 2 -->
+        <div class="post-row">
+            <div class="post-title">smile face</div>
+            <div class="post-desc">Loliki is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been...</div>
+            <div class="rating">
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star">★</span>
+            </div>
+            <div class="author">
+                <span class="author-name">klara lol</span>
+                <img src="https://i.pravatar.cc/38?u=klara" alt="" class="avatar">
+            </div>
+        </div>
+
+        <!-- Пост 3 -->
+        <div class="post-row">
+            <div class="post-title">one more post</div>
+            <div class="post-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry...</div>
+            <div class="rating">
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+            </div>
+            <div class="author">
+                <span class="author-name">Alexander</span>
+                <img src="https://i.pravatar.cc/38?u=alex" alt="" class="avatar">
+            </div>
+        </div>
+
+        <!-- Пост 4 -->
+        <div class="post-row">
+            <div class="post-title">brain</div>
+            <div class="post-desc">Lijsbs jjaajj hhhh babush ia aa of the printing and typesetting industry...</div>
+            <div class="rating">
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star">★</span>
+            </div>
+            <div class="author">
+                <span class="author-name">Muhemed</span>
+                <img src="https://i.pravatar.cc/38?u=muh" alt="" class="avatar">
+            </div>
+        </div>
+
+        <!-- Пост 5 -->
+        <div class="post-row">
+            <div class="post-title">behavior</div>
+            <div class="post-desc">Lorem Ipsum is simply dummy text of the printing and typesetting industry...</div>
+            <div class="rating">
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+            </div>
+            <div class="author">
+                <span class="author-name">MorKovka</span>
+                <img src="https://i.pravatar.cc/38?u=mork" alt="" class="avatar">
+            </div>
+        </div>
+
+        <!-- Пост 6 -->
+        <div class="post-row">
+            <div class="post-title">name of the post</div>
+            <div class="post-desc">letters, as opposed to using 'Content here, content here', making it look like readable English...</div>
+            <div class="rating">
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star filled">★</span>
+                <span class="star">★</span>
+                <span class="star">★</span>
+            </div>
+            <div class="author">
+                <span class="author-name">zus</span>
+                <img src="https://i.pravatar.cc/38?u=zus" alt="" class="avatar">
+            </div>
+        </div>
+    </div>
+    </div>
+<script>
+    
+    // Все посты на странице (каждый должен иметь data-tags)
+    const posts = document.querySelectorAll('.post-card'); // ← поменяй на свой класс карточек
+
+    const filterBtn = document.getElementById('filter-btn');
+    const dropdown = document.getElementById('filter-dropdown');
+    const checkboxes = document.querySelectorAll('.tag-checkbox');
+    const applyBtn = document.getElementById('apply-filters');
+    const resetBtn = document.getElementById('reset-filters');
+    const searchInput = document.querySelector('input[type="text"]'); // твоя поисковая строка
+
+    // Открываем/закрываем дропдаун
+    filterBtn.addEventListener('click', () => {
+        dropdown.classList.toggle('show');
+    });
+
+    // Закрываем при клике вне дропдауна
+    document.addEventListener('click', (e) => {
+        if (!filterBtn.contains(e.target) && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('show');
+        }
+    });
+
+    // Основная функция фильтрации
+    function filterPosts() {
+        const selectedTags = Array.from(checkboxes)
+            .filter(ch => ch.checked)
+            .map(ch => ch.value);
+
+        const searchText = searchInput.value.toLowerCase().trim();
+
+        posts.forEach(post => {
+            const postText = (post.textContent || "").toLowerCase();
+            const postTags = post.getAttribute('data-tags') || ""; // например: "friction,mechanics"
+
+            const matchesSearch = !searchText || postText.includes(searchText);
+            const matchesTags = selectedTags.length === 0 || 
+                selectedTags.some(tag => postTags.includes(tag));
+
+            if (matchesSearch && matchesTags) {
+                post.style.display = "block";
+            } else {
+                post.style.display = "none";
+            }
+        });
+    }
+
+    // Применяем фильтры
+    applyBtn.addEventListener('click', filterPosts);
+    resetBtn.addEventListener('click', () => {
+        checkboxes.forEach(ch => ch.checked = false);
+        searchInput.value = "";
+        filterPosts();
+    });
+
+    // Поиск в реальном времени
+    searchInput.addEventListener('input', filterPosts);
+</script>
+</body>
+</html>
