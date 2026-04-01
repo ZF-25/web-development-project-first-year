@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<link href="upload.css" rel="stylesheet">
+
+<title>brain worm - Create Post</title>
+
+</head>
+
+<body>
+
+<div class="header">
+    <div class="header-left">
+        <a href="######">
+        <img src="./images/home.png" alt="Home" class="home" height="50px">
+        </a>
+    </div>
+    <div class = "logo-title">
+        <img src="./images/app-logo-image-cropped.png" alt="Logo" class="logo" width="250px" height="140px">
+        <p class="title">brain worm</p>
+    </div>
+
+    <div class="profile-menu">
+        <img src="./images/profilepic.jpg" alt="Profile" class="profile" width="90px" height="90px" onclick="toggleMenu()">
+
+        <div id="dropdown" class="dropdown">
+            <a href="library.html">Library</a>
+            <a href="settings.html">Settings</a>
+            <a href="login.html">Logout</a>
+        </div>
+    </div> 
+</div>
+
+
+
+<div class="main-area py-4">
+
+    <div class="container">
+
+        <div class="card p-3 shadow-sm">
+
+            <!-- Top Fields -->
+            <div class="row g-2 mb-3">
+
+                <div class="col-12 col-md-4">
+                    <input type="text" id="title" class="form-control" placeholder="Title">
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <select id="category-select" class="form-select">
+                        <option value="">Category</option>
+                        <option value="natural">Natural Science</option>
+                        <option value="formal">Formal Science</option>
+                        <option value="applied">Applied Science</option>
+                        <option value="social">Social Science</option>
+                        <option value="humanities">Humanities</option>
+                        <option value="languages">Languages</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-4">
+                    <select id="sub-category-select" class="form-select">
+                        <option value="">Sub-category</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Textarea -->
+            <div class="mb-3">
+                <textarea id="posts" class="form-control" rows="50" placeholder="Your post goes here"></textarea>
+            </div>
+
+            <!-- Bottom Bar -->
+            <div class="row align-items-center">
+
+                <div class="col-12 col-md-8 mb-2 mb-md-0">
+                    <input type="text" id="references" class="form-control" placeholder="References">
+                </div>
+
+                <div class="col-12 col-md-4 text-md-end">
+                    <button class="btn btn-primary w-100 w-md-auto">
+                        Upload
+                        <img src="upload-icon.png" class="upload-icon ms-1" width="30px" height="20px">
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="upload.js" type="module"></script>
+
+</body>
+</html>

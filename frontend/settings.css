@@ -1,0 +1,198 @@
+@media (max-width: 768px) {
+
+    .logo {
+        width: 150px;
+        height: 90px;
+    }
+
+    .profile {
+        width: 60px;
+        height: 60px;
+    }
+
+    .settings-title {
+        font-size: 30px;
+    }
+
+     .settings-title {
+        gap: 2px;
+    }
+}
+
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, Helvetica, sans-serif;}
+
+html,body{
+    height: 100%;
+}
+
+/* Header */
+.header{
+    background:#5A9EA4;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 20px;
+}
+
+.header-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.header-left a:hover {
+    background-color: #839fb1;   
+}
+
+.home {
+    cursor:pointer;
+    margin-left: 50px;
+    background: #c9f1f4f2;
+    border: 3px solid #0f5e78;
+    border-radius: 12px;
+    transition: 0.2s;
+}
+
+.home:hover {
+    background: #0f5e78;
+    transform: scale(1.05);
+    filter: brightness(0.8);
+}
+
+.settings-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+}
+
+.title{
+    font-size:50px;
+    color:#0d2b3e;
+    font-weight:bold;
+}
+
+.profile-menu {
+    position:relative;
+    display:inline-block;
+}
+
+.profile-menu:hover .dropdown{
+    display: block;
+}
+
+.profile{
+    border-radius:100%;
+    background-color: white;
+    padding: 2px;
+    cursor:pointer
+}
+
+.profile:hover {
+    transform: scale(1.05);
+    filter: brightness(0.8);
+}
+
+.dropdown{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #c9f1f4f2;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 180px;
+    display: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 1; /* prevents it from going behind things */
+}
+
+.dropdown a {
+    display: block;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+    font-weight: bolder;
+    font-size: medium;
+}
+
+.dropdown a:hover{
+    background:#7fb1b7;
+    
+}
+
+.main {
+    background-image:url("./images/app-background-image.jpg"); /* your pattern */
+    background-repeat:repeat;
+    padding:30px;
+    background-size: 500px;
+    min-height: calc(100vh - 100px); /* adjust based on header height */
+}
+
+.card {
+    background-color: #dbebed;
+    border: solid #5A9EA4 3px;
+}
+
+.list-group {
+    gap: 50px;
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.list-group-item-action {
+    font-size: xx-large;
+    font-weight: bolder;
+}
+
+.form-control, .form-label {
+    font-size: large;
+}
+
+.btn {
+    font-size: large;
+    background-color: #5A9EA4;
+    font-weight: bolder;
+}
+
+.btn:hover {
+    background-color: #7fb1b7;
+    border:#0f5e78 solid 2px;
+    color: rgb(255, 255, 255);
+    font-weight: bolder;
+    transform: scale(1.05);
+    filter: brightness(0.8);
+    
+}
+
+#delete-account {
+    color: red;
+}
+
+#delete-btn {
+    background-color: red;
+}
+
+.col-4 {
+    width: 100%;
+}
+
+.edit-pic {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding-left: 100px;
+}
+
+#delete-account {
+    color: red;
+}
+
+#delete-btn {
+    display: flex;
+    gap: 10px;
+}

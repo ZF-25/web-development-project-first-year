@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+<link href="settings.css" rel="stylesheet">
+
+<title>brain worm - Settings</title>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <div class="header-left">
+        <img src="./images/app-logo-image.png" alt="Logo" class="logo" height="170px" width="300px">
+    </div>
+
+    <div class = "settings-title">
+        <div class="title">Settings  </div>
+        <img src="./images/settings-icon.png" alt="settings-icon" width="50px" height="50px">
+    </div>
+
+    <div class="profile-menu">
+        <img src="./images/profilepic.jpg" alt="Profile" class="profile" width="90px" height="90px" onclick="toggleMenu()">
+
+        <div id="dropdown" class="dropdown">
+            <a href="library.html">Library</a>
+            <a href="upload.html">Create Posts</a>
+            <a href="login.html">Logout</a>
+        </div>
+
+    </div> 
+
+</div>
+
+<div class="main">
+
+    <div> <img src="./images/home.png" alt="Home" class="home" height="50px" width="50px"> </div>
+
+
+<div class="container py-4">
+
+    <div class="card shadow p-3">
+
+        <div class="list-group">
+
+            <!-- Edit Profile -->
+            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" href="#editProfile">Edit Profile
+                <img src="./images/edit-icon.png" class="edit-pen" width="40" height="40">
+            </a>
+            <div class="collapse p-3" id="editProfile">
+                <img src="./images/profilepic.jpg" class="rounded-circle mb-2" width="100">
+                <input type="file" class="form-control mb-2">
+                <button class="btn btn-sm">Upload</button>
+            </div>
+
+            <!-- Username -->
+            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" href="#username">Username
+                <img src="./images/edit-icon.png" class="edit-pen" width="40" height="40">
+            </a>
+            <div class="collapse p-3" id="username">
+                <input type="text" class="form-control mb-2" placeholder="Enter username">
+                <button class="btn btn-sm">Update</button>
+            </div>
+
+            <!-- Email -->
+            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" href="#email">Email
+                <img src="./images/edit-icon.png" class="edit-pen" width="40" height="40">
+            </a>
+            <div class="collapse p-3" id="email">
+                <input type="email" class="form-control mb-2" placeholder="Enter email">
+                <button class="btn btn-sm">Update</button>
+            </div>
+
+            <!-- Password -->
+            <a class="list-group-item list-group-item-action" data-bs-toggle="collapse" href="#password">Password
+                <img src="./images/edit-icon.png" class="edit-pen" width="40" height="40">
+            </a>
+            <div class="collapse p-3" id="password">
+
+                <label class="form-label">Current Password</label>
+                <input type="text" class="form-control mb-2" value="abcd1234" disabled>
+
+                <label class="form-label">New Password</label>
+                <input type="password" class="form-control mb-2">
+
+                <label class="form-label">Confirm Password</label>
+                <input type="password" class="form-control mb-2">
+
+                <button class="btn btn-sm">Update</button>
+            </div>
+
+            <!-- Delete Account -->
+            <a id="delete-account" class="list-group-item list-group-item-action" data-bs-toggle="collapse" href="#delete">Delete Account
+                <img src="./images/delete-icon-red.png" class="delete-bin" width="40" height="40">
+            </a>
+            <div class="collapse p-3" id="delete">
+                <button id="delete-btn" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account  
+                    <img src="./images/delete-icon-white.png" class="delete-icon" width="20" height="20">
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+<!-- ✅ MODAL -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Are you sure?</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        Deleting your account will remove all data permanently.
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button class="btn btn-danger">Yes, Delete</button>
+      </div>
+
+    </div>
+  </div>
+    </div>
+
+</div>
+    
+    
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="settings.js" type="module"></script>
+
+  </body>
+
+  </html>
