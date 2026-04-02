@@ -19,7 +19,7 @@
   margin: auto;
   padding-top: 1px;
   background-color: #cfe3e6;
-  background-image: url("C:/Users/marin/OneDrive - University of Oulu and Oamk/project/web-development-project-first-year/frontend/images/app-background-image.jpg");
+  background-image: url("./images/app-background-image.jpg");
   background-size: 550px;
   background-repeat: repeat;
     overflow: hidden;

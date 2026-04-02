@@ -24,7 +24,7 @@ body {
     flex-direction: column;
 
     background-color: #cfe3e6;
-    background-image: url("C:/Users/marin/OneDrive - University of Oulu and Oamk/project/web-development-project-first-year/frontend/images/app-background-image.jpg");
+    background-image: url("./images/app-background-image.jpg");
     background-repeat: repeat;
     background-size: 600px;
 }
