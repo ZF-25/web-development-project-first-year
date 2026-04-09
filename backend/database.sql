@@ -31,7 +31,7 @@ CREATE TABLE posts (
 id SERIAL PRIMARY KEY,
 title TEXT NOT NULL,
 content TEXT NOT NULL,
-topic VARCHAR(100), -- e.g., Mechanics, Thermodynamics
+topic_id INTEGER REFERENCES topics(id) ON DELETE SET NULL,
 user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 subcategory_id INTEGER REFERENCES subcategories(id) ON DELETE CASCADE,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -98,6 +98,15 @@ INSERT INTO subcategories (name, category_id) VALUES
 ('Spanish', 6),
 ('Chinese', 6);
 
+-- Topics
+INSERT INTO topics (name, subcategory_id) VALUES
+('Optics', (SELECT id FROM subcategories WHERE name = 'Physics')),
+('Thermodynamics', (SELECT id FROM subcategories WHERE name = 'Physics')),
+('Mechanics', (SELECT id FROM subcategories WHERE name = 'Physics')),
+('Cell Biology', (SELECT id FROM subcategories WHERE name = 'Biology')),
+('Genetics', (SELECT id FROM subcategories WHERE name = 'Biology')),
+('Algebra', (SELECT id FROM subcategories WHERE name = 'Mathematics')),
+('Geometry', (SELECT id FROM subcategories WHERE name = 'Mathematics'));
 -- NOTES
 -- "Topics" (e.g., Mechanics, Thermodynamics) are stored inside POSTS as 'topic'.
 -- Do NOT create a separate topics table.
