@@ -4,38 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Твой CSS файл -->
     <link rel="stylesheet" href="home.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100..900&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <div class="grid">
-
         <!-- HEADER -->
         <header class="header">
             <div class="container-fluid">
                 <div class="row align-items-center">
-            
-                    <!-- Логотип -->
                     <div class="col-6 col-md-4">
                         <div class="logo d-flex align-items-center gap-3">
-                            <img src="C:\Users\marin\OneDrive - University of Oulu and Oamk\project\web-development-project-first-year\frontend\images\logo.png" alt="Logo" class="logo-img" width="55">
-                          
+                            <img src="images/logo.png" alt="Logo" class="logo-img">
                         </div>
                     </div>
-
-                    <!-- Профиль (прижат вправо) -->
                     <div class="col-6 col-md-8 text-end">
                         <div class="profile">
-                            <img src="C:\Users\marin\OneDrive - University of Oulu and Oamk\project\web-development-project-first-year\frontend\images\pfp.jpg" alt="Profile" class="profile-img">
+                            <img src="images/pfp.jpg" alt="Profile" class="profile-img">
                         </div>
                     </div>
                 </div>
@@ -45,362 +32,188 @@
         <!-- Основной контент -->
         <div class="background">
             <div class="container mt-4">
-
-                <div class="row g-4">   <!-- g-4 = расстояние между карточками -->
-                    <!-- Natural Science -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h3 class="card-title">Natural Science</h3>
-                                <div class="dropdown mt-3">
-                                   <div class="dropdown-item subject">
-    • Physics
-    <div class="sub-dropdown">
-        <a href="page.html">- optics</a>
-        <a href="#">- thermodynamics</a>
-        <a href="#">- friction</a>
-        <a href="#">- Mechanics</a>
-    </div>
-</div>
-                                   <div class="dropdown-item subject">
-    • Biology
-    <div class="sub-dropdown">
-        <a href="#">- Cell Biology</a>
-        <a href="#">- Genetics</a>
-        <a href="#">- Human Anatomy</a>
-        <a href="#">- Ecology</a>
-    </div>
-</div>
-                                    <div class="dropdown-item subject">
-    • Chemistry 
-    <div class="sub-dropdown">
-        <a href="#">- Organic Chemistry</a>
-        <a href="#">- Biochemistry</a>
-        <a href="#">- Thermochemistry</a>
-    </div>
-</div>
-                                   <div class="dropdown-item subject">
-    • Geology
-    <div class="sub-dropdown">
-        <a href="#">- Plate Tectonics</a>
-        <a href="#">- Volcanology</a>
-        <a href="#">- Paleontology</a>
-        <a href="#">- Minerals & Rocks</a>
-    </div>
-</div>
-                                   <div class="dropdown-item subject">
-    • Astronomy
-    <div class="sub-dropdown">
-        <a href="#">- Solar System</a>
-        <a href="#">- Cosmology</a>
-        <a href="#">- Black Holes</a>
-        <a href="#">- Stars & Galaxies</a>
-    </div>
-</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Formal Science -->
-                   <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h3 class="card-title">Formal Science</h3>
-                                <div class="dropdown mt-3">
-
-    <div class="dropdown-item subject">
-    • Mathematics
-    <div class="sub-dropdown">
-        <a href="#">- Algebra</a>
-        <a href="#">- Geometry</a>
-        <a href="#">- Trigonometry</a>
-        <a href="#">- Number Theory</a>
-        <a href="#">- Calculus</a>
-    </div>
-</div>
-            <div class="dropdown-item subject">
-            • Logic
-            <div class="sub-dropdown">
-                <a href="#">- Propositional Logic</a>
-                <a href="#">- Deductive Reasoning</a>
-                <a href="#">- Inductive Reasoning</a>
-            </div>
-        </div>
-                                            <div class="dropdown-item subject">
-                                            • Statistics 
-                                            <div class="sub-dropdown">
-                                                <a href="#">- Probability</a>
-                                                <a href="#">- Data Analysis</a>
-                                                <a href="#">- Distributions</a>
-                                                <a href="#">- Hypothesis Testing</a>
-                                                <a href="#">- Regression</a>
-                                            </div>
-                                        </div>
-            </div>
-        </div>
-    </div>
-    </div>
-
-                    <!-- Applied Science -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h3 class="card-title">Applied Science</h3>
-                                <div class="dropdown mt-3">
- <div class="dropdown-item subject">
-    • Engineering & IT
-    <div class="sub-dropdown">
-        <a href="#">- Programming</a>
-        <a href="#">- Data Structures</a>
-        <a href="#">- Cybersecurity</a>
-        <a href="#">- Artificial Intelligence</a>
-        <a href="#">- Networks</a>
-    </div>
-</div>
-            <div class="dropdown-item subject">
-            • Environmental Science
-            <div class="sub-dropdown">
-                <a href="#">- Climate Change</a>
-                <a href="#">- Sustainability</a>
-                <a href="#">- Ecosystems</a>
-                <a href="#">- Pollution</a>
-                <a href="#">- Renewable Energy</a>
-            </div>
-        </div>
-                                            <div class="dropdown-item subject">
-                                            • • Medical & Health
-                                            <div class="sub-dropdown">
-                                                <a href="#">- Human Physiology</a>
-                                                <a href="#">- Diseases</a>
-                                                <a href="#">- Nutrition</a>
-                                                <a href="#">- Pharmacology</a>
-                                            </div>
-                                        </div>
-                                <div class="dropdown-item subject">
-                                • Agriculture
-                                <div class="sub-dropdown">
-                                    <a href="#">- Crop Science</a>
-                                    <a href="#">- Soil Science</a>
-                                    <a href="#">- Agronomy</a>
-                                </div>
-                            </div>
-                    </div>
+                <div class="row g-4" id="categories-container">
+                    <!-- Карточки будут здесь динамически -->
                 </div>
             </div>
         </div>
+    </div>
 
-                    <!-- Social Science -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h3 class="card-title">Social Science</h3>
-                                <div class="dropdown mt-3">
- <div class="dropdown-item subject">
-    • Psychology
-    <div class="sub-dropdown">
-        <a href="#">- Cognitive Psychology</a>
-        <a href="#">- Behavior</a>
-        <a href="#">- Emotions</a>
-        <a href="#">- Mental Disorders</a>
-        <a href="#">- Personality</a>
-    </div>
-</div>
-            <div class="dropdown-item subject">
-            • Sociology
-            <div class="sub-dropdown">
-                <a href="#">- Social Structures</a>
-                <a href="#">- Culture</a>
-                <a href="#">- Inequality</a>
-                <a href="#">- Social Change</a>
-                <a href="#">- Institutions</a>
-            </div>
-        </div>
-                                            <div class="dropdown-item subject">
-                                            • Economics 
-                                            <div class="sub-dropdown">
-                                                <a href="#">- Microeconomics</a>
-                                                <a href="#">- Markets</a>
-                                                <a href="#">- Global Economy</a>
-                                            </div>
-                                        </div>
-                                <div class="dropdown-item subject">
-                                • Political Science
-                                <div class="sub-dropdown">
-                                    <a href="#">- Government Systems</a>
-                                    <a href="#">- Political Theories</a>
-                                    <a href="#">- Public Policy</a>
-                                    <a href="#">- Elections</a>
-                                </div>
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <!-- Сначала подключаем данные -->
+    <!-- <script type="module" src="data.js"></script> -->
 
-                    <!-- Humanities -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h3 class="card-title">Humanities</h3>
-                                <div class="dropdown mt-3">
- <div class="dropdown-item subject">
-    • Philosophy
-    <div class="sub-dropdown">
-        <a href="#">- Ethics</a>
-        <a href="#">- Metaphysics</a>
-        <a href="#">- Epistemology</a>
-    </div>
-</div>
-            <div class="dropdown-item subject">
-            • History
-            <div class="sub-dropdown">
-                <a href="#">- Ancient History</a>
-                <a href="#">- Medieval History</a>
-                <a href="#">- Civilizations</a>
-                <a href="#">- World Wars</a>
-            </div>
-        </div>
-                                            <div class="dropdown-item subject">
-                                            • Religion 
-                                            <div class="sub-dropdown">
-                                                <a href="#">- World Religions</a>
-                                                <a href="#">- Beliefs & Practices</a>
-                                                <a href="#">- Sacred Texts</a>
-                                            </div>
-                                        </div>
-                                <div class="dropdown-item subject">
-                                • Ethics
-                                <div class="sub-dropdown">
-                                    <a href="#">- Moral Theories</a>
-                                    <a href="#">- Applied Ethics</a>
-                                    <a href="#">- Justice</a>
-                                    <a href="#">- Human Rights</a>
-                                </div>
-                            </div>
-    <div class="dropdown-item subject">
-    • Arts
-    <div class="sub-dropdown">
-        <a href="#">- Painting</a>
-        <a href="#">- Music</a>
-        <a href="#">- Literature</a>
-    </div>
-    </div>
-                                </div>
-                            </div>
+    <!-- Потом наш главный скрипт -->
+<script type="module">
+    // ========== 1. FETCH CATEGORIES (основная задача) ==========
+    async function loadCategories() {
+        const container = document.getElementById('categories-container');
+        
+        try {
+            // Показываем загрузку
+            container.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-3">Fetching categories...</p>
+                </div>`;
+
+            const res = await fetch('http://localhost:3000/categories');
+            if (!res.ok) throw new Error('Failed to load categories');
+            
+            const categories = await res.json();
+
+            // Handle empty data
+            if (!categories || categories.length === 0) {
+                handleEmptyData();
+                return;
+            }
+
+            renderCategories(categories);
+            initCardHandlers();        // твоя рабочая функция
+
+            console.log(`✅ Successfully fetched ${categories.length} categories`);
+
+        } catch (error) {
+            console.error("Fetch error:", error);
+            container.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <h4 class="text-danger">Failed to load categories</h4>
+                    <p class="text-muted">Make sure backend is running on port 3000</p>
+                </div>`;
+        }
+    }
+
+    // ========== 2. RENDER CATEGORIES ==========
+    function renderCategories(categories) {
+        const container = document.getElementById('categories-container');
+        container.innerHTML = '';
+
+        categories.forEach(cat => {
+            const cardHTML = `
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card h-100 text-center" data-category-id="${cat.id}">
+                        <div class="card-body">
+                            <h3 class="card-title">${cat.name}</h3>
+                            <div class="dropdown mt-3" id="dropdown-${cat.id}"></div>
                         </div>
                     </div>
+                </div>`;
+            container.innerHTML += cardHTML;
+        });
+    }
 
-                    <!-- Languages -->
-                    <div class="col-12 col-md-6 col-lg-4">
-                        <div class="card h-100 text-center">
-                            <div class="card-body">
-                                <h3 class="card-title">Languages</h3>
-                                <div class="dropdown mt-3">
- <div class="dropdown-item subject">
-    • English
-    <div class="sub-dropdown">
-        <a href="#">- Grammar</a>
-        <a href="#">- Vocabulary</a>
-        <a href="#">- Speaking</a>
-        <a href="#">- Writing</a>
-    </div>
-</div>
-            <div class="dropdown-item subject">
-            • Finnish
-            <div class="sub-dropdown">
-                <a href="#">- Basics</a>
-                <a href="#">- Grammar</a>
-                <a href="#">- Pronunciation</a>
-                <a href="#">- Vocabulary</a>
-                <a href="#">- Conversation</a>
-            </div>
-        </div>
-                                            <div class="dropdown-item subject">
-                                            • Chinese 
-                                            <div class="sub-dropdown">
-                                                <a href="#">- Characters</a>
-                                                <a href="#">- Grammar</a>
-                                                <a href="#">- Tones</a>
-                                                <a href="#">- Vocabulary</a>
-                                            </div>
-                                        </div>
-                                <div class="dropdown-item subject">
-                                • Spanish
-                                <div class="sub-dropdown">
-                                    <a href="#">- Basics</a>
-                <a href="#">- Grammar</a>
-                <a href="#">- Pronunciation</a>
-                <a href="#">- Vocabulary</a>
-                <a href="#">- Conversation</a>
-                                </div>
-                            </div>
-    <div class="dropdown-item subject">
-    • Russian
-    <div class="sub-dropdown">
-      <a href="#">- Basics</a>
-                <a href="#">- Grammar</a>
-                <a href="#">- Pronunciation</a>
-                <a href="#">- Vocabulary</a>
-                <a href="#">- Conversation</a>
-    </div>
-    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+    // ========== 3. HANDLE EMPTY DATA ==========
+    function handleEmptyData() {
+        const container = document.getElementById('categories-container');
+        container.innerHTML = `
+            <div class="col-12 text-center py-5">
+                <h3 class="text-muted">No categories found</h3>
+                <p class="text-secondary">The database is currently empty.</p>
+            </div>`;
+    }
 
-                </div>
-            </div>
-        </div>
+    // ========== ТВОЯ РАБОЧАЯ ЛОГИКА КЛИКОВ (оставляем почти без изменений) ==========
+    function initCardHandlers() {
+        // Клик по карточке
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', async function (e) {
+    // ❗ фикс
+    if (e.target.closest('.subject')) return;
 
-    </div>
+    if (e.target.closest('a')) return;
 
-    <script>
-        const subjects = document.querySelectorAll('.subject');
+    const categoryId = this.dataset.categoryId;
+    if (!categoryId) return;
 
-subjects.forEach(subject => {
-    subject.addEventListener('click', function (e) {
-        e.stopPropagation(); // 🔥 важно — не даёт карточке закрыться
-
-        // если клик по ссылке — не мешаем переходу
-        if (e.target.tagName === 'A') return;
-
-        this.classList.toggle('active');
+    document.querySelectorAll('.card').forEach(c => {
+        if (c !== this) c.classList.remove('active');
     });
+
+    const wasActive = this.classList.contains('active');
+    this.classList.toggle('active');
+
+    const dropdown = this.querySelector('.dropdown');
+
+    if (!wasActive && dropdown && dropdown.children.length === 0) {
+        await loadSubcategories(categoryId, dropdown);
+    }
 });
-    document.addEventListener('DOMContentLoaded', () => {
-        const cards = document.querySelectorAll('.card');
-
-        cards.forEach(card => {
-            card.addEventListener('click', function (e) {
-                // Если кликнули по ссылке внутри дропдауна — ничего не делаем (просто переходим)
-                if (e.target.closest('a')) {
-                    return;
-                }
-
-                // Закрываем все остальные дропдауны
-                cards.forEach(otherCard => {
-                    if (otherCard !== card) {
-                        otherCard.classList.remove('active');
-                    }
-                });
-
-                // Переключаем текущую карточку
-                this.classList.toggle('active');
-            });
         });
 
-        // Закрываем все дропдауны при клике вне любой карточки
-        document.addEventListener('click', function (e) {
-            if (!e.target.closest('.card')) {
-                cards.forEach(card => {
-                    card.classList.remove('active');
+        // Клик по subject (подкатегория)
+        document.addEventListener('click', async function (e) {
+            const subject = e.target.closest('.subject');
+            if (!subject) return;
+
+            e.stopImmediatePropagation();
+
+            const subcategoryId = subject.dataset.subcategoryId;
+            if (!subcategoryId) return;
+
+            const subDropdown = subject.querySelector('.sub-dropdown');
+            if (!subDropdown) return;
+
+            const wasActive = subject.classList.contains('active');
+
+            const currentCard = subject.closest('.card');
+            if (currentCard) {
+                currentCard.querySelectorAll('.subject').forEach(s => {
+                    if (s !== subject) s.classList.remove('active');
                 });
             }
+
+            subject.classList.toggle('active');
+
+            if (!wasActive && subDropdown.children.length === 0) {
+                await loadTopics(subcategoryId, subDropdown);
+            }
         });
-    });
+    }
+
+    // ========== Вспомогательные функции загрузки (оставляем) ==========
+    async function loadSubcategories(categoryId, dropdownElement) {
+        dropdownElement.innerHTML = `<div class="text-center py-3"><div class="spinner-border spinner-border-sm"></div></div>`;
+
+        try {
+            const res = await fetch(`http://localhost:3000/subcategories/${categoryId}`);
+            if (!res.ok) throw new Error('Failed');
+            const subcategories = await res.json();
+
+            let html = '';
+            subcategories.forEach(sub => {
+                html += `
+                    <div class="dropdown-item subject" data-subcategory-id="${sub.id}">
+                        • ${sub.name}
+                        <div class="sub-dropdown" id="subdropdown-${sub.id}"></div>
+                    </div>`;
+            });
+            dropdownElement.innerHTML = html;
+        } catch (e) {
+            dropdownElement.innerHTML = `<p class="text-danger text-center py-2">Ошибка загрузки</p>`;
+        }
+    }
+
+    async function loadTopics(subcategoryId, subDropdownElement) {
+        subDropdownElement.innerHTML = `<div class="text-center py-2"><div class="spinner-border spinner-border-sm"></div></div>`;
+
+        try {
+            const res = await fetch(`http://localhost:3000/topics/${subcategoryId}`);
+            if (!res.ok) throw new Error('Failed');
+            const topics = await res.json();
+
+            let html = '';
+            topics.forEach(topic => {
+                html += `<a href="page.html?topic=${encodeURIComponent(topic.name)}">${topic.name}</a>`;
+            });
+            subDropdownElement.innerHTML = html;
+        } catch (e) {
+            subDropdownElement.innerHTML = `<p class="text-danger small">Не удалось загрузить темы</p>`;
+        }
+    }
+
+    // Запуск
+    document.addEventListener('DOMContentLoaded', loadCategories);
 </script>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
