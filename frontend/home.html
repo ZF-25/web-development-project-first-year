@@ -39,10 +39,7 @@
         </div>
     </div>
 
-    <!-- Сначала подключаем данные -->
-    <!-- <script type="module" src="data.js"></script> -->
 
-    <!-- Потом наш главный скрипт -->
 <script type="module">
     // ========== 1. FETCH CATEGORIES (основная задача) ==========
     async function loadCategories() {
@@ -68,9 +65,9 @@
             }
 
             renderCategories(categories);
-            initCardHandlers();        // твоя рабочая функция
+            initCardHandlers();   
 
-            console.log(`✅ Successfully fetched ${categories.length} categories`);
+            console.log(` Successfully fetched ${categories.length} categories`);
 
         } catch (error) {
             console.error("Fetch error:", error);
@@ -110,13 +107,11 @@
                 <p class="text-secondary">The database is currently empty.</p>
             </div>`;
     }
-
-    // ========== ТВОЯ РАБОЧАЯ ЛОГИКА КЛИКОВ (оставляем почти без изменений) ==========
     function initCardHandlers() {
         // Клик по карточке
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', async function (e) {
-    // ❗ фикс
+
     if (e.target.closest('.subject')) return;
 
     if (e.target.closest('a')) return;
