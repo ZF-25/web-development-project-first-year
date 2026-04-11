@@ -39,7 +39,7 @@ This project is developed as part of a Web Programming course using JavaScript, 
 ## Team Members
 
 * **Zainab** – Project Board Management, Backend Setup, Database Setup, User Registration & Login, Integration, Testing, Deployment
-* **Marina** – Subjects, Subcategories, Topics, Filtering, Rating
+* **Marina** – Subjects, Subcategories, Topics, Rating
 * **Ruvindra** – Posts System, Library, User Settings
 
 ## Development Method
