@@ -52,22 +52,6 @@
       <img src="./images/search.png" alt="Поиск" width="24" height="24">
     </span>
     <input type="text" class="search-input" placeholder="post search...">
-    <!-- После строки поиска добавь эту кнопку -->
-<button id="filter-btn" class="filter-button">Filter</button>
-
-<!-- Сам дропдаун с чекбоксами -->
-<div id="filter-dropdown" class="filter-dropdown">
-  <h4>Chose your topic:</h4>
-  <label><input type="checkbox" value="friction" class="tag-checkbox">Friction</label>
-  <label><input type="checkbox" value="newton" class="tag-checkbox"> Force</label>
-  <label><input type="checkbox" value="mechanics" class="tag-checkbox">Mechanics</label>
-  <label><input type="checkbox" value="electromagnetism" class="tag-checkbox">Electromagnetism</label>
-  <label><input type="checkbox" value="thermodynamics" class="tag-checkbox">Thermodynamics</label>
-  <label><input type="checkbox" value="optics" class="tag-checkbox">Optics</label>
-  
-  <button id="apply-filters" class="apply-btn">Apply</button>
-  <button id="reset-filters" class="reset-btn">Reset</button>
-</div>
   </div>
 </div>
   
@@ -200,40 +184,5 @@
         }
     });
 
-    // Основная функция фильтрации
-    function filterPosts() {
-        const selectedTags = Array.from(checkboxes)
-            .filter(ch => ch.checked)
-            .map(ch => ch.value);
 
-        const searchText = searchInput.value.toLowerCase().trim();
-
-        posts.forEach(post => {
-            const postText = (post.textContent || "").toLowerCase();
-            const postTags = post.getAttribute('data-tags') || ""; // например: "friction,mechanics"
-
-            const matchesSearch = !searchText || postText.includes(searchText);
-            const matchesTags = selectedTags.length === 0 || 
-                selectedTags.some(tag => postTags.includes(tag));
-
-            if (matchesSearch && matchesTags) {
-                post.style.display = "block";
-            } else {
-                post.style.display = "none";
-            }
-        });
-    }
-
-    // Применяем фильтры
-    applyBtn.addEventListener('click', filterPosts);
-    resetBtn.addEventListener('click', () => {
-        checkboxes.forEach(ch => ch.checked = false);
-        searchInput.value = "";
-        filterPosts();
-    });
-
-    // Поиск в реальном времени
-    searchInput.addEventListener('input', filterPosts);
-</script>
-</body>
-</html>
+    
