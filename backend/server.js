@@ -231,13 +231,15 @@ app.get('/subcategories/:categoryId', async (req, res) => {
 app.get('/topics/:subcategoryId', async (req, res) => {
   try {
     const { subcategoryId } = req.params;
+
     const result = await pool.query(
-      'SELECT * FROM topics WHERE subcategory_id = $1 ORDER BY id',
+      'SELECT * FROM topics WHERE subcategory_id = $1 ORDER BY id',   // ← ИСПРАВЛЕНО
       [subcategoryId]
     );
+
     res.json(result.rows);
   } catch (err) {
-    console.error(err);
+    console.error("error fetching topics:", err);
     res.status(500).send('Error fetching topics');
   }
 });
