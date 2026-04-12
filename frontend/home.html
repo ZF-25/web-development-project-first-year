@@ -41,10 +41,11 @@
 
 <script type="module">
     // === Правильная настройка адреса сервера ===
-    const API_BASE = (window.location.hostname === 'localhost' || 
-                      window.location.hostname === '127.0.0.1') 
-                     ? 'http://localhost:3000' 
-                     : '';
+    const API_BASE = window.location.protocol === 'file:' 
+    ? 'http://localhost:3000' 
+    : (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') 
+        ? 'http://localhost:3000' 
+        : '';
 
     async function loadCategories() {
         const container = document.getElementById('categories-container');
