@@ -230,16 +230,13 @@ body {
 
   /* HEADER FIX */
   .header {
-    padding: 15px;
+    padding: 1px;
   }
-  .post-meta {
-  display: flex;
-  align-items: center;
-  justify-content:center;
-  flex-wrap: wrap;
-  gap: 15px;
-  flex-direction: column;
-}
+.post-meta {
+    flex-direction: row;           /* аватар + имя слева, дата справа */
+    align-items: center;
+    justify-content: space-between;
+  }
 
   .logo {
     position: static;
@@ -255,14 +252,27 @@ body {
     width: 50px;
     height: 50px;
   }
+  .author img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .author-name {
+    font-size: 1.05rem;
+    color: #1d3557;
+  }
+
+  .date {
+    font-size: 0.9rem;
+  }
 }
 
   /* TITLE */
-  .title {
-    font-size: 24px;
-    order: -1;
-    text-align: center;
-    margin-top: 0; /* 💥 убираем костыль */
+ .title {
+    font-size: 1.75rem;
+    margin-top: 30px;
+    font-weight: bold;           
+    color: #1d3557;
   }
 
   /* META */
@@ -294,6 +304,9 @@ body {
 
   .date {
     order: 1;
+    padding-bottom: 15px;
+    font-weight: bolder;
+    color: #1d3557;
   }
   /* PAGE */
   .page {
@@ -316,11 +329,15 @@ body {
 @media (max-width: 576px) {
   .logo-img {
     height: 72px;
+    margin-left: -130px;
+        margin-top: 40px;
   }
   .title {
     font-size: 1.7rem;
   }
-  
+  .post-meta {
+    gap: 8px;
+  }
   .author img {
     width: 42px;
     height: 42px;
