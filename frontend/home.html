@@ -40,11 +40,11 @@
     </div>
 
 <script type="module">
-    // === Настройка базового URL ===
-    const API_BASE = window.location.hostname === '127.0.0.1' || 
-                     window.location.hostname === 'localhost' 
+    // === Правильная настройка адреса сервера ===
+    const API_BASE = (window.location.hostname === 'localhost' || 
+                      window.location.hostname === '127.0.0.1') 
                      ? 'http://localhost:3000' 
-                     : '';   // для будущего деплоя
+                     : '';
 
     async function loadCategories() {
         const container = document.getElementById('categories-container');
@@ -53,22 +53,22 @@
             container.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-3">loading categories...</p>
+                    <p class="mt-3">Загрузка категорий...</p>
                 </div>`;
 
-            const res = await fetch(`${API_BASE}/categories`);
+            const url = `${API_BASE}/categories`;
+            console.log("Запрашиваем:", url);   // ← для отладки
+
+            const res = await fetch(url);
             
-            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
             
             const categories = await res.json();
 
-            console.log(`✅ reseived ${categories.length} categories `);
+            console.log(`✅ Получено ${categories.length} категорий из базы`);
 
-            if (!categories || categories.length === 0) {
-                container.innerHTML = `
-                    <div class="col-12 text-center py-5">
-                        <h3 class="text-muted">No categories found</h3>
-                    </div>`;
+            if (categories.length === 0) {
+                container.innerHTML = `<div class="col-12 text-center py-5"><h3>No categories found</h3></div>`;
                 return;
             }
 
@@ -76,15 +76,16 @@
             initCardHandlers();
 
         } catch (error) {
-            console.error("Fetch error:", error);
+            console.error("❌ Fetch error:", error);
             container.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <h4 class="text-danger">Failed to load categories</h4>
-                    <p class="text-muted">Backend is not running or network issue</p>
+                    <p class="text-muted">Убедись, что backend запущен на порту 3000</p>
                 </div>`;
         }
     }
 
+    // ========== RENDER ==========
     function renderCategories(categories) {
         const container = document.getElementById('categories-container');
         container.innerHTML = '';
@@ -103,6 +104,7 @@
         });
     }
 
+    // ========== ТВОЯ ЛОГИКА КЛИКОВ (оставляем как была) ==========
     function initCardHandlers() {
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', async function (e) {
@@ -111,9 +113,7 @@
                 const categoryId = this.dataset.categoryId;
                 if (!categoryId) return;
 
-                document.querySelectorAll('.card').forEach(c => {
-                    if (c !== this) c.classList.remove('active');
-                });
+                document.querySelectorAll('.card').forEach(c => c !== this && c.classList.remove('active'));
 
                 const wasActive = this.classList.contains('active');
                 this.classList.toggle('active');
@@ -155,6 +155,7 @@
         });
     }
 
+    // loadSubcategories и loadTopics оставляем как у тебя были
     async function loadSubcategories(categoryId, dropdownElement) {
         dropdownElement.innerHTML = `<div class="text-center py-3"><div class="spinner-border spinner-border-sm"></div></div>`;
 
@@ -189,13 +190,10 @@
             });
             subDropdownElement.innerHTML = html;
         } catch (e) {
-            subDropdownElement.innerHTML = `<p class="text-danger small">topics could not be uploaded</p>`;
+            subDropdownElement.innerHTML = `<p class="text-danger small">Не удалось загрузить темы</p>`;
         }
     }
 
+    // Запуск
     document.addEventListener('DOMContentLoaded', loadCategories);
 </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
