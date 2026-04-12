@@ -54,11 +54,11 @@
             container.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-3">Загрузка категорий...</p>
+                    <p class="mt-3">loading categories...</p>
                 </div>`;
 
             const url = `${API_BASE}/categories`;
-            console.log("Запрашиваем:", url);   // ← для отладки
+            console.log("", url);   // ← для отладки
 
             const res = await fetch(url);
             
@@ -66,7 +66,7 @@
             
             const categories = await res.json();
 
-            console.log(`✅ Получено ${categories.length} категорий из базы`);
+            console.log(`✅ received ${categories.length} categories`);
 
             if (categories.length === 0) {
                 container.innerHTML = `<div class="col-12 text-center py-5"><h3>No categories found</h3></div>`;
@@ -81,7 +81,7 @@
             container.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <h4 class="text-danger">Failed to load categories</h4>
-                    <p class="text-muted">Убедись, что backend запущен на порту 3000</p>
+                    <p class="text-muted">make sure, that backend is using port 3000</p>
                 </div>`;
         }
     }
@@ -174,7 +174,7 @@
             });
             dropdownElement.innerHTML = html;
         } catch (e) {
-            dropdownElement.innerHTML = `<p class="text-danger text-center py-2">Ошибка загрузки</p>`;
+            dropdownElement.innerHTML = `<p class="text-danger text-center py-2">loading error</p>`;
         }
     }
 
@@ -191,7 +191,7 @@
             });
             subDropdownElement.innerHTML = html;
         } catch (e) {
-            subDropdownElement.innerHTML = `<p class="text-danger small">Не удалось загрузить темы</p>`;
+            subDropdownElement.innerHTML = `<p class="text-danger small">failed to load topics</p>`;
         }
     }
 
