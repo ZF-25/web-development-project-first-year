@@ -103,7 +103,6 @@
         });
     }
 
-    // Твоя рабочая логика кликов
     function initCardHandlers() {
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', async function (e) {
@@ -190,7 +189,7 @@
             });
             subDropdownElement.innerHTML = html;
         } catch (e) {
-            subDropdownElement.innerHTML = `<p class="text-danger small">Не удалось загрузить темы</p>`;
+            subDropdownElement.innerHTML = `<p class="text-danger small">topics could not be uploaded</p>`;
         }
     }
 
