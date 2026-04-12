@@ -46,7 +46,7 @@ form.addEventListener("submit", async (e) => {
     const category = localStorage.getItem("category");
 
     if (category) {
-      window.location.href = `landingPage.html?category=${encodeURIComponent(category)}`;
+      window.location.href = `home.html?category=${encodeURIComponent(category)}`;
     } else {
       window.location.href = "landingPage.html";
     }
