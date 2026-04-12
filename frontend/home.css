@@ -203,7 +203,6 @@ html, body {
 
 /* ====================== RESPONSIVE IMPROVEMENTS ====================== */
 
-/* На очень маленьких экранах делаем текст чуть меньше */
 @media (max-width: 576px) {
     .card {
         font-size: 22px;

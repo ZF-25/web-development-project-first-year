@@ -39,47 +39,52 @@
         </div>
     </div>
 
-
 <script type="module">
-    // ========== 1. FETCH CATEGORIES (основная задача) ==========
+    // === Настройка базового URL ===
+    const API_BASE = window.location.hostname === '127.0.0.1' || 
+                     window.location.hostname === 'localhost' 
+                     ? 'http://localhost:3000' 
+                     : '';   // для будущего деплоя
+
     async function loadCategories() {
         const container = document.getElementById('categories-container');
         
         try {
-            // Показываем загрузку
             container.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-3">Fetching categories...</p>
+                    <p class="mt-3">Загрузка категорий...</p>
                 </div>`;
 
-            const res = await fetch('http://localhost:3000/categories');
-            if (!res.ok) throw new Error('Failed to load categories');
+            const res = await fetch(`${API_BASE}/categories`);
+            
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
             
             const categories = await res.json();
 
-            // Handle empty data
+            console.log(`✅ Получено ${categories.length} категорий`);
+
             if (!categories || categories.length === 0) {
-                handleEmptyData();
+                container.innerHTML = `
+                    <div class="col-12 text-center py-5">
+                        <h3 class="text-muted">No categories found</h3>
+                    </div>`;
                 return;
             }
 
             renderCategories(categories);
-            initCardHandlers();   
-
-            console.log(` Successfully fetched ${categories.length} categories`);
+            initCardHandlers();
 
         } catch (error) {
             console.error("Fetch error:", error);
             container.innerHTML = `
                 <div class="col-12 text-center py-5">
                     <h4 class="text-danger">Failed to load categories</h4>
-                    <p class="text-muted">Make sure backend is running on port 3000</p>
+                    <p class="text-muted">Backend is not running or network issue</p>
                 </div>`;
         }
     }
 
-    // ========== 2. RENDER CATEGORIES ==========
     function renderCategories(categories) {
         const container = document.getElementById('categories-container');
         container.innerHTML = '';
@@ -98,43 +103,30 @@
         });
     }
 
-    // ========== 3. HANDLE EMPTY DATA ==========
-    function handleEmptyData() {
-        const container = document.getElementById('categories-container');
-        container.innerHTML = `
-            <div class="col-12 text-center py-5">
-                <h3 class="text-muted">No categories found</h3>
-                <p class="text-secondary">The database is currently empty.</p>
-            </div>`;
-    }
+    // Твоя рабочая логика кликов
     function initCardHandlers() {
-        // Клик по карточке
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', async function (e) {
+                if (e.target.closest('.subject') || e.target.closest('a')) return;
 
-    if (e.target.closest('.subject')) return;
+                const categoryId = this.dataset.categoryId;
+                if (!categoryId) return;
 
-    if (e.target.closest('a')) return;
+                document.querySelectorAll('.card').forEach(c => {
+                    if (c !== this) c.classList.remove('active');
+                });
 
-    const categoryId = this.dataset.categoryId;
-    if (!categoryId) return;
+                const wasActive = this.classList.contains('active');
+                this.classList.toggle('active');
 
-    document.querySelectorAll('.card').forEach(c => {
-        if (c !== this) c.classList.remove('active');
-    });
+                const dropdown = this.querySelector('.dropdown');
 
-    const wasActive = this.classList.contains('active');
-    this.classList.toggle('active');
-
-    const dropdown = this.querySelector('.dropdown');
-
-    if (!wasActive && dropdown && dropdown.children.length === 0) {
-        await loadSubcategories(categoryId, dropdown);
-    }
-});
+                if (!wasActive && dropdown && dropdown.children.length === 0) {
+                    await loadSubcategories(categoryId, dropdown);
+                }
+            });
         });
 
-        // Клик по subject (подкатегория)
         document.addEventListener('click', async function (e) {
             const subject = e.target.closest('.subject');
             if (!subject) return;
@@ -164,13 +156,11 @@
         });
     }
 
-    // ========== Вспомогательные функции загрузки (оставляем) ==========
     async function loadSubcategories(categoryId, dropdownElement) {
         dropdownElement.innerHTML = `<div class="text-center py-3"><div class="spinner-border spinner-border-sm"></div></div>`;
 
         try {
-            const res = await fetch(`http://localhost:3000/subcategories/${categoryId}`);
-            if (!res.ok) throw new Error('Failed');
+            const res = await fetch(`${API_BASE}/subcategories/${categoryId}`);
             const subcategories = await res.json();
 
             let html = '';
@@ -191,8 +181,7 @@
         subDropdownElement.innerHTML = `<div class="text-center py-2"><div class="spinner-border spinner-border-sm"></div></div>`;
 
         try {
-            const res = await fetch(`http://localhost:3000/topics/${subcategoryId}`);
-            if (!res.ok) throw new Error('Failed');
+            const res = await fetch(`${API_BASE}/topics/${subcategoryId}`);
             const topics = await res.json();
 
             let html = '';
@@ -205,7 +194,6 @@
         }
     }
 
-    // Запуск
     document.addEventListener('DOMContentLoaded', loadCategories);
 </script>
 
