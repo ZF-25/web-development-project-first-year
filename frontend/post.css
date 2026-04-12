@@ -120,15 +120,15 @@ body {
 }
 .post-meta {
   display: flex;
-  align-items: center;           /* выравнивание по вертикали */
-  justify-content: space-between; /* растягивает элементы */
-  gap: 20px;
-  flex-wrap: nowrap;             /* важно — не переносить на новую строку */
-  margin-bottom: 25px;
+  align-items: center;
+  justify-content: space-between;
+  position: relative; /* 💥 важно */
 }
+
 
 .author {
   display: flex;
+  padding-top:15px;
   align-items: center;
   gap: 10px;
   flex-shrink: 0;
@@ -150,6 +150,7 @@ body {
 
 .date {
  font-size: 0.95rem;
+ padding-bottom: 10px;
   color: #555;
   white-space: nowrap;
   flex-shrink: 0;
@@ -158,15 +159,14 @@ body {
 
 /* TITLE */
 .title {
+  position: absolute;
+  left: 50%;
+  padding-top:25px;
+  transform: translateX(-50%);
   text-align: center;
-font-size: 2.1rem;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0;
-  text-align: center;
-  flex: 1;                    /* занимает всё доступное пространство */
-  min-width: 0;
+  white-space: nowrap;
 }
+
 
 /* RATING */
 .rating {

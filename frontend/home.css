@@ -134,7 +134,7 @@ html, body {
     width: 280px;
     max-width: 92%;
     display: none;
-    z-index: 100;                               /* очень высокий */
+    z-index: 100;                            
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
     overflow: hidden;
 }
