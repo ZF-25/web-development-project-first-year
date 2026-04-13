@@ -141,28 +141,7 @@ app.post('/api/auth/login', async (req, res) => {
 });
 
 
-// SETTINGS PAGE - PROFILE IMAGE
-const user_id = parseInt(localStorage.getItem("user_id")) || 2;
 
-async function loadUserProfileImages() {
-    try {
-        const res = await fetch(`http://localhost:3000/api/users/${user_id}`);
-        const user = await res.json();
-
-        const imagePath = user.profile_pic 
-            ? `http://localhost:3000/uploads/${user.profile_pic}?t=${Date.now()}`
-            : "./images/profilepic.jpg";
-
-        // Update ALL profile images on page
-        document.querySelectorAll('.profile-img').forEach(img => {
-            img.src = imagePath;
-        });
-
-    } catch (err) {
-        console.error(err);
-    }
-}
-loadUserProfileImages();
 
 
 // ======================================================
@@ -222,11 +201,16 @@ app.post('/api/posts', async (req, res) => {
       user_id
     } = req.body;
 
-    if (!user_id) {
-      return res.status(401).json({ error: "User not logged in" });
+    // ✅ VALIDATION
+    if (!user_id || isNaN(user_id)) {
+      return res.status(400).json({ error: "Invalid user_id" });
     }
 
-    // 1. Get category ID
+    if (!topic) {
+      return res.status(400).json({ error: "Topic is required" });
+    }
+
+    // 1. Category
     const categoryResult = await pool.query(
       'SELECT id FROM categories WHERE LOWER(name) = LOWER($1)',
       [category]
@@ -238,7 +222,7 @@ app.post('/api/posts', async (req, res) => {
 
     const category_id = categoryResult.rows[0].id;
 
-    // 2. Get subcategory ID
+    // 2. Subcategory
     const subcategoryResult = await pool.query(
       'SELECT id FROM subcategories WHERE LOWER(name) = LOWER($1) AND category_id = $2',
       [subcategory, category_id]
@@ -277,6 +261,35 @@ app.post('/api/posts', async (req, res) => {
   }
 });
 
+// NEW API to fetch posts by topic *******************
+app.get('/api/posts/topic/:topic', async (req, res) => {
+  try {
+    const { topic } = req.params;
+
+    const result = await pool.query(
+      `
+      SELECT 
+        posts.id,
+        posts.title,
+        posts.content,
+        posts.topic,
+        users.username,
+        users.profile_pic
+      FROM posts
+      JOIN users ON users.id = posts.user_id
+      WHERE LOWER(posts.topic) = LOWER($1)
+      ORDER BY posts.id DESC
+      `,
+      [topic]
+    );
+
+    res.json(result.rows);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 
 // ======================================================
@@ -293,7 +306,7 @@ app.post('/api/posts', async (req, res) => {
 // Handles: Profile updates
 // 1. Update profile picture
   app.put('/api/users/profile-pic', upload.single('profile_pic'), async (req, res) => {
-  const user_id = req.body.user_id;
+  const { user_id, username } = req.body;
   const filePath = req.file.filename;
 
   await pool.query(

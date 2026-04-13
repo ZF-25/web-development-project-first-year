@@ -80,22 +80,32 @@ uploadBtn.addEventListener("click", async () => {
     const title = document.getElementById("title").value;
     const content = document.getElementById("posts").value;
     const categoryValue = category.options[category.selectedIndex].text;
-    const subcategoryValue = subcategory.value;
+    const subcategoryValue = subcategory.options[subcategory.selectedIndex].text;
+
+    const topicValue = topic.options[topic.selectedIndex]?.text;
     const references = document.getElementById("references").value;
 
-    // ✅ GET USER ID FROM LOGIN SESSION
-    const user_id = localStorage.getItem("user_id");
+    const user = JSON.parse(localStorage.getItem("user"));
+    const user_id = user?.id;
 
-   // if (!user_id) {
-   //     alert("You must login first!");
-    //    window.location.href = "login.html";
-    //    return;
-   // }
-
-    if (!title || !content || !categoryValue || !subcategoryValue) {
-        alert("Please fill all required fields");
+    // ✅ VALIDATION (IMPORTANT)
+    if (!user_id) {
+        alert("Please login first");
+        window.location.href = "login.html";
         return;
     }
+
+    if (!title || !content || !categoryValue || !subcategoryValue || !topicValue) {
+        alert("Please fill all fields including topic");
+        return;
+    }
+
+    console.log("Uploading post:", {
+        title,
+        categoryValue,
+        subcategoryValue,
+        topicValue
+    });
 
     try {
         const response = await fetch("http://localhost:3000/api/posts", {
@@ -108,9 +118,9 @@ uploadBtn.addEventListener("click", async () => {
                 content,
                 category: categoryValue,
                 subcategory: subcategoryValue,
-                topic: topic.value,
+                topic: topicValue,
                 references,
-                user_id: parseInt(user_id) // ✅ IMPORTANT FIX
+                user_id: parseInt(user_id)
             })
         });
 
@@ -120,7 +130,7 @@ uploadBtn.addEventListener("click", async () => {
             alert("Post uploaded successfully!");
             window.location.reload();
         } else {
-            alert(data.error);
+            alert(data.error || "Upload failed");
         }
 
     } catch (err) {
@@ -128,7 +138,6 @@ uploadBtn.addEventListener("click", async () => {
         alert("Server error");
     }
 });
-
 
 
 

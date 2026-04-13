@@ -1,5 +1,6 @@
-// USER ID (temporary)
-const user_id = localStorage.getItem("user_id"); // ✅ REPLACE WITH ACTUAL LOGGED-IN USER ID (e.g., from localStorage or session) 
+// USER ID
+const user = JSON.parse(localStorage.getItem("user"));
+const user_id = user?.id;
 
 // EDIT PROFILE PICTURE
 document.querySelector('#editProfile button').addEventListener('click', async () => {
@@ -148,7 +149,7 @@ document.getElementById('passwordBtn').addEventListener('click', async () => {
 
 // DELETE ACCOUNT (MODAL BUTTON)
 document.querySelector('#confirm-delete').addEventListener('click', async () => {
-    const res = await fetch('http://localhost:3000/api/users/1', {
+    const res = await fetch(`http://localhost:3000/api/users/${user_id}`, {
         method: 'DELETE'
     });
 
