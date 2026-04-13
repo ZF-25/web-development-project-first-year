@@ -12,22 +12,33 @@
 
     <div class="grid">
         <!-- HEADER -->
-        <header class="header">
-            <div class="container-fluid">
-                <div class="row align-items-center">
-                    <div class="col-6 col-md-4">
-                        <div class="logo d-flex align-items-center gap-3">
-                            <img src="images/logo.png" alt="Logo" class="logo-img">
-                        </div>
-                    </div>
-                    <div class="col-6 col-md-8 text-end">
-                        <div class="profile">
-                            <img src="images/pfp.jpg" alt="Profile" class="profile-img">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+       <header class="header">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+
+      <!-- LOGO -->
+      <div class="col-6 col-md-4">
+        <div class="logo d-flex align-items-center gap-3">
+          <img src="images/logo.png" alt="Logo" class="logo-img">
+        </div>
+      </div>
+
+      <!-- PROFILE -->
+      <div class="col-6 col-md-8 text-end">
+        <div class="profile-menu">
+          <img src="images/pfp.jpg" alt="Profile" class="profile-img">
+
+          <div class="profile-dropdown">
+            <a href="library.html">Library</a>
+            <a href="upload.html">Create Posts</a>
+            <a href="login.html">Logout</a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</header>
 
         <!-- Основной контент -->
         <div class="background">
@@ -40,6 +51,51 @@
     </div>
 
 <script type="module">
+    // ===== PROFILE MENU =====
+document.addEventListener('DOMContentLoaded', () => {
+    const profileMenu = document.querySelector('.profile-menu');
+
+    if (profileMenu) {
+        profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle('active');
+        });
+
+        document.addEventListener('click', () => {
+            profileMenu.classList.remove('active');
+        });
+    }
+});
+
+
+// ===== LOAD PROFILE IMAGE =====
+const user_id = parseInt(localStorage.getItem("user_id")) || 2;
+
+async function loadUserProfileImages() {
+    try {
+        const res = await fetch(`http://localhost:3000/api/users/${user_id}`);
+        const user = await res.json();
+
+        const imagePath = user.profile_pic
+            ? `http://localhost:3000/uploads/${user.profile_pic}?t=${Date.now()}`
+            : "./images/profilepic.jpg";
+
+        document.querySelectorAll(".profile-img").forEach(img => {
+            img.src = imagePath;
+        });
+
+    } catch (err) {
+        console.error("Profile image error:", err);
+    }
+}
+
+loadUserProfileImages();
+
+// Вызываем после загрузки категорий
+document.addEventListener('DOMContentLoaded', () => {
+    loadCategories();
+    loadUserProfileImage();   // ← добавили
+});
     // === Правильная настройка адреса сервера ===
     const API_BASE = window.location.protocol === 'file:' 
     ? 'http://localhost:3000' 

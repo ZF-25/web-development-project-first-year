@@ -134,12 +134,63 @@ html, body {
     width: 280px;
     max-width: 92%;
     display: none;
-    z-index: 100;                            
+    z-index: 100;                               /* очень высокий */
     box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
     overflow: hidden;
 }
 
+/* ===== PROFILE DROPDOWN ===== */
 
+.profile-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.profile-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid #3a5560;
+    object-fit: cover;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.profile-img:hover {
+    transform: scale(1.05);
+    filter: brightness(0.9);
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background: #c9f1f4f2;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 180px;
+    display: none;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.profile-dropdown a {
+    display: block;
+    padding: 10px;
+    text-align: start;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+}
+
+.profile-dropdown a:hover {
+    background: #7fb1b7;
+}
+
+/* SHOW MENU */
+.profile-menu.active .profile-dropdown {
+    display: block;
+}
 /* Показываем дропдаун, когда у карточки есть класс .active */
 .card.active .dropdown {
     display: block;
@@ -224,7 +275,7 @@ html, body {
     }
     .logo-img {
     height: 70px;
-    padding-left: 45px;
+    padding-left: 30px;
     }
     
     .dropdown a,
