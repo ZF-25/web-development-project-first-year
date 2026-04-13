@@ -15,7 +15,7 @@
 
 <div class="header">
     <div class="header-left">
-        <a href="######">
+        <a href="home.html">
         <img src="./images/home.png" alt="Home" class="home" height="50px">
         </a>
     </div>
@@ -25,7 +25,7 @@
     </div>
 
     <div class="profile-menu">
-        <img src="./images/profilepic.jpg" alt="Profile" class="profile" width="90px" height="90px" onclick="toggleMenu()">
+        <img src="./images/profilepic.jpg" alt="Profile" class="profile-img" width="90px" height="90px" onclick="toggleMenu()">
 
         <div id="dropdown" class="dropdown">
             <a href="library.html">Library</a>
@@ -46,11 +46,11 @@
             <!-- Top Fields -->
             <div class="row g-2 mb-3">
 
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-3">
                     <input type="text" id="title" class="form-control" placeholder="Title">
                 </div>
 
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-3">
                     <select id="category-select" class="form-select">
                         <option value="">Category</option>
                         <option value="natural">Natural Science</option>
@@ -62,9 +62,15 @@
                     </select>
                 </div>
 
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-3">
                     <select id="sub-category-select" class="form-select">
                         <option value="">Sub-category</option>
+                    </select>
+                </div>
+
+                <div class="col-12 col-md-3">
+                    <select id="topic-select" class="form-select">
+                        <option value="">Topic</option>
                     </select>
                 </div>
 
@@ -83,7 +89,7 @@
                 </div>
 
                 <div class="col-12 col-md-4 text-md-end">
-                    <button class="btn btn-primary w-100 w-md-auto">
+                    <button type="button" class="btn btn-primary w-100 w-md-auto">
                         Upload
                         <img src="upload-icon.png" class="upload-icon ms-1" width="30px" height="20px">
                     </button>

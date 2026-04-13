@@ -5,7 +5,7 @@
         height: 90px;
     }
 
-    .profile {
+    .profile-img {
         width: 60px;
         height: 60px;
     }
@@ -82,7 +82,7 @@ html,body{
     display: block;
 }
 
-.profile{
+.profile-img{
     border-radius:100%;
     background-color: white;
     padding: 2px;
@@ -173,10 +173,6 @@ html,body{
     color: red;
 }
 
-#delete-btn {
-    background-color: red;
-}
-
 .col-4 {
     width: 100%;
 }
@@ -193,6 +189,7 @@ html,body{
 }
 
 #delete-btn {
+    background-color: red;
     display: flex;
     gap: 10px;
 }

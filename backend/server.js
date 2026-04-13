@@ -1,3 +1,7 @@
+// Related to multer:
+const multer = require('multer');
+const path = require('path');
+
 const express = require('express');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
@@ -5,8 +9,24 @@ const { Pool } = require('pg');
 
 const app = express();
 
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage });
+
+
+
 app.use(express.json());
 app.use(cors());
+app.use('/uploads', express.static('uploads')); // save the uploaded profile pictures in the "uploads" folder and serve them statically
+
 
 //DATABASE CONNECTION
 const pool = new Pool({
@@ -190,7 +210,72 @@ loadUserProfileImages();
 // ================= FILES APIs ==========================
 // ======================================================
 // Handles: References / uploads
+app.post('/api/posts', async (req, res) => {
+  try {
+    const {
+      title,
+      content,
+      category,
+      subcategory,
+      topic,
+      references,
+      user_id
+    } = req.body;
 
+    if (!user_id) {
+      return res.status(401).json({ error: "User not logged in" });
+    }
+
+    // 1. Get category ID
+    const categoryResult = await pool.query(
+      'SELECT id FROM categories WHERE LOWER(name) = LOWER($1)',
+      [category]
+    );
+
+    if (categoryResult.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid category' });
+    }
+
+    const category_id = categoryResult.rows[0].id;
+
+    // 2. Get subcategory ID
+    const subcategoryResult = await pool.query(
+      'SELECT id FROM subcategories WHERE LOWER(name) = LOWER($1) AND category_id = $2',
+      [subcategory, category_id]
+    );
+
+    if (subcategoryResult.rows.length === 0) {
+      return res.status(400).json({ error: 'Invalid subcategory' });
+    }
+
+    const subcategory_id = subcategoryResult.rows[0].id;
+
+    // 3. Insert post
+    const postResult = await pool.query(
+      `INSERT INTO posts (title, content, topic, user_id, subcategory_id)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING id`,
+      [title, content, topic, user_id, subcategory_id]
+    );
+
+    const post_id = postResult.rows[0].id;
+
+    // 4. Save references
+    if (references) {
+      await pool.query(
+        `INSERT INTO files (post_id, file_url)
+         VALUES ($1, $2)`,
+        [post_id, references]
+      );
+    }
+
+    res.json({ message: 'Post created successfully', post_id });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 
 
@@ -206,6 +291,110 @@ loadUserProfileImages();
 // ================= USER SETTINGS APIs ==================
 // ======================================================
 // Handles: Profile updates
+// 1. Update profile picture
+  app.put('/api/users/profile-pic', upload.single('profile_pic'), async (req, res) => {
+  const user_id = req.body.user_id;
+  const filePath = req.file.filename;
+
+  await pool.query(
+    'UPDATE users SET profile_pic = $1 WHERE id = $2',
+    [filePath, user_id]
+  );
+
+  res.json({ message: 'Profile picture updated' });
+});
+
+app.get('/api/users/:id', async (req, res) => {
+  try {
+    const user = await pool.query(
+      'SELECT * FROM users WHERE id = $1',
+      [req.params.id]
+    );
+
+    res.json(user.rows[0]);
+
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+app.use('/uploads', express.static('uploads'));
+
+
+
+  // 2. Update username
+  app.put('/api/users/username', async (req, res) => {
+  try {
+    const { user_id, username } = req.body;
+
+    const result = await pool.query(
+      'UPDATE users SET username = $1 WHERE id = $2 RETURNING *',
+      [username, user_id]
+    );
+
+    res.json({ message: 'Username updated', user: result.rows[0] });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+  // 3. Update email
+  app.put('/api/users/email', async (req, res) => {
+  try {
+    const { user_id, email } = req.body;
+
+    const result = await pool.query(
+      'UPDATE users SET email = $1 WHERE id = $2 RETURNING *',
+      [email, user_id]
+    );
+
+    res.json({ message: 'Email updated', user: result.rows[0] });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+  // 4. Update password
+  app.put('/api/users/password', async (req, res) => {
+  try {
+    const { user_id, newPassword } = req.body;
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    await pool.query(
+      'UPDATE users SET password = $1 WHERE id = $2',
+      [hashedPassword, user_id]
+    );
+
+    res.json({ message: 'Password updated' });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+  // 5. Delete account
+  app.delete('/api/users/:id', async (req, res) => {
+  try {
+    const user_id = req.params.id;
+
+    await pool.query('DELETE FROM users WHERE id = $1', [user_id]);
+
+    res.json({ message: 'Account deleted' });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 
 
 
