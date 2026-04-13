@@ -106,3 +106,29 @@ function renderArticles(){
     container.appendChild(col);
   });
 }
+
+
+// SETTINGS PAGE - PROFILE IMAGE
+
+const user_id = parseInt(localStorage.getItem("user_id")) || 2;
+
+async function loadUserProfileImages() {
+    try {
+        const res = await fetch(`http://localhost:3000/api/users/${user_id}`);
+        const user = await res.json();
+
+        const imagePath = user.profile_pic
+          ? `http://localhost:3000/uploads/${user.profile_pic}?t=${Date.now()}`
+          : "./images/profilepic.jpg";
+
+        // Update ALL profile images on page
+        document.querySelectorAll(".profile-img").forEach(img => {
+            img.src = imagePath;
+        });
+
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+loadUserProfileImages();
