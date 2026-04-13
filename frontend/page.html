@@ -15,33 +15,44 @@
 </head>
 <body>
 
-<!-- ШАПКА -->
+<!-- header -->
 <header class="category-header">
   <div class="container-fluid">
     <div class="header-content">
 
-      <!-- Логотип (brain worm) -->
+      <!-- logo -->
       <div class="logo">
         <div class="category-icon">
-          <img src="./images/logo.png" alt="Brain Worm">
+          <picture>
+  <!-- mobile version -->
+  <source srcset="./images/app-logo-image.png" media="(max-width: 768px)">
+  
+  <!-- deskpot version  -->
+  <img src="./images/logo.png" alt="Brain Worm">
+</picture>
         </div>
       </div>
-
-      <!-- Заголовок PHYSICS по центру -->
       <div class="category-title-wrapper">
         <div class="category-badge">OPTICS</div>
       </div>
 
-      <!-- Аватарка справа -->
-      <div class="profile-avatar">
-        <img src="./images/pfp.jpg" alt="Profile">
+      <!-- avatar and dropdown menu -->
+      <div class="profile-menu">
+        <div class="profile-avatar">
+          <img src="./images/profilepic.jpg" alt="Profile" class="profile-img" onclick="toggleMenu()">
+        </div>
+        <div id="dropdown" class="dropdown">
+          <a href="library.html">Library</a>
+          <a href="upload.html">Create Posts</a>
+          <a href="login.html">Logout</a>
+        </div>
       </div>
 
     </div>
   </div>
 </header>
    <div class="background">
-    <!-- ПОИСК + ДОМ -->
+    <!-- search bar and home -->
 <div class="sub-bar d-flex flex-column flex-md-row align-items-center gap-2">
   <button class="home-btn" aria-label="home-page">
    <a href="project.html" class="home-btn"> <img src="./images/home.png" alt="" width="28" height="28"></a>
@@ -55,7 +66,7 @@
   </div>
 </div>
   
-    <!-- СПИСОК ПОСТОВ -->
+    <!-- list of posts -->
     <div class="posts-container">
         <!-- Пост 1 -->
         <div class="post-row">
@@ -161,28 +172,33 @@
     </div>
     </div>
 <script>
-    
-    // Все посты на странице (каждый должен иметь data-tags)
-    const posts = document.querySelectorAll('.post-card'); // ← поменяй на свой класс карточек
+// open and close the menu 
+// === dropdown menu ===
+document.addEventListener('DOMContentLoaded', () => {
+    const profileMenu = document.querySelector('.profile-menu');
+    const dropdown = document.querySelector('.dropdown');
 
-    const filterBtn = document.getElementById('filter-btn');
-    const dropdown = document.getElementById('filter-dropdown');
-    const checkboxes = document.querySelectorAll('.tag-checkbox');
-    const applyBtn = document.getElementById('apply-filters');
-    const resetBtn = document.getElementById('reset-filters');
-    const searchInput = document.querySelector('input[type="text"]'); // твоя поисковая строка
-
-    // Открываем/закрываем дропдаун
-    filterBtn.addEventListener('click', () => {
-        dropdown.classList.toggle('show');
+    // click
+    document.querySelector('.profile-avatar').addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileMenu.classList.toggle('active');
     });
 
-    // Закрываем при клике вне дропдаун
-    document.addEventListener('click', (e) => {
-        if (!filterBtn.contains(e.target) && !dropdown.contains(e.target)) {
-            dropdown.classList.remove('show');
+    // close by click
+    document.addEventListener('click', function(e) {
+        if (!profileMenu.contains(e.target)) {
+            profileMenu.classList.remove('active');
         }
     });
+
+    //prevemt from closing when click inside of the menu
+    dropdown.addEventListener('click', function(e) {
+        e.stopPropagation();
+    });
+});
+</script>
+
+
 
 
     
