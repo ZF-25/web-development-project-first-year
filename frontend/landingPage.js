@@ -1,6 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  
+  // REDIRECT IF ALREADY LOGGED IN
+ 
+  const user = localStorage.getItem("user");
+
+  if (user) {
+    window.location.replace("home.html");
+  }
+
+  
   // NAVBAR SHADOW
+  
   const navbar = document.querySelector(".navbar");
 
   if (navbar) {
@@ -10,7 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  
   // SCROLL ANIMATIONS
+  
   if ('IntersectionObserver' in window) {
 
     const observer = new IntersectionObserver((entries) => {
@@ -31,17 +44,21 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // CATEGORY CLICK (FIXED)
+  
+  // CATEGORY CLICK
+  
   const categoryCards = document.querySelectorAll(".category-card");
 
   categoryCards.forEach(card => {
     card.addEventListener("click", () => {
       const category = card.textContent.trim();
 
+      // Save selected category
       localStorage.setItem("category", category);
 
       const user = localStorage.getItem("user");
 
+      // Redirect based on login state
       if (user) {
         window.location.href = "home.html";
       } else {
@@ -50,19 +67,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // NAVBAR USER STATE 
-  const user = localStorage.getItem("user");
+  
+  // NAVBAR USER STATE
+  
   const navActions = document.getElementById("nav-actions");
 
   if (user && navActions) {
     navActions.innerHTML = `
-      <a href="home.html" class="btn btn-outline-dark me-2">Dashboard</a>
+      <a href="home.html" class="btn btn-outline-dark me-2">Home</a>
       <button class="btn btn-dark" id="logout-btn">Logout</button>
     `;
 
     document.getElementById("logout-btn").addEventListener("click", () => {
       localStorage.removeItem("user");
-      window.location.reload();
+      window.location.replace("login.html");
     });
   }
 
