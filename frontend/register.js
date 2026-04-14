@@ -1,17 +1,17 @@
 // ===============================
-// BLOCK IF USER ALREADY LOGGED IN
+// IMPORT AUTH FUNCTION
 // ===============================
-// Prevent logged-in users from accessing register page
-const user = localStorage.getItem("user");
+// Import function to prevent logged-in users from accessing this page
+import { redirectIfLoggedIn } from "./auth.js";
 
-if (user) {
-  window.location.replace("home.html");
-}
+// Redirect user to home page if already logged in
+redirectIfLoggedIn();
 
 
 // ===============================
 // GET FORM ELEMENTS
 // ===============================
+// Get references to DOM elements used in the form
 const form = document.getElementById("register-form");
 const registerBtn = document.getElementById("register-btn");
 const errorMsg = document.getElementById("error-msg");
@@ -20,18 +20,20 @@ const errorMsg = document.getElementById("error-msg");
 // ===============================
 // PASSWORD VISIBILITY TOGGLE
 // ===============================
-// Allows user to show/hide password fields
+// Allows users to show/hide password and confirm password fields
 document.querySelectorAll(".toggle-password").forEach(icon => {
   icon.addEventListener("click", () => {
+
+    // Get the input field linked to this icon
     const input = document.getElementById(icon.dataset.target);
 
-    // Toggle input type
+    // Toggle between password and text input type
     if (input.type === "password") {
       input.type = "text";
-      icon.textContent = "🙈"; // hide icon
+      icon.textContent = "🙈"; // Change icon to indicate hidden state
     } else {
       input.type = "password";
-      icon.textContent = "👁"; // show icon
+      icon.textContent = "👁"; // Change icon to indicate visible state
     }
   });
 });
@@ -40,19 +42,21 @@ document.querySelectorAll(".toggle-password").forEach(icon => {
 // ===============================
 // FORM SUBMISSION HANDLER
 // ===============================
+// Handles the registration process when user submits the form
 form.addEventListener("submit", async (e) => {
-  e.preventDefault(); // Prevent page reload
+  e.preventDefault(); // Prevent default form reload behavior
 
   // ===============================
   // GET INPUT VALUES
   // ===============================
+  // Collect and clean user input values
   const username = document.getElementById("username").value.trim();
   const email = document.getElementById("email").value.trim();
   const dob = document.getElementById("dob").value;
   const password = document.getElementById("password").value.trim();
   const confirmPassword = document.getElementById("confirm-password").value.trim();
 
-  // Clear previous error message
+  // Clear any previous error message
   errorMsg.textContent = "";
 
 
@@ -60,32 +64,32 @@ form.addEventListener("submit", async (e) => {
   // FORM VALIDATION
   // ===============================
 
-  // Check if all fields are filled
+  // Check if any field is empty
   if (!username || !email || !dob || !password || !confirmPassword) {
     errorMsg.textContent = "Please fill all fields";
     return;
   }
 
-  // Validate email format
+  // Validate email format using regex
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
     errorMsg.textContent = "Invalid email format";
     return;
   }
 
-  // Check password length
+  // Check minimum password length
   if (password.length < 6) {
     errorMsg.textContent = "Password must be at least 6 characters";
     return;
   }
 
-  // Check password strength (at least 1 capital letter and 1 number)
+  // Ensure password contains at least one uppercase letter and one number
   if (!/[A-Z]/.test(password) || !/[0-9]/.test(password)) {
     errorMsg.textContent = "Password must include a capital letter and a number";
     return;
   }
 
-  // Check if passwords match
+  // Check if password and confirm password match
   if (password !== confirmPassword) {
     errorMsg.textContent = "Passwords do not match";
     return;
@@ -96,11 +100,11 @@ form.addEventListener("submit", async (e) => {
   // SEND DATA TO BACKEND
   // ===============================
   try {
-    // Show loading state on button
+    // Show loading state to user
     registerBtn.textContent = "Creating...";
     registerBtn.disabled = true;
 
-    // Make POST request to backend API
+    // Send POST request to backend API
     const response = await fetch("http://localhost:3000/api/auth/register", {
       method: "POST",
       headers: {
@@ -114,7 +118,7 @@ form.addEventListener("submit", async (e) => {
       })
     });
 
-    // Convert response to JSON
+    // Parse response JSON
     const data = await response.json();
 
 
@@ -122,7 +126,7 @@ form.addEventListener("submit", async (e) => {
     // HANDLE SERVER RESPONSE
     // ===============================
     if (!response.ok) {
-      // Show backend error message
+      // Display error message returned from backend
       errorMsg.textContent = data.message || "Registration failed";
 
       // Reset button state
@@ -136,18 +140,20 @@ form.addEventListener("submit", async (e) => {
     // SUCCESS HANDLING
     // ===============================
 
-    // Store flag to show success message on login page
+    // Store a flag to show success message on login page
     localStorage.setItem("justRegistered", "true");
 
     // Redirect to login page (replace prevents back navigation)
     window.location.replace("login.html");
 
   } catch (error) {
+
     // ===============================
     // HANDLE NETWORK / SERVER ERRORS
     // ===============================
     console.error(error);
 
+    // Show generic error message
     errorMsg.textContent = "Server error. Try again later.";
 
     // Reset button state
@@ -158,9 +164,9 @@ form.addEventListener("submit", async (e) => {
 
 
 // ===============================
-// ENTER KEY SUBMIT SUPPORT
+// ENTER KEY SUPPORT
 // ===============================
-// Allows pressing Enter to submit form
+// Allows pressing Enter key to submit the form
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     form.dispatchEvent(new Event("submit"));
@@ -169,8 +175,9 @@ document.addEventListener("keydown", (e) => {
 
 
 // ===============================
-// BUTTON CLICK EFFECT (UI FEEDBACK)
+// BUTTON CLICK EFFECT
 // ===============================
+// Adds visual feedback when button is pressed
 registerBtn.addEventListener("mousedown", () => {
   registerBtn.style.transform = "scale(0.95)";
 });
