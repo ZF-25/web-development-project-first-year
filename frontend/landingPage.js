@@ -1,16 +1,18 @@
+import { redirectIfLoggedIn } from "./auth.js";
+
+redirectIfLoggedIn();
+
 document.addEventListener("DOMContentLoaded", () => {
 
   // ===============================
   // GET USER SESSION
   // ===============================
-  // Check if user is logged in (stored in localStorage)
   const user = localStorage.getItem("user");
 
 
   // ===============================
   // NAVBAR SHADOW EFFECT
   // ===============================
-  // Adds shadow to navbar when scrolling down
   const navbar = document.querySelector(".navbar");
 
   if (navbar) {
@@ -24,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // SCROLL ANIMATIONS
   // ===============================
-  // Animate elements when they come into view
   if ('IntersectionObserver' in window) {
 
     const observer = new IntersectionObserver((entries) => {
@@ -40,8 +41,8 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     animatedElements.forEach(el => {
-      el.classList.add("hidden"); // start hidden
-      observer.observe(el);       // observe for visibility
+      el.classList.add("hidden");
+      observer.observe(el);
     });
   }
 
@@ -49,19 +50,14 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // CATEGORY CLICK HANDLER
   // ===============================
-  // When user clicks a category:
-  // - Save category in localStorage
-  // - Redirect based on login state
   const categoryCards = document.querySelectorAll(".category-card");
 
   categoryCards.forEach(card => {
     card.addEventListener("click", () => {
       const category = card.textContent.trim();
 
-      // Save selected category
       localStorage.setItem("category", category);
 
-      // Redirect based on login status
       if (user) {
         window.location.href = "home.html";
       } else {
@@ -74,7 +70,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===============================
   // NAVBAR USER STATE
   // ===============================
-  // Change navbar buttons if user is logged in
   const navActions = document.getElementById("nav-actions");
 
   if (user && navActions) {
@@ -83,10 +78,6 @@ document.addEventListener("DOMContentLoaded", () => {
       <button class="btn btn-dark" id="logout-btn">Logout</button>
     `;
 
-    // ===============================
-    // LOGOUT FUNCTIONALITY
-    // ===============================
-    // Remove user session and redirect to login page
     document.getElementById("logout-btn").addEventListener("click", () => {
       localStorage.removeItem("user");
       window.location.replace("login.html");
