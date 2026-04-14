@@ -61,3 +61,48 @@ export function preventBackAccess() {
     }
   });
 }
+
+
+
+
+
+
+//Before Deployment
+/* 
+// ===============================
+// IMPORT AUTH FUNCTIONS
+// ===============================
+import { requireAuth, setupLogout, preventBackAccess } from "./auth.js";
+
+
+// ===============================
+// PROTECT PAGE
+// ===============================
+// Block access if user is not logged in
+requireAuth();
+
+
+// ===============================
+// LOGOUT SETUP
+// ===============================
+// Enable logout button if present
+setupLogout();
+
+
+// ===============================
+// PREVENT BACK BUTTON ACCESS
+// ===============================
+// Prevent user from returning after logout
+preventBackAccess();
+
+
+
+//e.g, <script type="module" src="home.js"></script>
+
+home.js
+library.js
+upload.js
+settings.js
+page.js
+post.js
+*/

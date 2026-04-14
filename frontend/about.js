@@ -1,4 +1,6 @@
-// FADE-IN ON LOAD
+// ===============================
+// PAGE LOAD ANIMATION
+// ===============================
 window.addEventListener("load", () => {
   const card = document.querySelector(".about-card");
 
@@ -15,7 +17,9 @@ window.addEventListener("load", () => {
 });
 
 
-// HEADER SHADOW ON SCROLL 
+// ===============================
+// HEADER SHADOW ON SCROLL
+// ===============================
 const header = document.querySelector(".custom-header");
 
 window.addEventListener("scroll", () => {
@@ -26,7 +30,9 @@ window.addEventListener("scroll", () => {
 });
 
 
-// LINK CLICK FEEDBACK 
+// ===============================
+// LINK CLICK FEEDBACK
+// ===============================
 document.querySelectorAll("a").forEach(link => {
   link.addEventListener("click", () => {
     link.style.opacity = "0.6";
@@ -38,7 +44,9 @@ document.querySelectorAll("a").forEach(link => {
 });
 
 
-// EMAIL CLICK ALERT 
+// ===============================
+// EMAIL CLICK LOG
+// ===============================
 const emailLink = document.querySelector('a[href^="mailto:"]');
 
 if (emailLink) {
@@ -46,16 +54,3 @@ if (emailLink) {
     console.log("Opening email client...");
   });
 }
-
-
-// TEAM LIST HOVER EFFECT
-document.querySelectorAll(".about-card li").forEach(member => {
-  member.addEventListener("mouseenter", () => {
-    member.style.transform = "translateX(4px)";
-    member.style.transition = "0.2s";
-  });
-
-  member.addEventListener("mouseleave", () => {
-    member.style.transform = "translateX(0)";
-  });
-});
