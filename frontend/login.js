@@ -1,26 +1,60 @@
+// Handles user login functionality:
+// - Validates input fields
+// - Sends login request to backend
+// - Manages UI states and redirects
+
+// Get form elements
 const form = document.getElementById("login-form");
 const loginBtn = document.getElementById("login-btn");
 const errorMsg = document.getElementById("error-msg");
 
+
+
+// PASSWORD TOGGLE
+
+document.querySelectorAll(".toggle-password").forEach(icon => {
+  icon.addEventListener("click", () => {
+    const input = document.getElementById(icon.dataset.target);
+
+    if (input.type === "password") {
+      input.type = "text";
+      icon.textContent = "🙈";
+    } else {
+      input.type = "password";
+      icon.textContent = "👁";
+    }
+  });
+});
+
+
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  // Get input values
   const identifier = document.getElementById("login-input").value.trim();
   const password = document.getElementById("password").value.trim();
 
+  // Clear previous error
   errorMsg.textContent = "";
 
-  //VALIDATION
+  
+  // FORM VALIDATION
+  
   if (!identifier || !password) {
     errorMsg.textContent = "Please fill all fields";
     return;
   }
 
   try {
-    //LOADING STATE
+    
+    // LOADING STATE
+  
     loginBtn.textContent = "Signing in...";
     loginBtn.disabled = true;
 
+    
+    // SEND LOGIN REQUEST TO BACKEND
+    
     const response = await fetch("http://localhost:3000/api/auth/login", {
       method: "POST",
       headers: {
@@ -31,7 +65,9 @@ form.addEventListener("submit", async (e) => {
 
     const data = await response.json();
 
-    //ERROR HANDLING
+    
+    // HANDLE SERVER RESPONSE
+    
     if (!response.ok) {
       errorMsg.textContent = data.message || "Login failed";
       loginBtn.textContent = "Sign in";
@@ -39,19 +75,18 @@ form.addEventListener("submit", async (e) => {
       return;
     }
 
-    //SUCCESS
+    
+    // SUCCESS: STORE USER + REDIRECT
+    
     localStorage.setItem("user", JSON.stringify(data.user));
 
-    // Smart redirect (category support)
-    const category = localStorage.getItem("category");
-
-    if (category) {
-      window.location.href = `home.html?category=${encodeURIComponent(category)}`;
-    } else {
-      window.location.href = "landingPage.html";
-    }
+    // Redirect to home page after login
+    window.location.href = "home.html";
 
   } catch (error) {
+    
+    // HANDLE NETWORK / SERVER ERRORS
+    
     console.error(error);
     errorMsg.textContent = "Server error. Try again later.";
     loginBtn.textContent = "Sign in";
@@ -60,7 +95,9 @@ form.addEventListener("submit", async (e) => {
 });
 
 
-//ENTER KEY SUPPORT
+
+// ENTER KEY SUBMIT SUPPORT
+
 document.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     form.dispatchEvent(new Event("submit"));
@@ -68,7 +105,9 @@ document.addEventListener("keypress", (e) => {
 });
 
 
-//BUTTON CLICK EFFECT
+
+// BUTTON CLICK EFFECT (UI FEEDBACK)
+
 loginBtn.addEventListener("mousedown", () => {
   loginBtn.style.transform = "scale(0.95)";
 });
@@ -78,7 +117,9 @@ loginBtn.addEventListener("mouseup", () => {
 });
 
 
-//HEADER SHADOW
+
+// HEADER SHADOW ON SCROLL
+
 const header = document.querySelector("header");
 
 window.addEventListener("scroll", () => {
