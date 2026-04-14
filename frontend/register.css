@@ -87,10 +87,31 @@ input[type="date"] {
   padding: 10px !important;
 }
 
+/* FOCUS */
 .form-control:focus {
   border-color: #5A9EA4 !important;
   box-shadow: 0 0 8px rgba(90,158,164,0.5);
   transform: scale(1.02);
+}
+
+/* ================= PASSWORD TOGGLE ================= */
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 40px !important;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 14px;
+  user-select: none;
+  color: #0d2b3e;
 }
 
 /* BUTTON */
