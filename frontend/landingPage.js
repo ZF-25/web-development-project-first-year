@@ -1,17 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  
-  // REDIRECT IF ALREADY LOGGED IN
- 
+  // ===============================
+  // GET USER SESSION
+  // ===============================
+  // Check if user is logged in (stored in localStorage)
   const user = localStorage.getItem("user");
 
-  if (user) {
-    window.location.replace("home.html");
-  }
 
-  
-  // NAVBAR SHADOW
-  
+  // ===============================
+  // NAVBAR SHADOW EFFECT
+  // ===============================
+  // Adds shadow to navbar when scrolling down
   const navbar = document.querySelector(".navbar");
 
   if (navbar) {
@@ -21,9 +20,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  
+
+  // ===============================
   // SCROLL ANIMATIONS
-  
+  // ===============================
+  // Animate elements when they come into view
   if ('IntersectionObserver' in window) {
 
     const observer = new IntersectionObserver((entries) => {
@@ -39,14 +40,18 @@ document.addEventListener("DOMContentLoaded", () => {
     );
 
     animatedElements.forEach(el => {
-      el.classList.add("hidden");
-      observer.observe(el);
+      el.classList.add("hidden"); // start hidden
+      observer.observe(el);       // observe for visibility
     });
   }
 
-  
-  // CATEGORY CLICK
-  
+
+  // ===============================
+  // CATEGORY CLICK HANDLER
+  // ===============================
+  // When user clicks a category:
+  // - Save category in localStorage
+  // - Redirect based on login state
   const categoryCards = document.querySelectorAll(".category-card");
 
   categoryCards.forEach(card => {
@@ -56,9 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       // Save selected category
       localStorage.setItem("category", category);
 
-      const user = localStorage.getItem("user");
-
-      // Redirect based on login state
+      // Redirect based on login status
       if (user) {
         window.location.href = "home.html";
       } else {
@@ -67,9 +70,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  
+
+  // ===============================
   // NAVBAR USER STATE
-  
+  // ===============================
+  // Change navbar buttons if user is logged in
   const navActions = document.getElementById("nav-actions");
 
   if (user && navActions) {
@@ -78,6 +83,10 @@ document.addEventListener("DOMContentLoaded", () => {
       <button class="btn btn-dark" id="logout-btn">Logout</button>
     `;
 
+    // ===============================
+    // LOGOUT FUNCTIONALITY
+    // ===============================
+    // Remove user session and redirect to login page
     document.getElementById("logout-btn").addEventListener("click", () => {
       localStorage.removeItem("user");
       window.location.replace("login.html");
