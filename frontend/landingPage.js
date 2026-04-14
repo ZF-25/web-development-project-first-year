@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  //NAVBAR SHADOW
+  // NAVBAR SHADOW
   const navbar = document.querySelector(".navbar");
 
   if (navbar) {
@@ -10,8 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
-  //SCROLL ANIMATIONS
+  // SCROLL ANIMATIONS
   if ('IntersectionObserver' in window) {
 
     const observer = new IntersectionObserver((entries) => {
@@ -32,21 +31,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
-  //CATEGORY CLICK
+  // CATEGORY CLICK (FIXED)
   const categoryCards = document.querySelectorAll(".category-card");
 
-  if (categoryCards.length > 0) {
-    categoryCards.forEach(card => {
-      card.addEventListener("click", () => {
-        const category = card.textContent.trim();
+  categoryCards.forEach(card => {
+    card.addEventListener("click", () => {
+      const category = card.textContent.trim();
 
-        // Save selected category
-        localStorage.setItem("category", category);
+      localStorage.setItem("category", category);
 
-        // Redirect to login with query param
+      const user = localStorage.getItem("user");
+
+      if (user) {
+        window.location.href = "dashboard.html";
+      } else {
         window.location.href = `login.html?category=${encodeURIComponent(category)}`;
-      });
+      }
+    });
+  });
+
+  // NAVBAR USER STATE 
+  const user = localStorage.getItem("user");
+  const navActions = document.getElementById("nav-actions");
+
+  if (user && navActions) {
+    navActions.innerHTML = `
+      <a href="dashboard.html" class="btn btn-outline-dark me-2">Dashboard</a>
+      <button class="btn btn-dark" id="logout-btn">Logout</button>
+    `;
+
+    document.getElementById("logout-btn").addEventListener("click", () => {
+      localStorage.removeItem("user");
+      window.location.reload();
     });
   }
 
