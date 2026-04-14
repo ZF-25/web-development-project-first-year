@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const user = localStorage.getItem("user");
 
       if (user) {
-        window.location.href = "dashboard.html";
+        window.location.href = "home.html";
       } else {
         window.location.href = `login.html?category=${encodeURIComponent(category)}`;
       }
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (user && navActions) {
     navActions.innerHTML = `
-      <a href="dashboard.html" class="btn btn-outline-dark me-2">Dashboard</a>
+      <a href="home.html" class="btn btn-outline-dark me-2">Dashboard</a>
       <button class="btn btn-dark" id="logout-btn">Logout</button>
     `;
 
