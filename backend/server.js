@@ -57,13 +57,13 @@ pool.query('SELECT NOW()', (err) => {
 app.post('/api/auth/register', async (req, res) => {
   const { username, email, password, dob } = req.body;
 
-  // Validation
+  // Basic validation
   if (!username || !email || !password || !dob) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   try {
-    // Check existing user
+    // Check if user alraedy exists
     const existingUser = await pool.query(
       'SELECT * FROM users WHERE email = $1 OR username = $2',
       [email, username]
@@ -73,10 +73,10 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Hash password
+    // Hash password before saving
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert user
+    // Insert new user into database
     const newUser = await pool.query(
       `INSERT INTO users (username, email, password, dob)
        VALUES ($1, $2, $3, $4)
@@ -100,12 +100,13 @@ app.post('/api/auth/register', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
   const { identifier, password } = req.body;
 
-  // Validation
+  // Basic validation
   if (!identifier || !password) {
     return res.status(400).json({ message: 'All fields are required' });
   }
 
   try {
+    //Find user by email OR username
     const result = await pool.query(
       'SELECT * FROM users WHERE email = $1 OR username = $1',
       [identifier]
@@ -117,20 +118,21 @@ app.post('/api/auth/login', async (req, res) => {
 
     const user = result.rows[0];
 
-    // Compare password
+    // Compare entered password with hashed password
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
       return res.status(400).json({ message: 'Invalid password' });
     }
 
-    // Send safe user data only
+    // Send safe user data only (no password)
     res.json({
       message: 'Login successful',
       user: {
         id: user.id,
         username: user.username,
         email: user.email,
+        profile_pic: user.profile_pic
       },
     });
 
@@ -307,7 +309,13 @@ app.get('/api/posts/topic/:topic', async (req, res) => {
 // 1. Update profile picture
   app.put('/api/users/profile-pic', upload.single('profile_pic'), async (req, res) => {
   const { user_id, username } = req.body;
-  const filePath = req.file.filename;
+
+  //CHECK IF FILE EXISTS
+  if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    const filePath = req.file.filename;
 
   await pool.query(
     'UPDATE users SET profile_pic = $1 WHERE id = $2',
@@ -331,7 +339,6 @@ app.get('/api/users/:id', async (req, res) => {
   }
 });
 
-app.use('/uploads', express.static('uploads'));
 
 
 
