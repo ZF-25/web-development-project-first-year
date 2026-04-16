@@ -175,7 +175,27 @@ app.post('/api/auth/login', async (req, res) => {
 // ================= POSTS APIs ==========================
 // ======================================================
 // Handles: Notes / posts
+app.get('/api/posts/:id', async (req, res) => {
+  try {
+    const result = await pool.query(
+      `
+      SELECT 
+        posts.*,
+        users.username,
+        users.profile_pic
+      FROM posts
+      JOIN users ON users.id = posts.user_id
+      WHERE posts.id = $1
+      `,
+      [req.params.id]
+    );
 
+    res.json(result.rows[0]);
+
+  } catch (err) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
 
 
 
@@ -236,15 +256,27 @@ app.post('/api/posts', async (req, res) => {
 
     const subcategory_id = subcategoryResult.rows[0].id;
 
-    // 3. Insert post
-    const postResult = await pool.query(
-      `INSERT INTO posts (title, content, topic, user_id, subcategory_id)
-       VALUES ($1, $2, $3, $4, $5)
-       RETURNING id`,
-      [title, content, topic, user_id, subcategory_id]
-    );
+    // 3. Get topic_id
+   // const topicResult = await pool.query(
+      //'SELECT id FROM topics WHERE LOWER(name) = LOWER($1)',
+      //[topic]
+    //);
 
-    const post_id = postResult.rows[0].id;
+    //if (topicResult.rows.length === 0) {
+      //return res.status(400).json({ error: 'Invalid topic' });
+    //}
+
+    //const topic_id = topicResult.rows[0].id;
+
+    // 4. Insert post
+    const postResult = await pool.query(
+  `INSERT INTO posts (title, content, topic, user_id, subcategory_id)
+   VALUES ($1, $2, $3, $4, $5)
+   RETURNING id`,
+  [title, content, topic, user_id, subcategory_id]
+);
+
+const post_id = postResult.rows[0].id;
 
     // 4. Save references
     if (references) {
@@ -269,22 +301,21 @@ app.get('/api/posts/topic/:topic', async (req, res) => {
     const { topic } = req.params;
 
     const result = await pool.query(
-      `
-      SELECT 
-        posts.id,
-        posts.title,
-        posts.content,
-        posts.topic,
-        users.username,
-        users.profile_pic
-      FROM posts
-      JOIN users ON users.id = posts.user_id
-      WHERE LOWER(posts.topic) = LOWER($1)
-      ORDER BY posts.id DESC
-      `,
-      [topic]
-    );
-
+  `
+  SELECT 
+    posts.id,
+    posts.title,
+    posts.content,
+    posts.topic,
+    users.username,
+    users.profile_pic
+  FROM posts
+  JOIN users ON users.id = posts.user_id
+  WHERE LOWER(posts.topic) = LOWER($1)
+  ORDER BY posts.id DESC
+  `,
+  [topic]
+);
     res.json(result.rows);
 
   } catch (err) {
@@ -292,6 +323,8 @@ app.get('/api/posts/topic/:topic', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
 
 
 // ======================================================
