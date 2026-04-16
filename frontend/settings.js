@@ -2,6 +2,7 @@
 const user = JSON.parse(localStorage.getItem("user"));
 const user_id = user?.id;
 
+
 // EDIT PROFILE PICTURE
 document.querySelector('#editProfile button').addEventListener('click', async () => {
     const fileInput = document.querySelector('#editProfile input[type="file"]');

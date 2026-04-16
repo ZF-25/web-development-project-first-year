@@ -113,6 +113,7 @@ function renderArticles(){
 const user = JSON.parse(localStorage.getItem("user"));
 const user_id = user?.id;
 
+
 async function loadUserProfileImages() {
     try {
         const res = await fetch(`http://localhost:3000/api/users/${user_id}`);

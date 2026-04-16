@@ -1,5 +1,10 @@
 @media (max-width: 768px) {
 
+    .header {
+        
+        
+    }
+
     .logo {
         width: 150px;
         height: 90px;
@@ -82,16 +87,19 @@ html,body{
     display: block;
 }
 
-.profile-img{
-    border-radius:100%;
-    background-color: white;
-    padding: 2px;
-    cursor:pointer
+.profile-img {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid #3a5560;
+    object-fit: cover;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-.profile:hover {
+.profile-img:hover {
     transform: scale(1.05);
-    filter: brightness(0.8);
+    filter: brightness(0.9);
 }
 
 .dropdown{
@@ -145,7 +153,7 @@ html,body{
 }
 
 .list-group-item-action {
-    font-size: xx-large;
+    font-size: x-large;
     font-weight: bolder;
 }
 

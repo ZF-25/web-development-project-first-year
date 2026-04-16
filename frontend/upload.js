@@ -86,7 +86,9 @@ uploadBtn.addEventListener("click", async () => {
     const references = document.getElementById("references").value;
 
     const user = JSON.parse(localStorage.getItem("user"));
-    const user_id = user?.id;
+    //const user_id = user?.id;
+    const user_id = 1;
+
 
     // ✅ VALIDATION (IMPORTANT)
     if (!user_id) {
@@ -145,6 +147,7 @@ uploadBtn.addEventListener("click", async () => {
 
 const user = JSON.parse(localStorage.getItem("user"));
 const user_id = user?.id;
+
 
 async function loadUserProfileImages() {
     try {
