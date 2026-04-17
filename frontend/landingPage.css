@@ -1,3 +1,6 @@
+/* ===============================
+   GLOBAL STYLES
+=============================== */
 * {
   margin: 0;
   padding: 0;
@@ -5,28 +8,36 @@
   font-family: Arial;
 }
 
-/* HEADER */
+
+/* ===============================
+   HEADER / NAVBAR
+=============================== */
 .custom-header {
   background: #5A9EA4;
 }
 
+/* Logo */
 .logo {
   height: 55px;
 }
 
+/* App name */
 .logo-text {
-  font-size: 34px;
+  font-size: 30px;
   color: #0d2b3e;
   font-weight: bold;
 }
 
-/* HERO */
+
+/* ===============================
+   HERO SECTION
+=============================== */
 .hero {
   min-height: 70vh;
-  padding: 80px 20px;
+  padding: 60px 20px;
 
   background:
-    linear-gradient(rgba(90,158,164,0.75), rgba(90,158,164,0.75)),
+    linear-gradient(rgba(90,158,164,0.7), rgba(90,158,164,0.7)),
     url("./images/app-background-image.jpg");
 
   background-size: cover;
@@ -34,67 +45,82 @@
 }
 
 .hero h1 {
-  font-size: 40px;
+  font-size: 36px;
 }
 
 .hero p {
   font-size: 16px;
 }
 
-/* BUTTON */
+
+/* ===============================
+   BUTTON
+=============================== */
 .btn-main {
-  background:#0f666d;
+  background: #0f666d;
   color: white;
-  border-radius: 12px;
-  padding: 12px 25px;
+  border-radius: 10px;
+  padding: 10px 20px;
 }
 
 .btn-main:hover {
   background: #4a8b90;
 }
 
-/* FEATURES */
+
+/* ===============================
+   FEATURES SECTION
+=============================== */
 .features {
   background: #d0eff1;
 }
 
 .feature-card {
-  padding: 25px;
-  border-radius: 15px;
+  padding: 20px;
+  border-radius: 12px;
   background: white;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
   font-weight: bold;
 }
 
-/* CATEGORIES */
+
+/* ===============================
+   CATEGORIES SECTION
+=============================== */
 .categories {
   background:
-    linear-gradient(rgba(90,158,164,0.25), rgba(90,158,164,0.25)),
+    linear-gradient(rgba(90,158,164,0.2), rgba(90,158,164,0.2)),
     url("./images/app-background-image.jpg");
 
-  background-size: 500px;
+  background-size: 400px;
 }
 
 .category-card {
-  padding: 15px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.9);
+  padding: 12px;
+  border-radius: 8px;
+  background: white;
   border: 2px solid #0d2b3e;
   cursor: pointer;
-  transition: 0.2s;
 }
 
+/* Simple hover */
 .category-card:hover {
   background: #5A9EA4;
   color: white;
 }
 
-/* CTA */
+
+/* ===============================
+   CTA SECTION
+=============================== */
 .cta {
   background: #d0eff1;
 }
 
-/* FOOTER */
+
+/* ===============================
+   FOOTER
+=============================== */
 footer {
   color: #0d2b3e;
 }
@@ -107,16 +133,4 @@ footer a {
 
 footer a:hover {
   text-decoration: underline;
-}
-
-/* ANIMATIONS */
-.hidden {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s ease;
-}
-
-.show {
-  opacity: 1;
-  transform: translateY(0);
 }
