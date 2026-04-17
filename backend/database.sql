@@ -1,7 +1,3 @@
--- DATABASE SETUP
--- Create database manually in pgAdmin:
--- CREATE DATABASE brainworm;
-
 -- ================= USERS =================
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
@@ -26,12 +22,19 @@ CREATE TABLE subcategories (
   category_id INTEGER REFERENCES categories(id) ON DELETE CASCADE
 );
 
+-- ================= TOPICS =================
+CREATE TABLE topics (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  subcategory_id INTEGER REFERENCES subcategories(id) ON DELETE CASCADE
+);
+
 -- ================= POSTS =================
 CREATE TABLE posts (
   id SERIAL PRIMARY KEY,
   title TEXT NOT NULL,
   content TEXT NOT NULL,
-  topic TEXT NOT NULL,
+  topic_id INTEGER REFERENCES topics(id) ON DELETE SET NULL,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   subcategory_id INTEGER REFERENCES subcategories(id) ON DELETE CASCADE,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -97,3 +100,13 @@ INSERT INTO subcategories (name, category_id) VALUES
 ('Finnish', 6),
 ('Spanish', 6),
 ('Chinese', 6);
+
+-- Topics
+INSERT INTO topics (name, subcategory_id) VALUES
+('Optics', 1),
+('Thermodynamics', 1),
+('Mechanics', 1),
+('Cell Biology', 2),
+('Genetics', 2),
+('Algebra', 6),
+('Geometry', 6);
