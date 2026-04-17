@@ -2,61 +2,61 @@
 -- Create database manually in pgAdmin:
 -- CREATE DATABASE brainworm;
 
--- USERS
+-- ================= USERS =================
 CREATE TABLE users (
-id SERIAL PRIMARY KEY,
-username VARCHAR(50) UNIQUE NOT NULL,
-email VARCHAR(100) UNIQUE NOT NULL,
-password TEXT NOT NULL,
-dob DATE,
-profile_pic TEXT,
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  dob DATE,
+  profile_pic TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- CATEGORIES
+-- ================= CATEGORIES =================
 CREATE TABLE categories (
-id SERIAL PRIMARY KEY,
-name VARCHAR(100) NOT NULL
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL
 );
 
--- SUBCATEGORIES
+-- ================= SUBCATEGORIES =================
 CREATE TABLE subcategories (
-id SERIAL PRIMARY KEY,
-name VARCHAR(100) NOT NULL,
-category_id INTEGER REFERENCES categories(id) ON DELETE CASCADE
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  category_id INTEGER REFERENCES categories(id) ON DELETE CASCADE
 );
 
--- POSTS
+-- ================= POSTS =================
 CREATE TABLE posts (
-id SERIAL PRIMARY KEY,
-title TEXT NOT NULL,
-content TEXT NOT NULL,
-topic_id INTEGER REFERENCES topics(id) ON DELETE SET NULL,
-user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-subcategory_id INTEGER REFERENCES subcategories(id) ON DELETE CASCADE,
-created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  content TEXT NOT NULL,
+  topic TEXT NOT NULL,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  subcategory_id INTEGER REFERENCES subcategories(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- RATINGS
-CREATE TABLE ratings (
-id SERIAL PRIMARY KEY,
-user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
-rating INTEGER CHECK (rating >= 1 AND rating <= 5)
-);
-
--- FILES (REFERENCES)
+-- ================= FILES =================
 CREATE TABLE files (
-id SERIAL PRIMARY KEY,
-post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
-file_url TEXT NOT NULL
+  id SERIAL PRIMARY KEY,
+  post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+  file_url TEXT NOT NULL
 );
 
--- FAVOURITES
+-- ================= RATINGS =================
+CREATE TABLE ratings (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
+  rating INTEGER CHECK (rating >= 1 AND rating <= 5)
+);
+
+-- ================= FAVOURITES =================
 CREATE TABLE favourites (
-id SERIAL PRIMARY KEY,
-user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE
 );
 
 -- ================= SAMPLE DATA =================
@@ -97,16 +97,3 @@ INSERT INTO subcategories (name, category_id) VALUES
 ('Finnish', 6),
 ('Spanish', 6),
 ('Chinese', 6);
-
--- Topics
-INSERT INTO topics (name, subcategory_id) VALUES
-('Optics', (SELECT id FROM subcategories WHERE name = 'Physics')),
-('Thermodynamics', (SELECT id FROM subcategories WHERE name = 'Physics')),
-('Mechanics', (SELECT id FROM subcategories WHERE name = 'Physics')),
-('Cell Biology', (SELECT id FROM subcategories WHERE name = 'Biology')),
-('Genetics', (SELECT id FROM subcategories WHERE name = 'Biology')),
-('Algebra', (SELECT id FROM subcategories WHERE name = 'Mathematics')),
-('Geometry', (SELECT id FROM subcategories WHERE name = 'Mathematics'));
--- NOTES
--- "Topics" (e.g., Mechanics, Thermodynamics) are stored inside POSTS as 'topic'.
--- Do NOT create a separate topics table.
