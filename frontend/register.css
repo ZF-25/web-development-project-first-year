@@ -1,3 +1,6 @@
+/* ===============================
+   GLOBAL STYLES
+=============================== */
 * {
   margin: 0;
   padding: 0;
@@ -5,134 +8,141 @@
   font-family: Arial, sans-serif;
 }
 
+/* Background color of whole page */
 body {
   background: #1c1c1c;
 }
 
-/* HEADER + FOOTER */
+
+/* ===============================
+   HEADER + FOOTER
+=============================== */
 .custom-header {
   background: #5A9EA4;
 }
 
-/* LOGO */
+/* Logo image */
 .logo {
   height: 55px;
 }
 
+/* App name text */
 .logo-text {
-  font-size: 34px;
+  font-size: 30px;
   color: #0d2b3e;
   font-weight: bold;
 }
 
-/* CONTENT */
+
+/* ===============================
+   MAIN BACKGROUND
+=============================== */
 .content {
   background:
     linear-gradient(rgba(90,158,164,0.25), rgba(90,158,164,0.25)),
     url("./images/app-background-image.jpg");
 
-  background-size: 500px;
+  background-size: 400px;
   background-repeat: repeat;
 }
 
-/* CARD */
+
+/* ===============================
+   FORM CARD
+=============================== */
 .login-card {
   width: 90%;
-  max-width: 360px;
-  padding: 26px;
+  max-width: 350px;
+  padding: 25px;
 
-  background: rgba(255,255,255,0.9);
-  border-radius: 20px;
+  background: white;
+  border-radius: 15px;
 
-  box-shadow: 0 12px 30px rgba(0,0,0,0.25);
-
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /* Simple shadow (no blur or animation) */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 
   display: flex;
   flex-direction: column;
-  gap: 14px;
-
-  animation: fadeIn 0.5s ease;
-  transition: 0.3s;
+  gap: 12px;
 }
 
-.login-card:hover {
-  transform: translateY(-2px);
-}
 
-/* TITLE */
+/* ===============================
+   FORM TITLE
+=============================== */
 .form-title {
   text-align: center;
   color: #0d2b3e;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
 }
 
-/* INPUTS */
+
+/* ===============================
+   INPUT FIELDS
+=============================== */
 .form-control {
-  padding: 12px !important;
+  padding: 10px !important;
   font-size: 14px;
 
-  border-radius: 12px !important;
+  border-radius: 10px !important;
   border: 2px solid #5A9EA4 !important;
 
-  background: #f0f0f0;
   text-align: center;
-  transition: 0.2s;
 }
 
-/* Fix for date input */
+/* Date input small fix */
 input[type="date"] {
-  padding: 10px !important;
+  padding: 8px !important;
 }
 
-/* FOCUS */
-.form-control:focus {
-  border-color: #5A9EA4 !important;
-  box-shadow: 0 0 8px rgba(90,158,164,0.5);
-  transform: scale(1.02);
-}
 
-/* ================= PASSWORD TOGGLE ================= */
+/* ===============================
+   PASSWORD TOGGLE
+=============================== */
 .password-wrapper {
   position: relative;
 }
 
+/* Add space for eye icon */
 .password-wrapper input {
-  padding-right: 40px !important;
+  padding-right: 35px !important;
 }
 
+/* Eye icon */
 .toggle-password {
   position: absolute;
-  right: 12px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
   font-size: 14px;
-  user-select: none;
-  color: #0d2b3e;
 }
 
-/* BUTTON */
+
+/* ===============================
+   BUTTON
+=============================== */
 .login-btn {
-  padding: 12px;
-  border-radius: 12px;
+  padding: 10px;
+  border-radius: 10px;
 
   background: #5A9EA4;
   color: white;
 
   border: none;
-  font-weight: 500;
-  transition: 0.2s;
+  font-weight: bold;
 }
 
+/* Simple hover effect */
 .login-btn:hover {
   background: #4a8b90;
-  transform: translateY(-2px);
 }
 
-/* LINKS */
+
+/* ===============================
+   LINKS
+=============================== */
 .register {
   font-size: 14px;
 }
@@ -147,15 +157,21 @@ input[type="date"] {
   text-decoration: underline;
 }
 
-/* ERROR */
+
+/* ===============================
+   ERROR MESSAGE
+=============================== */
 .error {
   color: red;
   text-align: center;
-  min-height: 18px;
   font-size: 13px;
+  min-height: 18px;
 }
 
-/* FOOTER */
+
+/* ===============================
+   FOOTER LINK
+=============================== */
 footer a {
   color: #0d2b3e;
   font-weight: bold;
@@ -164,16 +180,4 @@ footer a {
 
 footer a:hover {
   text-decoration: underline;
-}
-
-/* ANIMATION */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
