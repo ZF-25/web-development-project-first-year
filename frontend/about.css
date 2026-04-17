@@ -1,4 +1,6 @@
-/* GLOBAL */
+/* ===============================
+   GLOBAL
+=============================== */
 * {
   margin: 0;
   padding: 0;
@@ -10,12 +12,14 @@ body {
   background: #1c1c1c;
 }
 
-/* HEADER + FOOTER */
+
+/* ===============================
+   HEADER + FOOTER
+=============================== */
 .custom-header {
   background: #5A9EA4;
 }
 
-/* LOGO */
 .logo {
   height: 50px;
 }
@@ -26,62 +30,64 @@ body {
   font-weight: bold;
 }
 
-/* CONTENT */
+
+/* ===============================
+   CONTENT BACKGROUND
+=============================== */
 .content {
   background:
     linear-gradient(rgba(90,158,164,0.25), rgba(90,158,164,0.25)),
     url("./images/app-background-image.jpg");
 
-  background-size: 500px;
+  background-size: 400px;
   background-repeat: repeat;
 }
 
-/* CARD */
+
+/* ===============================
+   CARD
+=============================== */
 .about-card {
   width: 100%;
   max-width: 600px;
   padding: 25px;
 
-  background: rgba(255,255,255,0.95);
-  border-radius: 20px;
+  background: white;
+  border-radius: 15px;
 
-  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 
   display: flex;
   flex-direction: column;
-  gap: 12px;
-
-  animation: fadeIn 0.5s ease;
+  gap: 10px;
 }
 
-/* TEXT */
+
+/* ===============================
+   TEXT
+=============================== */
 .about-card h2,
 .about-card h3 {
   color: #0d2b3e;
 }
 
 .about-card p {
-  line-height: 1.6;
   font-size: 14px;
+  line-height: 1.5;
 }
 
-/* LIST */
 .about-card ul {
   margin-left: 20px;
 }
 
 .about-card li {
   margin-bottom: 5px;
-  transition: 0.2s;
 }
 
-/* HOVER EFFECT */
-.about-card li:hover {
-  transform: translateX(4px);
-  color: #5A9EA4;
-}
 
-/* LINKS */
+/* ===============================
+   LINKS
+=============================== */
 .about-card a {
   color: #0d2b3e;
   font-weight: bold;
@@ -89,11 +95,13 @@ body {
 }
 
 .about-card a:hover {
-  color: #4a8b90;
   text-decoration: underline;
 }
 
-/* FOOTER */
+
+/* ===============================
+   FOOTER
+=============================== */
 footer a {
   color: #0d2b3e;
   font-weight: bold;
@@ -102,16 +110,4 @@ footer a {
 
 footer a:hover {
   text-decoration: underline;
-}
-
-/* ANIMATION */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
