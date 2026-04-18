@@ -171,43 +171,154 @@
         </div>
     </div>
     </div>
-<script>
-// open and close the menu 
-// === dropdown menu ===
+<script type="module">
+
+// ===============================
+// IMPORT AUTH
+// ===============================
+import { requireAuth, getUser } from "./auth.js";
+
+requireAuth();
+
+
+// ===============================
+// CONFIG
+// ===============================
+const API_BASE = "http://localhost:3000";
+
+
+// ===============================
+// GET TOPIC FROM URL
+// ===============================
+const params = new URLSearchParams(window.location.search);
+const topic = params.get("topic");
+
+
+// ===============================
+// INIT
+// ===============================
 document.addEventListener('DOMContentLoaded', () => {
+    setupProfileMenu();
+    setupLogout();
+    loadPosts();
+    setTopicTitle();
+});
+
+
+// ===============================
+// SET TOPIC TITLE
+// ===============================
+function setTopicTitle() {
+    const titleEl = document.querySelector(".category-badge");
+
+    if (titleEl && topic) {
+        titleEl.textContent = topic.toUpperCase();
+    }
+}
+
+
+// ===============================
+// LOAD POSTS (🔥 MAIN FIX)
+// ===============================
+async function loadPosts() {
+    const container = document.querySelector(".posts-container");
+
+    if (!topic) {
+        container.innerHTML = "<p>No topic selected</p>";
+        return;
+    }
+
+    try {
+        container.innerHTML = `<p style="text-align:center;">Loading posts...</p>`;
+
+        const res = await fetch(`${API_BASE}/api/posts/topic/${topic}`);
+        const posts = await res.json();
+
+        if (!posts.length) {
+            container.innerHTML = `<p style="text-align:center;">No posts found</p>`;
+            return;
+        }
+
+        container.innerHTML = "";
+
+        posts.forEach(post => {
+            container.innerHTML += `
+                <div class="post-row">
+                    
+                    <div class="post-title">
+                        <a href="post.html?id=${post.id}" class="post-title">
+                            ${post.title}
+                        </a>
+                    </div>
+
+                    <div class="post-desc">
+                        ${post.content.substring(0, 120)}...
+                    </div>
+
+                    <!-- KEEPING RATING UI (STATIC) -->
+                    <div class="rating">
+                        ★ ★ ★ ★ ★
+                    </div>
+
+                    <div class="author">
+                        <span class="author-name">${post.username}</span>
+                        <img src="https://i.pravatar.cc/38?u=${post.username}" class="avatar">
+                    </div>
+
+                </div>
+            `;
+        });
+
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = `<p style="text-align:center; color:red;">Failed to load posts</p>`;
+    }
+}
+
+
+// ===============================
+// PROFILE MENU (UNCHANGED LOGIC)
+// ===============================
+function setupProfileMenu() {
     const profileMenu = document.querySelector('.profile-menu');
     const dropdown = document.querySelector('.dropdown');
 
-    // click
+    if (!profileMenu) return;
+
     document.querySelector('.profile-avatar').addEventListener('click', function(e) {
         e.stopPropagation();
         profileMenu.classList.toggle('active');
     });
 
-    // close by click
     document.addEventListener('click', function(e) {
         if (!profileMenu.contains(e.target)) {
             profileMenu.classList.remove('active');
         }
     });
 
-    //prevemt from closing when click inside of the menu
-    dropdown.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
-});
+    if (dropdown) {
+        dropdown.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+    }
+}
 
 
+// ===============================
+// LOGOUT (FIXED)
+// ===============================
+function setupLogout() {
+    const logoutLink = document.querySelector('.dropdown a[href="login.html"]');
+
+    if (logoutLink) {
+        logoutLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            localStorage.removeItem("user");
+            window.location.replace("login.html");
+        });
+    }
+}
 
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-    
