@@ -20,9 +20,12 @@
       <div class="logo">
         <div class="category-icon">
           <picture>
-            <source srcset="./images/app-logo-image.png" media="(max-width: 768px)">
-            <img src="./images/logo.png" alt="Brain Worm">
-          </picture>
+  <!-- mobile version -->
+  <source srcset="./images/app-logo-image.png" media="(max-width: 768px)">
+  
+  <!-- deskpot version  -->
+  <img src="./images/logo.png" alt="Brain Worm">
+</picture>
         </div>
       </div>
 
@@ -33,11 +36,12 @@
       <!-- avatar and dropdown menu -->
       <div class="profile-menu">
         <div class="profile-avatar">
-          <img src="images\profilepic.jpeg" alt="Profile" class="profile-img" id="profile-img">
+          <img src="./images/profilepic.jpg" alt="Profile" class="profile-img" onclick="toggleMenu()">
         </div>
         <div id="dropdown" class="dropdown">
           <a href="library.html">Library</a>
           <a href="upload.html">Create Posts</a>
+          <a href="settings.html">Settings</a>
           <a href="login.html">Logout</a>
         </div>
       </div>
@@ -48,12 +52,10 @@
 
 <div class="background">
     <!-- search bar and home -->
-    <div class="sub-bar d-flex flex-column flex-md-row align-items-center gap-2">
-<a href="home.html" class="home-btn" aria-label="home-page">
-  <img src="./images/home.png" alt="" width="28" height="28">
-</a>
-
-
+<div class="sub-bar d-flex flex-column flex-md-row align-items-center gap-2">
+  <button class="home-btn" aria-label="home-page">
+   <a href="project.html" class="home-btn"> <img src="./images/home.png" alt="" width="28" height="28"></a>
+  </button>
 
       <div class="search-container">
         <span class="search-icon">
