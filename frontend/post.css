@@ -31,6 +31,7 @@ body {
     justify-content: space-between !important;
     padding: 40px;
 }
+
 .logo {
     position: absolute;
     left: 50%;
@@ -85,8 +86,14 @@ body {
 .back {
   display: inline-block;
   margin-bottom: 20px;
-  color: var(--accent);
-  text-decoration: none;
+  color: var(--text);
+    border-radius: 10px;
+    border-color: #1d3557;
+    border-width: 3px;
+   width: 260px;
+  background-color:var(--card);
+  text-decoration: none !important;
+  font-size: 25px;
   font-weight: 600;
 }
 
@@ -168,15 +175,6 @@ body {
 }
 
 
-/* RATING */
-.rating {
-  margin-top: 20px;
-  text-align: center;
-  font-size: 24px;
-  color: #0f5e78;
-  letter-spacing: 3px;
-}
-
 /* CONTENT */
 .content {
   margin-top: 20px;
@@ -202,6 +200,42 @@ body {
 
 .content::-webkit-scrollbar-track {
   background: #e6f6f9;
+}
+/* ====================== FAVORITE BUTTON ====================== */
+
+.favorite-btn {
+    font-weight: 500;
+    border-width: 2px;
+    width: 250px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-size: 18px;
+    justify-content: center;
+
+}
+
+.favorite-btn:hover {
+    transform: scale(1.05);
+}
+
+.favorite-btn.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.favorite-btn .favorite-icon {
+    transition: transform 0.3s ease;
+}
+
+.favorite-btn:hover .favorite-icon {
+    transform: scale(1.2);
+}
+
+/* Когда пост уже в избранном */
+.favorite-btn.active {
+    background-color: #dc3545;
+    color: white;
+    border-color: #dc3545;
 }
 /* REFERENCES */
 .references {
