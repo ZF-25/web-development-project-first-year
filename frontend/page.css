@@ -269,10 +269,13 @@ position: relative;
 }
 
 .profile-img{
-    border-radius:100%;
-    background-color: white;
-    padding: 2px;
-    cursor:pointer
+       width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 3px solid #3a5560;
+    object-fit: cover;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
 .profile:hover {
@@ -321,9 +324,11 @@ position: relative;
     
 }
 
+.profile-menu:hover .dropdown,
 .profile-menu.active .dropdown {
-    display: block;
+  display: block;
 }
+
 /* ====================== deskpot ====================== */
 
 /* post are being in table view */

@@ -24,16 +24,25 @@
       <!-- central column — logo -->
       <div class="col-6 col-md-6 text-center">
         <div class="logo">
-          <img src="images/logo.png" alt="Brain Worm" class="logo-img">
+         <a href="landingPage.html"> <img src="images/logo.png" alt="Brain Worm" class="logo-img"></a>
         </div>
       </div>
 
       <!-- right column — profile pic  -->
-      <div class="col-3 col-md-3 text-end">
-        <div class="profile">
-          <img src="images/profilepic.jpeg" alt="Profile">
-        </div>
-      </div>
+     <!-- right column — profile pic + menu -->
+<div class="col-3 col-md-3 text-end">
+  <div class="profile-menu">
+    <div class="profile-avatar">
+      <img src="images/profilepic.jpeg" alt="Profile" class="profile-img">
+    </div>
+    <div id="dropdown" class="dropdown">
+      <a href="library.html">Library</a>
+      <a href="upload.html">Create Posts</a>
+      <a href="settings.html">Settings</a>
+      <a href="login.html">Logout</a>
+    </div>
+  </div>
+</div>
 
     </div>
   </div>
@@ -141,7 +150,34 @@
             } else {
                 sourcesList.innerHTML = '<p class="text-muted">No sources provided</p>';
             }
+ document.addEventListener('DOMContentLoaded', () => {
+  const profileMenu = document.querySelector('.profile-menu');
 
+  if (!profileMenu) return;
+
+  const avatar = profileMenu.querySelector('.profile-avatar');
+
+  // Клик по аватарке
+  avatar.addEventListener('click', function(e) {
+    e.stopPropagation();
+    profileMenu.classList.toggle('active');
+  });
+
+  // Закрытие при клике вне меню
+  document.addEventListener('click', function(e) {
+    if (!profileMenu.contains(e.target)) {
+      profileMenu.classList.remove('active');
+    }
+  });
+
+  // Чтобы ссылки внутри дропдауна не закрывали меню сразу
+  const dropdown = profileMenu.querySelector('.dropdown');
+  if (dropdown) {
+    dropdown.addEventListener('click', function(e) {
+      e.stopPropagation();
+    });
+  }
+});
             // ================== FAVORITES LOGIC ==================
             const user = JSON.parse(localStorage.getItem('user')) || {};
             const user_id = user.id || 1;   // Change to real user.id after login system is ready
