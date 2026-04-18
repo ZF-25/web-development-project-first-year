@@ -157,13 +157,13 @@
 
   const avatar = profileMenu.querySelector('.profile-avatar');
 
-  // Клик по аватарке
+  // click avatar
   avatar.addEventListener('click', function(e) {
     e.stopPropagation();
     profileMenu.classList.toggle('active');
   });
 
-  // Закрытие при клике вне меню
+  //closing when click outise of the dropdown
   document.addEventListener('click', function(e) {
     if (!profileMenu.contains(e.target)) {
       profileMenu.classList.remove('active');
