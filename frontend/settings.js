@@ -1,10 +1,50 @@
-// USER ID
-const user = JSON.parse(localStorage.getItem("user"));
+// ===============================
+// IMPORT AUTH
+// ===============================
+import { requireAuth, getUser } from "./auth.js";
+
+requireAuth();
+
+const API_BASE = "http://localhost:3000";
+
+
+// ===============================
+// USER
+// ===============================
+const user = getUser();
 const user_id = user?.id;
 
 
+// ===============================
+// INIT
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+    loadProfile();
+    setupLogout();
+});
+
+
+// ===============================
+// LOGOUT
+// ===============================
+function setupLogout() {
+    const logoutLink = document.querySelector('.dropdown a[href="login.html"]');
+
+    if (logoutLink) {
+        logoutLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            localStorage.removeItem("user");
+            window.location.replace("login.html");
+        });
+    }
+}
+
+
+// ===============================
 // EDIT PROFILE PICTURE
-document.querySelector('#editProfile button').addEventListener('click', async () => {
+// ===============================
+document.querySelector('#editProfile button')?.addEventListener('click', async () => {
+
     const fileInput = document.querySelector('#editProfile input[type="file"]');
     const file = fileInput.files[0];
 
@@ -13,27 +53,24 @@ document.querySelector('#editProfile button').addEventListener('click', async ()
         return;
     }
 
-    // ✅ Show preview instantly
     const previewURL = URL.createObjectURL(file);
 
     try {
-        // ✅ IMPORTANT: use FormData (for multer)
         const formData = new FormData();
         formData.append("profile_pic", file);
         formData.append("user_id", user_id);
 
-        const res = await fetch('http://localhost:3000/api/users/profile-pic', {
+        const res = await fetch(`${API_BASE}/api/users/profile-pic`, {
             method: 'PUT',
             body: formData
         });
-        
+
         const data = await res.json();
 
         if (!res.ok) throw new Error(data.error);
 
         alert(data.message);
 
-        // ✅ Update preview instantly
         document.querySelectorAll(".profile-img").forEach(img => {
             img.src = previewURL;
         });
@@ -45,17 +82,20 @@ document.querySelector('#editProfile button').addEventListener('click', async ()
 });
 
 
-// LOAD PROFILE DATA
+// ===============================
+// LOAD PROFILE
+// ===============================
 async function loadProfile() {
-    try {
-        const res = await fetch(`http://localhost:3000/api/users/${user_id}`);
-        const user = await res.json();
+    if (!user_id) return;
 
-        const imagePath = user.profile_pic
-            ? `http://localhost:3000/uploads/${user.profile_pic}?t=${Date.now()}`
+    try {
+        const res = await fetch(`${API_BASE}/api/users/${user_id}`);
+        const userData = await res.json();
+
+        const imagePath = userData.profile_pic
+            ? `${API_BASE}/uploads/${userData.profile_pic}?t=${Date.now()}`
             : "./images/profilepic.jpg";
 
-        // ✅ Update ALL profile images
         document.querySelectorAll(".profile-img").forEach(img => {
             img.src = imagePath;
         });
@@ -66,16 +106,17 @@ async function loadProfile() {
     }
 }
 
-// Run on page load
-loadProfile();
 
-
+// ===============================
 // USERNAME
-document.getElementById('usernameBtn').addEventListener('click', async () => {
-    const username = document.getElementById('usernameInput').value;
+// ===============================
+document.getElementById('usernameBtn')?.addEventListener('click', async () => {
+    const username = document.getElementById('usernameInput').value.trim();
+
+    if (!username) return alert("Enter username");
 
     try {
-        const res = await fetch('http://localhost:3000/api/users/username', {
+        const res = await fetch(`${API_BASE}/api/users/username`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id, username })
@@ -89,17 +130,21 @@ document.getElementById('usernameBtn').addEventListener('click', async () => {
 
     } catch (err) {
         console.error(err);
-        alert("Username update failed");
+        alert("Username update failed (backend missing?)");
     }
 });
 
 
+// ===============================
 // EMAIL
-document.getElementById('emailBtn').addEventListener('click', async () => {
-    const email = document.getElementById('emailInput').value;
+// ===============================
+document.getElementById('emailBtn')?.addEventListener('click', async () => {
+    const email = document.getElementById('emailInput').value.trim();
+
+    if (!email) return alert("Enter email");
 
     try {
-        const res = await fetch('http://localhost:3000/api/users/email', {
+        const res = await fetch(`${API_BASE}/api/users/email`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id, email })
@@ -113,13 +158,16 @@ document.getElementById('emailBtn').addEventListener('click', async () => {
 
     } catch (err) {
         console.error(err);
-        alert("Email update failed");
+        alert("Email update failed (backend missing?)");
     }
 });
 
 
+// ===============================
 // PASSWORD
-document.getElementById('passwordBtn').addEventListener('click', async () => {
+// ===============================
+document.getElementById('passwordBtn')?.addEventListener('click', async () => {
+
     const newPassword = document.getElementById('newPassword').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
 
@@ -129,7 +177,7 @@ document.getElementById('passwordBtn').addEventListener('click', async () => {
     }
 
     try {
-        const res = await fetch('http://localhost:3000/api/users/password', {
+        const res = await fetch(`${API_BASE}/api/users/password`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id, newPassword })
@@ -143,19 +191,30 @@ document.getElementById('passwordBtn').addEventListener('click', async () => {
 
     } catch (err) {
         console.error(err);
-        alert("Password update failed");
+        alert("Password update failed (backend missing?)");
     }
 });
 
 
-// DELETE ACCOUNT (MODAL BUTTON)
-document.querySelector('#confirm-delete').addEventListener('click', async () => {
-    const res = await fetch(`http://localhost:3000/api/users/${user_id}`, {
-        method: 'DELETE'
-    });
+// ===============================
+// DELETE ACCOUNT
+// ===============================
+document.querySelector('#confirm-delete')?.addEventListener('click', async () => {
 
-    const data = await res.json();
-    alert(data.message);
+    try {
+        const res = await fetch(`${API_BASE}/api/users/${user_id}`, {
+            method: 'DELETE'
+        });
 
-    window.location.href = "login.html";
+        const data = await res.json();
+
+        alert(data.message || "Account deleted");
+
+        localStorage.removeItem("user");
+        window.location.href = "login.html";
+
+    } catch (err) {
+        console.error(err);
+        alert("Delete failed (backend missing?)");
+    }
 });
