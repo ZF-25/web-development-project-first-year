@@ -73,7 +73,7 @@
 <div class="references" id="references-section">
     <h3>References</h3>
     <div id="sources-list" class="sources-list">
-        <!-- Ссылки будут автоматически подгружаться сюда из базы данных -->
+        <!-- link will be automatically loaded here -->
     </div>
 </div>
         </div>
@@ -163,7 +163,7 @@
                         post_id: parseInt(postId)
                     };
 
-                    // Если уже в избранном — удаляем
+                    // if it was already favourite then we remove it
                     if (isFavorited) {
                         url = 'http://localhost:3000/api/favorites/remove';
                     }

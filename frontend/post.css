@@ -41,7 +41,7 @@ body {
     align-items: center;
     gap: 12px;
 
-    font-size: 36px;   /* увеличили текст */
+    font-size: 36px;   
     font-weight: 750;
 }
 
@@ -51,8 +51,8 @@ body {
     width: auto;
     object-fit: contain;
      display: flex;
-    align-items: center;      /* центр по вертикали */
-    justify-content: center;  /* центр по горизонтали */
+    align-items: center;     
+    justify-content: center;  
 
 }
 
@@ -129,7 +129,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: relative; /* 💥 важно */
+  position: relative; 
 }
 
 
@@ -182,13 +182,12 @@ body {
   border-radius: 12px;
   padding: 20px;
 
-  height: 350px;        /* 💥 фиксированная высота */
-  overflow-y: auto;     /* 💥 включаем скролл */
+  height: 350px;       
+  overflow-y: auto;   
 
   background: white;
 }
 
-/* Красивый скролл (необязательно, но выглядит круто) */
 .content::-webkit-scrollbar {
   width: 8px;
 }
@@ -231,7 +230,6 @@ body {
     transform: scale(1.2);
 }
 
-/* Когда пост уже в избранном */
 .favorite-btn.active {
     background-color: #dc3545;
     color: white;
@@ -267,7 +265,7 @@ body {
     padding: 1px;
   }
 .post-meta {
-    flex-direction: row;           /* аватар + имя слева, дата справа */
+    flex-direction: row;         
     align-items: center;
     justify-content: space-between;
   }
@@ -356,10 +354,7 @@ body {
     font-size: 14px;
   }
 
-  /* RATING */
-  .rating {
-    font-size: 20px;
-  }
+
 @media (max-width: 576px) {
   .logo-img {
     height: 72px;
