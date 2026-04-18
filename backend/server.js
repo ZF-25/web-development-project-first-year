@@ -394,6 +394,86 @@ app.get('/topics/:id', async (req, res) => {
   res.json(data.rows);
 });
 
+// ======================================================
+// ================= POSTS ===============================
+// ======================================================
+
+// CREATE POST
+app.post('/api/posts', async (req, res) => {
+  try {
+    const { title, content, category, subcategory, topic, user_id } = req.body;
+
+    // Get category ID from name
+    const cat = await pool.query(
+      'SELECT id FROM categories WHERE LOWER(name)=LOWER($1)',
+      [category]
+    );
+
+    if (!cat.rows.length) return res.status(400).json({ error: 'Invalid category' });
+
+    // Get subcategory ID (must belong to category)
+    const sub = await pool.query(
+      'SELECT id FROM subcategories WHERE LOWER(name)=LOWER($1) AND category_id=$2',
+      [subcategory, cat.rows[0].id]
+    );
+
+    if (!sub.rows.length) return res.status(400).json({ error: 'Invalid subcategory' });
+
+    // Get topic ID (must belong to subcategory)
+    const top = await pool.query(
+      'SELECT id FROM topics WHERE LOWER(name)=LOWER($1) AND subcategory_id=$2',
+      [topic, sub.rows[0].id]
+    );
+
+    if (!top.rows.length) return res.status(400).json({ error: 'Invalid topic' });
+
+    // Insert post
+    const post = await pool.query(
+      `INSERT INTO posts (title,content,topic_id,user_id,subcategory_id)
+       VALUES ($1,$2,$3,$4,$5)
+       RETURNING id`,
+      [title, content, top.rows[0].id, user_id, sub.rows[0].id]
+    );
+
+    res.json({ post_id: post.rows[0].id });
+
+  } catch (err) {
+    console.error("POST CREATE ERROR:", err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+
+// ======================================================
+// NEW: GET SINGLE POST BY ID 
+// ======================================================
+
+// This route is REQUIRED for post.html
+// It fetches ONE post using its ID from URL (?id=3)
+app.get('/api/posts/:id', async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT posts.*, users.username, topics.name AS topic
+       FROM posts
+       JOIN users ON users.id = posts.user_id
+       LEFT JOIN topics ON topics.id = posts.topic_id
+       WHERE posts.id = $1`,
+      [req.params.id]
+    );
+
+    // If no post found → return 404 JSON (NOT HTML!)
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: "Post not found" });
+    }
+
+    // Send post data
+    res.json(result.rows[0]);
+
+  } catch (err) {
+    console.error("GET POST ERROR:", err);
+    res.status(500).json({ error: "Server error" });
+  }
+});
 
 // ======================================================
 // ================= START SERVER ========================
