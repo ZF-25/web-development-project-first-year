@@ -1,3 +1,27 @@
+// ===============================
+// IMPORT AUTH
+// ===============================
+import { requireAuth, getUser } from "./auth.js";
+
+requireAuth();
+
+
+// ===============================
+const API_BASE = "http://localhost:3000";
+
+
+// ===============================
+// ELEMENTS
+// ===============================
+const category = document.getElementById("category-select");
+const subcategory = document.getElementById("sub-category-select");
+const topic = document.getElementById("topic-select");
+const uploadBtn = document.querySelector("button");
+
+
+// ===============================
+// DATA (KEEP YOUR TEAMMATE LOGIC)
+// ===============================
 const subcategories = {
     natural: ["Physics", "Biology", "Chemistry", "Geology", "Astronomy"],
     formal: ["Mathematics", "Logic", "Statistics"],
@@ -34,32 +58,33 @@ const topics = {
     "Chinese": ["Characters", "Grammar", "Tones", "Vocabulary"],
     "Spanish": ["Basics", "Grammar", "Pronunciation", "Vocabulary"],
     "Russian": ["Basics", "Grammar", "Pronunciation", "Vocabulary"]
-    
 };
 
 
-const category = document.getElementById("category-select");
-const subcategory = document.getElementById("sub-category-select");
-const topic = document.getElementById("topic-select");
-const uploadBtn = document.querySelector("button");
-
-// Populate subcategories
+// ===============================
+// POPULATE SUBCATEGORIES
+// ===============================
 category.addEventListener("change", function() {
     const selected = this.value;
 
     subcategory.innerHTML = '<option value="">Sub-category</option>';
 
-    if(subcategories[selected]){
-        subcategories[selected].forEach(function(item){
+    if (subcategories[selected]) {
+        subcategories[selected].forEach(item => {
             const option = document.createElement("option");
             option.textContent = item;
             option.value = item;
             subcategory.appendChild(option);
         });
     }
+
+    topic.innerHTML = '<option value="">Topic</option>';
 });
 
-// Populate topics
+
+// ===============================
+// POPULATE TOPICS
+// ===============================
 subcategory.addEventListener("change", function () {
     const selected = this.options[this.selectedIndex].text;
 
@@ -75,22 +100,27 @@ subcategory.addEventListener("change", function () {
     }
 });
 
-// HANDLE UPLOAD
+
+// ===============================
+// UPLOAD POST (🔥 FIXED)
+// ===============================
 uploadBtn.addEventListener("click", async () => {
-    const title = document.getElementById("title").value;
-    const content = document.getElementById("posts").value;
-    const categoryValue = category.options[category.selectedIndex].text;
-    const subcategoryValue = subcategory.options[subcategory.selectedIndex].text;
 
+    const user = getUser();
+    const user_id = user?.id;
+
+    const title = document.getElementById("title").value.trim();
+    const content = document.getElementById("posts").value.trim();
+
+    const categoryValue = category.options[category.selectedIndex]?.text;
+    const subcategoryValue = subcategory.options[subcategory.selectedIndex]?.text;
     const topicValue = topic.options[topic.selectedIndex]?.text;
-    const references = document.getElementById("references").value;
 
-    const user = JSON.parse(localStorage.getItem("user"));
-    //const user_id = user?.id;
-    const user_id = 1;
+    const references = document.getElementById("references").value.trim();
 
-
-    // ✅ VALIDATION (IMPORTANT)
+    // ===============================
+    // VALIDATION
+    // ===============================
     if (!user_id) {
         alert("Please login first");
         window.location.href = "login.html";
@@ -98,19 +128,12 @@ uploadBtn.addEventListener("click", async () => {
     }
 
     if (!title || !content || !categoryValue || !subcategoryValue || !topicValue) {
-        alert("Please fill all fields including topic");
+        alert("Please fill all fields");
         return;
     }
 
-    console.log("Uploading post:", {
-        title,
-        categoryValue,
-        subcategoryValue,
-        topicValue
-    });
-
     try {
-        const response = await fetch("http://localhost:3000/api/posts", {
+        const response = await fetch(`${API_BASE}/api/posts`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -121,8 +144,7 @@ uploadBtn.addEventListener("click", async () => {
                 category: categoryValue,
                 subcategory: subcategoryValue,
                 topic: topicValue,
-                references,
-                user_id: parseInt(user_id)
+                user_id
             })
         });
 
@@ -130,7 +152,7 @@ uploadBtn.addEventListener("click", async () => {
 
         if (response.ok) {
             alert("Post uploaded successfully!");
-            window.location.reload();
+            window.location.href = "home.html";
         } else {
             alert(data.error || "Upload failed");
         }
@@ -142,23 +164,37 @@ uploadBtn.addEventListener("click", async () => {
 });
 
 
+// ===============================
+// LOGOUT FIX
+// ===============================
+const logoutLink = document.querySelector('.dropdown a[href="login.html"]');
 
-// SETTINGS PAGE - PROFILE IMAGE
+if (logoutLink) {
+    logoutLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        localStorage.removeItem("user");
+        window.location.replace("login.html");
+    });
+}
 
-const user = JSON.parse(localStorage.getItem("user"));
-const user_id = user?.id;
 
-
+// ===============================
+// LOAD PROFILE IMAGE
+// ===============================
 async function loadUserProfileImages() {
-    try {
-        const res = await fetch(`http://localhost:3000/api/users/${user_id}`);
-        const user = await res.json();
+    const user = getUser();
+    const user_id = user?.id;
 
-        const imagePath = user.profile_pic
-          ? `http://localhost:3000/uploads/${user.profile_pic}?t=${Date.now()}`
+    if (!user_id) return;
+
+    try {
+        const res = await fetch(`${API_BASE}/api/users/${user_id}`);
+        const userData = await res.json();
+
+        const imagePath = userData.profile_pic
+          ? `${API_BASE}/uploads/${userData.profile_pic}?t=${Date.now()}`
           : "./images/profilepic.jpg";
 
-        // Update ALL profile images on page
         document.querySelectorAll(".profile-img").forEach(img => {
             img.src = imagePath;
         });
