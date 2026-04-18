@@ -1,3 +1,16 @@
+// ===============================
+// IMPORT AUTH
+// ===============================
+import { requireAuth, getUser } from "./auth.js";
+
+requireAuth();
+
+const API_BASE = "http://localhost:3000";
+
+
+// ===============================
+// DATA (KEEP TEAMMATE STRUCTURE)
+// ===============================
 const subCategories = {
   "Natural Science": ["All","Physics", "Biology", "Chemistry", "Geology", "Astronomy"],
   "Formal Science": ["All","Mathematics","Logic", "Statistics"],
@@ -7,29 +20,24 @@ const subCategories = {
   "Languages": ["All","English","Finnish","Spanish", "Chinese"],
 };
 
-const articles = [
-  {title:"Advancements in Physics", sub:"Physics", category:"Natural Science"},
-  {title:"Python Beginner Guide", sub:"Engineering & IT", category:"Applied Science"},
-  {title:"Smartphone Innovations", sub:"Engineering & IT", category:"Applied Science"},
-  {title:"Cyber Safety Tips", sub:"Engineering & IT", category:"Applied Science"},
-  {title:"AI in Healthcare", sub:"Biology", category:"Natural Science"},
-  {title:"JavaScript Closures", sub:"Engineering & IT", category:"Applied Science"},
-  {title:"Wireless Earbuds Review", sub:"Engineering & IT", category:"Applied Science"},
-  {title:"Mars Rover Update", sub:"Chemistry", category:"Natural Science"},
-  {title:"Mars Exploration", sub:"Chemistry", category:"Natural Science"}
-];
-
 let selectedCategory = "Natural Science";
 let selectedSub = "All";
 
-/* INIT */
+
+// ===============================
+// INIT
+// ===============================
 window.onload = () => {
   renderCategories();
   renderSubCategories();
-  renderArticles();
+  loadArticles();
+  loadUserProfileImages();
 };
 
-/* CATEGORY BUTTONS */
+
+// ===============================
+// CATEGORY BUTTONS
+// ===============================
 function renderCategories(){
   const container = document.getElementById("categories");
   container.innerHTML = "";
@@ -45,18 +53,19 @@ function renderCategories(){
       selectedCategory = cat;
       selectedSub = "All";
 
-      document.querySelectorAll(".category-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
+      renderCategories();
       renderSubCategories();
-      renderArticles();
+      loadArticles();
     };
 
     container.appendChild(btn);
   });
 }
 
-/* SUB CATEGORY */
+
+// ===============================
+// SUBCATEGORY
+// ===============================
 function renderSubCategories(){
   const container = document.getElementById("subCategories");
   container.innerHTML = "";
@@ -70,60 +79,83 @@ function renderSubCategories(){
 
     btn.onclick = () => {
       selectedSub = sub;
-
-      document.querySelectorAll(".sub-btn").forEach(b => b.classList.remove("active"));
-      btn.classList.add("active");
-
-      renderArticles();
+      renderSubCategories();
+      loadArticles();
     };
 
     container.appendChild(btn);
   });
 }
 
-/* ARTICLES */
-function renderArticles(){
+
+// ===============================
+// LOAD ARTICLES (🔥 NOW REAL DATA)
+// ===============================
+async function loadArticles(){
   const container = document.getElementById("articles");
-  container.innerHTML = "";
+  container.innerHTML = `<p>Loading...</p>`;
 
-  const filtered = articles.filter(a => {
-    if(selectedSub === "All") return a.category === selectedCategory;
-    return a.category === selectedCategory && a.sub === selectedSub;
-  });
+  try {
+    let topicToFetch = selectedSub === "All" ? null : selectedSub;
 
-  filtered.forEach(a => {
-    const col = document.createElement("div");
-    col.className = "col-12 col-md-6 col-lg-4";
+    let posts = [];
 
-    col.innerHTML = `
-      <div class="card article-card p-3 shadow-sm">
-        <span class="badge bg-info mb-2">${a.sub}</span>
-        <h6>${a.title}</h6>
-        <p class="text-muted small">Short description about the article...</p>
-      </div>
-    `;
+    if (topicToFetch) {
+      const res = await fetch(`${API_BASE}/api/posts/topic/${topicToFetch}`);
+      posts = await res.json();
+    } else {
+      // fallback: just show nothing or could fetch multiple topics
+      container.innerHTML = `<p>Select a subcategory</p>`;
+      return;
+    }
 
-    container.appendChild(col);
-  });
+    if (!posts.length) {
+      container.innerHTML = `<p>No posts found</p>`;
+      return;
+    }
+
+    container.innerHTML = "";
+
+    posts.forEach(post => {
+      const col = document.createElement("div");
+      col.className = "col-12 col-md-6 col-lg-4";
+
+      col.innerHTML = `
+        <div class="card article-card p-3 shadow-sm">
+          <span class="badge bg-info mb-2">${selectedSub}</span>
+          <h6>${post.title}</h6>
+          <p class="text-muted small">${post.content.substring(0, 80)}...</p>
+          <a href="post.html?id=${post.id}">View</a>
+        </div>
+      `;
+
+      container.appendChild(col);
+    });
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = `<p>Error loading posts</p>`;
+  }
 }
 
 
-// SETTINGS PAGE - PROFILE IMAGE
-
-const user = JSON.parse(localStorage.getItem("user"));
-const user_id = user?.id;
-
-
+// ===============================
+// PROFILE IMAGE
+// ===============================
 async function loadUserProfileImages() {
-    try {
-        const res = await fetch(`http://localhost:3000/api/users/${user_id}`);
-        const user = await res.json();
+    const user = getUser();
+    const user_id = user?.id;
 
-        const imagePath = user.profile_pic
-          ? `http://localhost:3000/uploads/${user.profile_pic}?t=${Date.now()}`
+    if (!user_id) return;
+
+    try {
+        const res = await fetch(`${API_BASE}/api/users/${user_id}`);
+        const userData = await res.json();
+
+        const imagePath = userData.profile_pic
+          ? `${API_BASE}/uploads/${userData.profile_pic}?t=${Date.now()}`
           : "./images/profilepic.jpg";
 
-        // Update ALL profile images on page
         document.querySelectorAll(".profile-img").forEach(img => {
             img.src = imagePath;
         });
@@ -132,5 +164,3 @@ async function loadUserProfileImages() {
         console.error(err);
     }
 }
-
-loadUserProfileImages();
