@@ -33,13 +33,13 @@
 <div class="col-3 col-md-3 text-end">
   <div class="profile-menu">
     <div class="profile-avatar">
-      <img src="images/profilepic.jpeg" alt="Profile" class="profile-img">
+      <img src="images/profilepic.jpg" alt="Profile" class="profile-img">
     </div>
     <div id="dropdown" class="dropdown">
       <a href="library.html">Library</a>
       <a href="upload.html">Create Posts</a>
       <a href="settings.html">Settings</a>
-      <a href="login.html">Logout</a>
+      <a href="#" class="logout-btn">Logout</a>
     </div>
   </div>
 </div>
@@ -58,7 +58,7 @@
                 <!-- META: avatar + name + date -->
                 <div class="post-meta">
                     <div class="author">
-                        <img id="author-avatar" src="images/profilepic.jpeg" alt="author" width="48" height="48">
+                        <img id="author-avatar" src="images/profilepic.jpg" alt="author" width="48" height="48">
                         <span id="author-name" class="author-name">loading...</span>
                     </div>
                     
@@ -90,170 +90,222 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
- <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-        const params = new URLSearchParams(window.location.search);
-        const postId = params.get('id') || params.get('post_id');
+ <script type="module">
+// ===============================
+// IMPORT AUTH
+// ===============================
+import { requireAuth, getUser, setupLogout } from "./auth.js";
 
-        if (!postId) {
-            showError('Post not found. Missing ?id= parameter in URL');
-            return;
-        }
+requireAuth();
+setupLogout();
 
-        const favoriteBtn = document.getElementById('favorite-btn');
-        const favoriteIcon = document.getElementById('favorite-icon');
-        const favoriteText = document.getElementById('favorite-text');
+// ===============================
+// BASE URL
+// ===============================
+const BASE_URL =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : "https://your-backend-name.onrender.com";
 
-        let isFavorited = false;
+// ===============================
+// GLOBAL STATE
+// ===============================
+let isFavorited = false;
 
-        try {
-            // Fetch post data
-            const response = await fetch(`http://localhost:3000/api/posts/${postId}`);
-            
-            if (!response.ok) {
-                throw new Error('Post not found');
-            }
 
-            const post = await response.json();
+// ===============================
+// INIT
+// ===============================
+document.addEventListener("DOMContentLoaded", async () => {
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get("id"); //standardized
 
-            // Fill post data
-            document.getElementById('post-title').textContent = post.title || 'Untitled';
-            document.getElementById('author-name').textContent = post.username || 'Anonymous';
+  if (!postId) {
+    showError("Post ID missing");
+    return;
+  }
 
-            const avatar = document.getElementById('author-avatar');
-            avatar.src = post.profile_pic ? `/uploads/${post.profile_pic}` : 'images/profilepic.jpeg';
+  const user = getUser();
+  const user_id = user?.id;
 
-            const dateEl = document.getElementById('post-date');
-            if (post.created_at) {
-                const date = new Date(post.created_at);
-                dateEl.textContent = date.toLocaleDateString('ru-RU', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year: 'numeric'
-                });
-            }
+  if (!user_id) {
+    showError("User not logged in");
+    return;
+  }
 
-            const contentDiv = document.getElementById('post-content');
-            contentDiv.innerHTML = post.content 
-                ? post.content.replace(/\n/g, '<br><br>') 
-                : '<p class="text-muted">No content available</p>';
+  const favoriteBtn = document.getElementById("favorite-btn");
 
-            // Sources / References
-            const sourcesList = document.getElementById('sources-list');
-            const sources = post.sources || [];
-            if (sources.length > 0) {
-                sourcesList.innerHTML = sources.map(url => `
-                    <a href="${url}" target="_blank" rel="noopener noreferrer" class="d-block mb-2">
-                        ${url}
-                    </a>
-                `).join('');
-            } else {
-                sourcesList.innerHTML = '<p class="text-muted">No sources provided</p>';
-            }
- document.addEventListener('DOMContentLoaded', () => {
-  const profileMenu = document.querySelector('.profile-menu');
+  // ================= LOAD POST =================
+  try {
+    const res = await fetch(`${BASE_URL}/api/posts/${postId}`);
 
-  if (!profileMenu) return;
-
-  const avatar = profileMenu.querySelector('.profile-avatar');
-
-  // click avatar
-  avatar.addEventListener('click', function(e) {
-    e.stopPropagation();
-    profileMenu.classList.toggle('active');
-  });
-
-  //closing when click outise of the dropdown
-  document.addEventListener('click', function(e) {
-    if (!profileMenu.contains(e.target)) {
-      profileMenu.classList.remove('active');
+    if (!res.ok) {
+      const text = await res.text();
+      console.error("Server error:", text);
+      throw new Error("Post fetch failed");
     }
-  });
 
-  // Чтобы ссылки внутри дропдауна не закрывали меню сразу
-  const dropdown = profileMenu.querySelector('.dropdown');
-  if (dropdown) {
-    dropdown.addEventListener('click', function(e) {
-      e.stopPropagation();
+    const post = await res.json();
+
+    document.getElementById("post-title").textContent =
+      post.title || "Untitled";
+
+    document.getElementById("author-name").textContent =
+      post.username || "Anonymous";
+
+    // AUTHOR IMAGE
+    const avatar = document.getElementById("author-avatar");
+    avatar.src = post.profile_pic
+      ? `${BASE_URL}/uploads/${post.profile_pic}?t=${Date.now()}`
+      : "./images/profilepic.jpg";
+
+    avatar.onerror = () => {
+      avatar.src = "./images/profilepic.jpg";
+    };
+
+    // DATE
+    if (post.created_at) {
+      const date = new Date(post.created_at);
+      document.getElementById("post-date").textContent =
+        date.toLocaleDateString();
+    }
+
+    // CONTENT
+    document.getElementById("post-content").innerHTML = post.content
+      ? post.content.replace(/\n/g, "<br><br>")
+      : "<p>No content available</p>";
+
+  } catch (err) {
+    console.error(err);
+    showError("Failed to load post");
+    return;
+  }
+
+  // ================= LOAD HEADER PROFILE =================
+  loadUserProfileImages();
+
+  // ================= CHECK FAVORITE =================
+  try {
+    const res = await fetch(
+      `${BASE_URL}/api/favorites/check?user_id=${user_id}&post_id=${postId}`
+    );
+
+    if (res.ok) {
+      const data = await res.json();
+      isFavorited = data.isFavorited || false;
+      updateFavoriteUI();
+    }
+
+  } catch (err) {
+    console.error("Favorite check error:", err);
+  }
+
+  // ================= TOGGLE FAVORITE =================
+  if (favoriteBtn) {
+    favoriteBtn.addEventListener("click", async () => {
+      try {
+        const url = isFavorited
+          ? `${BASE_URL}/api/favorites/remove`
+          : `${BASE_URL}/api/favorites`;
+
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_id,
+            post_id: postId,
+          }),
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) throw new Error(data.error);
+
+        isFavorited = !isFavorited;
+        updateFavoriteUI();
+
+      } catch (err) {
+        console.error(err);
+        alert("Failed to update library");
+      }
     });
   }
 });
-            // ================== FAVORITES LOGIC ==================
-            const user = JSON.parse(localStorage.getItem('user')) || {};
-            const user_id = user.id || 1;   // Change to real user.id after login system is ready
 
-            // Check if post is already favorited
-            const checkRes = await fetch(`http://localhost:3000/api/favorites/check?user_id=${user_id}&post_id=${postId}`);
-            if (checkRes.ok) {
-                const checkData = await checkRes.json();
-                isFavorited = checkData.isFavorited || false;
-                updateFavoriteButton();
-            }
-            // Toggle favorite on button click
-            favoriteBtn.addEventListener('click', async () => {
-                try {
-                    let url = 'http://localhost:3000/api/favorites';
-                    let method = 'POST';
-                    let bodyData = {
-                        user_id: parseInt(user_id),
-                        post_id: parseInt(postId)
-                    };
 
-                    // if it was already favourite then we remove it
-                    if (isFavorited) {
-                        url = 'http://localhost:3000/api/favorites/remove';
-                    }
+// ===============================
+// FAVORITE UI
+// ===============================
+function updateFavoriteUI() {
+  const icon = document.getElementById("favorite-icon");
+  const text = document.getElementById("favorite-text");
+  const btn = document.getElementById("favorite-btn");
 
-                    const res = await fetch(url, {
-                        method: method,
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(bodyData)
-                    });
+  if (!icon || !text || !btn) return;
 
-                    const data = await res.json();
+  if (isFavorited) {
+    icon.textContent = "♥";
+    text.textContent = "In Library";
+    btn.classList.add("btn-danger", "text-white");
+    btn.classList.remove("btn-outline-danger");
+  } else {
+    icon.textContent = "♡";
+    text.textContent = "Add to Library";
+    btn.classList.remove("btn-danger", "text-white");
+    btn.classList.add("btn-outline-danger");
+  }
+}
 
-                    if (res.ok) {
-                        isFavorited = !isFavorited;
-                        updateFavoriteButton();
-                    } else {
-                        alert(data.message || 'Error updating favorites');
-                    }
-                } catch (err) {
-                    console.error(err);
-                    alert('Server is not responding. Make sure backend is running.');
-                }
-            });
 
-        } catch (error) {
-            console.error(error);
-            showError('Failed to load post. Please check if server is running.');
-        }
+// ===============================
+// PROFILE IMAGE (HEADER)
+// ===============================
+async function loadUserProfileImages() {
+  const user = getUser();
+  const user_id = user?.id;
 
-        function updateFavoriteButton() {
-            if (isFavorited) {
-                favoriteIcon.textContent = '♥';
-                favoriteText.textContent = 'In Library';
-                favoriteBtn.classList.add('btn-danger', 'text-white');
-                favoriteBtn.classList.remove('btn-outline-danger');
-            } else {
-                favoriteIcon.textContent = '♡';
-                favoriteText.textContent = 'Add to Library';
-                favoriteBtn.classList.remove('btn-danger', 'text-white');
-                favoriteBtn.classList.add('btn-outline-danger');
-            }
-        }
+  if (!user_id) return;
+
+  try {
+    const res = await fetch(`${BASE_URL}/api/users/${user_id}`);
+    const data = await res.json();
+
+    const imagePath = data.profile_pic
+      ? `${BASE_URL}/uploads/${data.profile_pic}?t=${Date.now()}`
+      : "./images/profilepic.jpg";
+
+    document.querySelectorAll(".profile-img").forEach(img => {
+      img.src = imagePath;
+      img.onerror = () => {
+        img.src = "./images/profilepic.jpg";
+      };
     });
 
-    function showError(message) {
-        const card = document.getElementById('post-card');
-        card.innerHTML = `
-            <div class="alert alert-danger m-4">
-                <h4>Error</h4>
-                <p>${message}</p>
-                <a href="page.html" class="btn btn-outline-dark">Back to Catalogue</a>
-            </div>
-        `;
-    }
+  } catch (err) {
+    console.error("Profile image error:", err);
+  }
+}
+
+
+// ===============================
+// ERROR UI
+// ===============================
+function showError(msg) {
+  const card = document.getElementById("post-card");
+
+  if (!card) return;
+
+  card.innerHTML = `
+    <div class="alert alert-danger m-4">
+      <h4>Error</h4>
+      <p>${msg}</p>
+      <a href="home.html" class="btn btn-outline-dark">Back</a>
+    </div>
+  `;
+}
 </script>
 </body>
 </html>

@@ -1,11 +1,19 @@
 // ===============================
 // IMPORT AUTH
 // ===============================
-import { requireAuth, getUser } from "./auth.js";
+import { requireAuth, setupLogout, getUser } from "./auth.js";
 
 requireAuth();
+setupLogout();
 
-const API_BASE = "http://localhost:3000";
+// ===============================
+// BASE URL (FIXED)
+// ===============================
+const BASE_URL =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : "https://your-backend-name.onrender.com";
 
 
 // ===============================
@@ -20,28 +28,51 @@ const user_id = user?.id;
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
     loadProfile();
-    setupLogout();
 });
 
 
 // ===============================
-// LOGOUT
+// PROFILE IMAGE LOAD (FIXED)
 // ===============================
-function setupLogout() {
-    const logoutLink = document.querySelector('.dropdown a[href="login.html"]');
+async function loadProfile() {
+    if (!user_id) return;
 
-    if (logoutLink) {
-        logoutLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            localStorage.removeItem("user");
-            window.location.replace("login.html");
+    try {
+        const res = await fetch(`${BASE_URL}/api/users/${user_id}`);
+
+        if (!res.ok) throw new Error("User not found");
+
+        const userData = await res.json();
+
+        let imagePath;
+
+        if (userData.profile_pic) {
+            imagePath = `${BASE_URL}/uploads/${userData.profile_pic}?t=${Date.now()}`;
+        } else {
+            imagePath = "./images/profilepic.jpg"; // ✅ fixed
+        }
+
+        document.querySelectorAll(".profile-img").forEach(img => {
+            img.src = imagePath;
+
+            // fallback if broken
+            img.onerror = () => {
+                img.src = "./images/profilepic.jpg";
+            };
+        });
+
+    } catch (err) {
+        console.error(err);
+
+        document.querySelectorAll(".profile-img").forEach(img => {
+            img.src = "./images/profilepic.jpg";
         });
     }
 }
 
 
 // ===============================
-// EDIT PROFILE PICTURE
+// UPLOAD PROFILE PIC (IMPROVED)
 // ===============================
 document.querySelector('#editProfile button')?.addEventListener('click', async () => {
 
@@ -60,7 +91,7 @@ document.querySelector('#editProfile button')?.addEventListener('click', async (
         formData.append("profile_pic", file);
         formData.append("user_id", user_id);
 
-        const res = await fetch(`${API_BASE}/api/users/profile-pic`, {
+        const res = await fetch(`${BASE_URL}/api/users/profile-pic`, {
             method: 'PUT',
             body: formData
         });
@@ -71,40 +102,20 @@ document.querySelector('#editProfile button')?.addEventListener('click', async (
 
         alert(data.message);
 
+        // update UI immediately
         document.querySelectorAll(".profile-img").forEach(img => {
             img.src = previewURL;
         });
+
+        // update stored user (important for other pages)
+        const updatedUser = { ...user, profile_pic: data.filename };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
 
     } catch (err) {
         console.error(err);
         alert("Failed to update profile picture");
     }
 });
-
-
-// ===============================
-// LOAD PROFILE
-// ===============================
-async function loadProfile() {
-    if (!user_id) return;
-
-    try {
-        const res = await fetch(`${API_BASE}/api/users/${user_id}`);
-        const userData = await res.json();
-
-        const imagePath = userData.profile_pic
-            ? `${API_BASE}/uploads/${userData.profile_pic}?t=${Date.now()}`
-            : "./images/profilepic.jpg";
-
-        document.querySelectorAll(".profile-img").forEach(img => {
-            img.src = imagePath;
-        });
-
-    } catch (err) {
-        console.error(err);
-        alert("Failed to load profile");
-    }
-}
 
 
 // ===============================
@@ -116,7 +127,7 @@ document.getElementById('usernameBtn')?.addEventListener('click', async () => {
     if (!username) return alert("Enter username");
 
     try {
-        const res = await fetch(`${API_BASE}/api/users/username`, {
+        const res = await fetch(`${BASE_URL}/api/users/username`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id, username })
@@ -130,7 +141,7 @@ document.getElementById('usernameBtn')?.addEventListener('click', async () => {
 
     } catch (err) {
         console.error(err);
-        alert("Username update failed (backend missing?)");
+        alert("Username update failed");
     }
 });
 
@@ -144,7 +155,7 @@ document.getElementById('emailBtn')?.addEventListener('click', async () => {
     if (!email) return alert("Enter email");
 
     try {
-        const res = await fetch(`${API_BASE}/api/users/email`, {
+        const res = await fetch(`${BASE_URL}/api/users/email`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id, email })
@@ -158,7 +169,7 @@ document.getElementById('emailBtn')?.addEventListener('click', async () => {
 
     } catch (err) {
         console.error(err);
-        alert("Email update failed (backend missing?)");
+        alert("Email update failed");
     }
 });
 
@@ -177,7 +188,7 @@ document.getElementById('passwordBtn')?.addEventListener('click', async () => {
     }
 
     try {
-        const res = await fetch(`${API_BASE}/api/users/password`, {
+        const res = await fetch(`${BASE_URL}/api/users/password`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id, newPassword })
@@ -191,7 +202,7 @@ document.getElementById('passwordBtn')?.addEventListener('click', async () => {
 
     } catch (err) {
         console.error(err);
-        alert("Password update failed (backend missing?)");
+        alert("Password update failed");
     }
 });
 
@@ -202,7 +213,7 @@ document.getElementById('passwordBtn')?.addEventListener('click', async () => {
 document.querySelector('#confirm-delete')?.addEventListener('click', async () => {
 
     try {
-        const res = await fetch(`${API_BASE}/api/users/${user_id}`, {
+        const res = await fetch(`${BASE_URL}/api/users/${user_id}`, {
             method: 'DELETE'
         });
 
@@ -211,10 +222,10 @@ document.querySelector('#confirm-delete')?.addEventListener('click', async () =>
         alert(data.message || "Account deleted");
 
         localStorage.removeItem("user");
-        window.location.href = "login.html";
+        window.location.replace("login.html");
 
     } catch (err) {
         console.error(err);
-        alert("Delete failed (backend missing?)");
+        alert("Delete failed");
     }
 });

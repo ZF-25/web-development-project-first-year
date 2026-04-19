@@ -1,142 +1,167 @@
-// ===============================
-// IMPORT AUTH FUNCTION
-// ===============================
-// Import helper that prevents logged-in users from accessing login page
-// (e.g., if already logged in → redirect to home)
 import { redirectIfLoggedIn } from "./auth.js";
 
-// Run immediately when script loads
+// Immediately check if the user is already logged in.
+// - If they are logged in, redirectIfLoggedIn() will send them to home.html.
+// - This prevents logged-in users from seeing the login page again.
 redirectIfLoggedIn();
 
+// ===============================
+// BASE URL FOR BACKEND
+// ===============================
+
+/**
+ * BASE_URL is the address of your backend server.
+ *
+ * What this does:
+ * - Checks where the site is running:
+ *   - If it's on localhost (your own computer), use "http://localhost:3000".
+ *   - Otherwise, use your deployed backend URL on Render (or another host).
+ *
+ * Why this is useful:
+ * - You can use the same frontend code in development and production
+ *   without changing the URL manually every time.
+ */
+const BASE_URL =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://localhost:3000"
+    : "https://your-backend-name.onrender.com";
+
 
 // ===============================
-// BASE URL
+// DOM ELEMENTS
 // ===============================
-// Backend server address (API)
-const BASE_URL = "http://localhost:3000";
 
-
-// ===============================
-// GET FORM ELEMENTS
-// ===============================
-// Get references to HTML elements we will use
-const form = document.getElementById("login-form");     // login form
-const errorMsg = document.getElementById("error-msg");  // error/success message container
-
+/**
+ * Get references to important elements in the HTML:
+ * - form: the login form element.
+ * - errorMsg: the element where we show error or success messages.
+ */
+const form = document.getElementById("login-form");
+const errorMsg = document.getElementById("error-msg");
 
 // ===============================
-// SHOW SUCCESS MESSAGE AFTER REGISTER
+// SHOW SUCCESS MESSAGE AFTER REGISTRATION
 // ===============================
-// If user just registered, show success message on login page
-// (we previously set this flag in localStorage after registration)
+
+/**
+ * After a user registers, you can set a flag in localStorage
+ * (for example, in your register.js file):
+ *   localStorage.setItem("justRegistered", "true");
+ *
+ * Here:
+ * - We check if "justRegistered" exists in localStorage.
+ * - If it does:
+ *   - Show a green success message: "Registration successful! Please login."
+ *   - Then remove "justRegistered" so the message only appears once.
+ */
 if (localStorage.getItem("justRegistered")) {
   errorMsg.style.color = "green";
   errorMsg.textContent = "Registration successful! Please login.";
-
-  // Remove flag so message doesn't show again on refresh
   localStorage.removeItem("justRegistered");
 }
 
+// ===============================
+// PASSWORD VISIBILITY TOGGLE
+// ===============================
 
-// ===============================
-// PASSWORD TOGGLE
-// ===============================
-// Allows user to show/hide password when clicking eye icon
+/**
+ * This code allows the user to show/hide the password.
+ *
+ * How it works:
+ * - It finds all elements with the class "toggle-password".
+ * - Each of these elements should have a data-target attribute
+ *   that matches the id of the input it controls.
+ *   Example in HTML:
+ *     <input id="password" type="password" />
+ *     <span class="toggle-password" data-target="password">👁</span>
+ *
+ * - When the icon is clicked:
+ *   - It finds the related input using icon.dataset.target.
+ *   - If the input type is "password", it changes it to "text" (show password).
+ *   - If the input type is "text", it changes it back to "password" (hide password).
+ */
 document.querySelectorAll(".toggle-password").forEach(icon => {
   icon.addEventListener("click", () => {
-
-    // Get the input field linked to this icon (via data-target)
     const input = document.getElementById(icon.dataset.target);
-
-    // Toggle between password and text
-    if (input.type === "password") {
-      input.type = "text";     // show password
-      icon.textContent = "🙈"; // change icon
-    } else {
-      input.type = "password"; // hide password
-      icon.textContent = "👁"; // change icon back
-    }
+    input.type = input.type === "password" ? "text" : "password";
   });
 });
 
+// ===============================
+// FORM SUBMIT HANDLER
+// ===============================
 
-// ===============================
-// FORM SUBMISSION
-// ===============================
-// Runs when user clicks "Login"
+/**
+ * This handles the login form submission.
+ *
+ * Steps:
+ * 1. Prevent the default form behavior (page reload).
+ * 2. Read the values from the login input and password input.
+ * 3. Validate that both fields are filled.
+ * 4. Send a POST request to the backend /api/auth/login endpoint.
+ * 5. Handle the response:
+ *    - If login fails, show an error message.
+ *    - If login succeeds, save the user in localStorage and go to home.html.
+ * 6. If something goes wrong with the request (server down, network error),
+ *    show a generic "Server error" message.
+ */
 form.addEventListener("submit", async (e) => {
-
-  // Prevent page reload (default form behavior)
+  // Stop the form from reloading the page
   e.preventDefault();
 
-  // Get user input values
-  const identifier = document.getElementById("login-input").value.trim(); // email OR username
+  // Get the values from the inputs and remove extra spaces
+  const identifier = document.getElementById("login-input").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  // Reset error message
+  // Clear any previous message
   errorMsg.textContent = "";
-  errorMsg.style.color = "red";
 
-
-  // ===============================
-  // VALIDATION
-  // ===============================
-  // Check if fields are empty
+  // Basic validation: make sure both fields are filled
   if (!identifier || !password) {
     errorMsg.textContent = "Please fill all fields";
-    return; // stop execution
+    return; // stop here, do not send request
   }
 
   try {
-    // ===============================
-    // SEND REQUEST TO BACKEND
-    // ===============================
-    // Send login data to server
-    const response = await fetch(`${BASE_URL}/api/auth/login`, {
+    // Send login request to the backend
+    const res = await fetch(`${BASE_URL}/api/auth/login`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json" // tell server we're sending JSON
       },
-      // Convert JS object → JSON string
-      body: JSON.stringify({ identifier, password })
+      body: JSON.stringify({ identifier, password }) // send data as JSON
     });
 
-    // Convert response → JSON
-    const data = await response.json();
+    // Convert the response body to a JavaScript object
+    const data = await res.json();
 
-
-    // ===============================
-    // HANDLE ERRORS FROM SERVER
-    // ===============================
-    if (!response.ok) {
-      // Show error message from backend (if exists)
+    // If the response status is not OK (e.g., 400, 401, 500...)
+    if (!res.ok) {
+      // Show the error message from the server if it exists,
+      // otherwise show a generic "Login failed" message.
       errorMsg.textContent = data.message || "Login failed";
       return;
     }
 
-
-    // ===============================
-    // SUCCESS (LOGIN WORKED)
-    // ===============================
-
-    // Save user data in localStorage
-    // This keeps user "logged in" across pages
+    /**
+     * If we reach here, login was successful.
+     *
+     * - data should contain user info and maybe a token (depending on your backend).
+     * - We save this user data in localStorage under the key "user".
+     * - Then we redirect the user to home.html.
+     */
     localStorage.setItem("user", JSON.stringify(data));
-
-    // Debug (optional)
-    console.log("Logged in user:", data);
-
-    // Redirect to home page
-    // replace() prevents going back to login page using back button
     window.location.replace("home.html");
 
-  } catch (error) {
-    // ===============================
-    // NETWORK / SERVER ERROR
-    // ===============================
-    console.error("Login error:", error);
-
-    // Show fallback error message
+  } catch (err) {
+    /**
+     * This catch block runs if:
+     * - The server is down.
+     * - There is a network error.
+     * - Something unexpected happens during fetch().
+     */
+    console.error(err);
     errorMsg.textContent = "Server error. Try again later.";
   }
 });

@@ -42,7 +42,7 @@
           <a href="library.html">Library</a>
           <a href="upload.html">Create Posts</a>
           <a href="settings.html">Settings</a>
-          <a href="login.html">Logout</a>
+          <a href="#" class="logout-btn">Logout</a>
         </div>
       </div>
 
@@ -70,108 +70,127 @@
     </div>
 </div>
 
-<script>
-    // === settings of API ===
-    const API_BASE = 'http://localhost:3000';
-    window.addEventListener('DOMContentLoaded', () => {
-        //reads parameters from the address bar
-    const urlParams = new URLSearchParams(window.location.search); 
-    let topicName = urlParams.get('topic'); 
+<script type="module">
+import { requireAuth, setupLogout, getUser } from "./auth.js";
 
-    if (!topicName && window.location.port == '5500') {
-        topicName = 'Topic';
-        window.location.search = `?topic=${encodeURIComponent(topicName)}`;
+// ================= AUTH =================
+requireAuth();
+setupLogout();
+
+// ================= BASE URL =================
+const API_BASE = "http://localhost:3000";
+
+// ================= USER =================
+const user = getUser();
+const user_id = user?.id;
+
+
+// ================= PROFILE IMAGE =================
+async function loadProfilePic() {
+    if (!user_id) return;
+
+    try {
+        const res = await fetch(`${API_BASE}/api/users/${user_id}`);
+        const data = await res.json();
+
+        const img = data.profile_pic
+            ? `${API_BASE}/uploads/${data.profile_pic}?t=${Date.now()}`
+            : "./images/profilepic.jpg";
+
+        document.querySelectorAll(".profile-img").forEach(el => {
+            el.src = img;
+        });
+
+    } catch (err) {
+        console.error("Profile pic error:", err);
     }
-});
+}
 
-    async function loadPostsByTopic() {
-        const urlParams = new URLSearchParams(window.location.search);
-        let topicName = urlParams.get('topic');
 
-        if (!topicName) {
-            document.getElementById('category-badge').textContent = 'topic is not found';
+// ================= LOAD POSTS =================
+async function loadPostsByTopic() {
+    const urlParams = new URLSearchParams(window.location.search);
+    let topicName = urlParams.get('topic');
+
+    if (!topicName) {
+        document.getElementById('category-badge').textContent = 'Topic not found';
+        return;
+    }
+
+    topicName = topicName.trim();
+
+    document.getElementById('category-badge').textContent = topicName.toUpperCase();
+    document.title = `Brain Worm — ${topicName}`;
+
+    const container = document.getElementById('posts-container');
+
+    container.innerHTML = `
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary"></div>
+            <p>Loading...</p>
+        </div>`;
+
+    try {
+        const res = await fetch(`${API_BASE}/api/posts/topic/${encodeURIComponent(topicName)}`);
+
+        if (!res.ok) throw new Error(res.status);
+
+        const posts = await res.json();
+
+        container.innerHTML = '';
+
+        if (posts.length === 0) {
+            container.innerHTML = `<h4 class="text-center">No posts found</h4>`;
             return;
         }
-        topicName = topicName.trim();
 
-        // uploading titles
-        document.getElementById('category-badge').textContent = topicName.toUpperCase();
-        document.title = `Brain Worm — ${topicName}`;
+        posts.forEach(post => {
+            const avatar = post.profile_pic
+                ? `${API_BASE}/uploads/${post.profile_pic}`
+                : "./images/profilepic.jpg";
 
-        const container = document.getElementById('posts-container');
-        container.innerHTML = `
-            <div class="text-center py-5">
-                <div class="spinner-border text-primary" role="status"></div>
-                <p class="mt-3">Loading...</p>
-            </div>`;
+            container.innerHTML += `
+                <div class="post-row">
+                    <div class="post-title">
+                        <a href="post.html?id=${post.id}">${post.title}</a>
+                    </div>
+                    <div class="post-desc">
+                        ${post.content?.substring(0,150) || ''}...
+                    </div>
+                    <div class="author">
+                        <span>${post.author || 'Anonymous'}</span>
+                        <img src="${avatar}" class="avatar">
+                    </div>
+                </div>
+            `;
+        });
 
-        try {
-            console.log("FETCH:", `${API_BASE}/api/posts/topic/${encodeURIComponent(topicName)}`);
-const res = await fetch(`${API_BASE}/api/posts/topic/${encodeURIComponent(topicName)}`);            
-            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-            
-            const posts = await res.json();
-            console.log(` Received  "${topicName}":`, posts.length);
+    } catch (err) {
+        console.error(err);
+        container.innerHTML = `<div class="text-danger text-center">Failed to load posts</div>`;
+    }
+}
 
-            container.innerHTML = '';
 
-            if (posts.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-5">
-                        <h4 class="text-muted">There are no posts regarding this topic</h4>
-                        <p class="text-secondary">Try to chose another topic</p>
-                    </div>`;
-                return;
-            }
-            posts.forEach(post => {
-                const postHTML = `
-                    <div class="post-row">
-                        <div class="post-title">
-                            <a href="post.html?post_id=${post.id}">${post.title}</a>
-                        </div>
-                        <div class="post-desc">${post.short_content || (post.content ? post.content.substring(0, 150) + '...' : '')}</div>
-                        <div class="author">
-                            <span class="author-name">${post.author || 'Anonymous'}</span>
-                            <img src="./images/profilepic.jpg" alt="" class="avatar">
-                        </div>
-                    </div>`;
-                container.innerHTML += postHTML;
-            });
+// ================= PROFILE DROPDOWN =================
+document.addEventListener('DOMContentLoaded', () => {
 
-        } catch (err) {
-            console.error(" Ошибка загрузки постов:", err);
-            container.innerHTML = `
-                <div class="text-center py-5 text-danger">
-                    failed to load posts.<br>
-                    male sure that server is connected to the port 3000.
-                </div>`;
-        }
+    const profileMenu = document.querySelector('.profile-menu');
+
+    if (profileMenu) {
+        profileMenu.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileMenu.classList.toggle('active');
+        });
+
+        document.addEventListener('click', () => {
+            profileMenu.classList.remove('active');
+        });
     }
 
-    // === Dropdown menu ===
-    document.addEventListener('DOMContentLoaded', () => {
-        const profileMenu = document.querySelector('.profile-menu');
-        const dropdown = document.querySelector('.dropdown');
-
-        if (document.querySelector('.profile-avatar')) {
-            document.querySelector('.profile-avatar').addEventListener('click', function(e) {
-                e.stopPropagation();
-                profileMenu.classList.toggle('active');
-            });
-        }
-
-        document.addEventListener('click', function(e) {
-            if (profileMenu && !profileMenu.contains(e.target)) {
-                profileMenu.classList.remove('active');
-            }
-        });
-        if (dropdown) {
-            dropdown.addEventListener('click', function(e) {
-                e.stopPropagation();
-            });
-        }
-        loadPostsByTopic();
-    });
+    loadPostsByTopic();
+    loadProfilePic();
+});
 </script>
 
 </body>
