@@ -7,15 +7,6 @@ requireAuth();
 setupLogout();
 
 // ===============================
-// BASE URL
-// ===============================
-const BASE_URL =
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-    ? "http://localhost:3000"
-    : "https://your-backend-name.onrender.com";
-
-// ===============================
 // CATEGORY DATA
 // ===============================
 const subCategories = {
@@ -118,22 +109,16 @@ async function loadArticles(){
   }
 
   try {
-    const res = await fetch(`${BASE_URL}/api/favorites/${user_id}`);
+    const res = await fetch(`/api/favorites/${user_id}`);
     if (!res.ok) throw new Error("Failed to fetch favorites");
 
     let posts = await res.json();
 
-    // DEBUG (optional)
-    console.log("Fetched posts:", posts);
-
     // ================= FILTER =================
-
-    // 1️⃣ Filter by CATEGORY (always)
     posts = posts.filter(p =>
       p.category?.toLowerCase() === selectedCategory.toLowerCase()
     );
 
-    // 2️⃣ Filter by SUBCATEGORY (if not "All")
     if (selectedSub !== "All") {
       posts = posts.filter(p =>
         p.topic?.toLowerCase() === selectedSub.toLowerCase() ||
@@ -141,7 +126,6 @@ async function loadArticles(){
       );
     }
 
-    // ================= EMPTY =================
     if (!posts.length) {
       container.innerHTML = `
         <div class="text-center py-4">
@@ -154,7 +138,6 @@ async function loadArticles(){
 
     container.innerHTML = "";
 
-    // ================= RENDER =================
     posts.forEach(post => {
       const col = document.createElement("div");
       col.className = "col-12 col-md-6 col-lg-4";
@@ -168,7 +151,7 @@ async function loadArticles(){
           <span class="badge bg-danger mb-2">Saved</span>
           <h6>${post.title}</h6>
           <p class="text-muted small">${safeContent}</p>
-          <a href="post.html?id=${post.id}" class="mt-auto">View</a>
+          <a href="/post.html?id=${post.id}" class="mt-auto">View</a>
         </div>
       `;
 
@@ -197,15 +180,19 @@ async function loadUserProfileImages() {
   if (!user_id) return;
 
   try {
-    const res = await fetch(`${BASE_URL}/api/users/${user_id}`);
+    const res = await fetch(`/api/users/${user_id}`);
     const userData = await res.json();
 
     const imagePath = userData.profile_pic
-      ? `${BASE_URL}/uploads/${userData.profile_pic}?t=${Date.now()}`
-      : "./images/profilepic.jpg";
+      ? `/uploads/${userData.profile_pic}?t=${Date.now()}`
+      : "/images/profilepic.jpg";
 
     document.querySelectorAll(".profile-img").forEach(img => {
       img.src = imagePath;
+
+      img.onerror = () => {
+        img.src = "/images/profilepic.jpg";
+      };
     });
 
   } catch (err) {

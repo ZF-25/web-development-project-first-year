@@ -235,25 +235,25 @@ body {
     color: white;
     border-color: #dc3545;
 }
-/* REFERENCES */
-.references {
+/* SOURCES */
+.sources {
   margin-top: 20px;
   padding-top: 15px;
   border-top: 2px solid #ddd;
 }
 
-.references h3 {
+.sources h3 {
   margin-bottom: 10px;
 }
 
-.references a {
+.sources a {
   display: block;
   color: var(--accent);
   text-decoration: none;
   margin-bottom: 5px;
 }
 
-.references a:hover {
+.sources a:hover {
   text-decoration: underline;
 }
 
@@ -345,12 +345,12 @@ body {
     margin: 20px auto;
   }
 
-  /* REFERENCES */
-  .references h3 {
+  /* SOURCES */
+  .sources h3 {
     font-size: 16px;
   }
 
-  .references a {
+  .sources a {
     font-size: 14px;
   }
    /* profile menu */

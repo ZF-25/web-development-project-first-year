@@ -8,15 +8,15 @@ preventBackAccess();
 setupLogout();
 
 // ===============================
-const API_BASE = "http://localhost:3000";
-
-// ===============================
 // ELEMENTS
 // ===============================
 const category = document.getElementById("category-select");
 const subcategory = document.getElementById("sub-category-select");
 const topic = document.getElementById("topic-select");
-const uploadBtn = document.querySelector(".btn-primary"); // safer
+const uploadBtn = document.querySelector(".btn-primary");
+
+//(sources input)
+const sourcesInput = document.getElementById("sources");
 
 // ===============================
 // DATA (UNCHANGED)
@@ -105,13 +105,16 @@ uploadBtn.addEventListener("click", async () => {
     const title = document.getElementById("title").value.trim();
     const content = document.getElementById("posts").value.trim();
 
+    // 🔥 GET SOURCES
+    let sources = sourcesInput?.value.trim();
+
     const categoryValue = category.options[category.selectedIndex]?.text;
     const subcategoryValue = subcategory.options[subcategory.selectedIndex]?.text;
     const topicValue = topic.options[topic.selectedIndex]?.text;
 
     if (!user_id) {
         alert("Please login first");
-        window.location.href = "login.html";
+        window.location.href = "/login.html";
         return;
     }
 
@@ -120,8 +123,17 @@ uploadBtn.addEventListener("click", async () => {
         return;
     }
 
+    //FORMAT SOURCES (optional cleanup)
+    if (sources) {
+        sources = sources
+            .split(',')
+            .map(s => s.trim())
+            .filter(Boolean)
+            .join(',');
+    }
+
     try {
-        const response = await fetch(`${API_BASE}/api/posts`, {
+        const response = await fetch(`/api/posts`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -132,7 +144,8 @@ uploadBtn.addEventListener("click", async () => {
                 category: categoryValue,
                 subcategory: subcategoryValue,
                 topic: topicValue,
-                user_id
+                user_id,
+                sources 
             })
         });
 
@@ -140,7 +153,7 @@ uploadBtn.addEventListener("click", async () => {
 
         if (response.ok) {
             alert("Post uploaded successfully!");
-            window.location.href = "home.html";
+            window.location.href = "/home.html";
         } else {
             alert(data.error || "Upload failed");
         }
@@ -161,14 +174,14 @@ async function loadUserProfileImages() {
     if (!user_id) return;
 
     try {
-        const res = await fetch(`${API_BASE}/api/users/${user_id}`);
+        const res = await fetch(`/api/users/${user_id}`);
         if (!res.ok) return;
 
         const userData = await res.json();
 
         const imagePath = userData.profile_pic
-            ? `${API_BASE}/uploads/${userData.profile_pic}?t=${Date.now()}`
-            : "./images/profilepic.jpg";
+            ? `/uploads/${userData.profile_pic}?t=${Date.now()}`
+            : "/images/profilepic.jpg";
 
         document.querySelectorAll(".profile-img").forEach(img => {
             img.src = imagePath;

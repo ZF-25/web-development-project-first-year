@@ -7,21 +7,10 @@ requireAuth();
 setupLogout();
 
 // ===============================
-// BASE URL (FIXED)
-// ===============================
-const BASE_URL =
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-    ? "http://localhost:3000"
-    : "https://your-backend-name.onrender.com";
-
-
-// ===============================
 // USER
 // ===============================
 const user = getUser();
 const user_id = user?.id;
-
 
 // ===============================
 // INIT
@@ -30,15 +19,14 @@ document.addEventListener("DOMContentLoaded", () => {
     loadProfile();
 });
 
-
 // ===============================
-// PROFILE IMAGE LOAD (FIXED)
+// PROFILE IMAGE LOAD
 // ===============================
 async function loadProfile() {
     if (!user_id) return;
 
     try {
-        const res = await fetch(`${BASE_URL}/api/users/${user_id}`);
+        const res = await fetch(`/api/users/${user_id}`);
 
         if (!res.ok) throw new Error("User not found");
 
@@ -47,17 +35,17 @@ async function loadProfile() {
         let imagePath;
 
         if (userData.profile_pic) {
-            imagePath = `${BASE_URL}/uploads/${userData.profile_pic}?t=${Date.now()}`;
+            // FIXED: no BASE_URL
+            imagePath = `/uploads/${userData.profile_pic}?t=${Date.now()}`;
         } else {
-            imagePath = "./images/profilepic.jpg"; // ✅ fixed
+            imagePath = "/images/profilepic.jpg";
         }
 
         document.querySelectorAll(".profile-img").forEach(img => {
             img.src = imagePath;
 
-            // fallback if broken
             img.onerror = () => {
-                img.src = "./images/profilepic.jpg";
+                img.src = "/images/profilepic.jpg";
             };
         });
 
@@ -65,14 +53,13 @@ async function loadProfile() {
         console.error(err);
 
         document.querySelectorAll(".profile-img").forEach(img => {
-            img.src = "./images/profilepic.jpg";
+            img.src = "/images/profilepic.jpg";
         });
     }
 }
 
-
 // ===============================
-// UPLOAD PROFILE PIC (IMPROVED)
+// UPLOAD PROFILE PIC
 // ===============================
 document.querySelector('#editProfile button')?.addEventListener('click', async () => {
 
@@ -91,7 +78,7 @@ document.querySelector('#editProfile button')?.addEventListener('click', async (
         formData.append("profile_pic", file);
         formData.append("user_id", user_id);
 
-        const res = await fetch(`${BASE_URL}/api/users/profile-pic`, {
+        const res = await fetch(`/api/users/profile-pic`, {
             method: 'PUT',
             body: formData
         });
@@ -102,12 +89,10 @@ document.querySelector('#editProfile button')?.addEventListener('click', async (
 
         alert(data.message);
 
-        // update UI immediately
         document.querySelectorAll(".profile-img").forEach(img => {
             img.src = previewURL;
         });
 
-        // update stored user (important for other pages)
         const updatedUser = { ...user, profile_pic: data.filename };
         localStorage.setItem("user", JSON.stringify(updatedUser));
 
@@ -116,7 +101,6 @@ document.querySelector('#editProfile button')?.addEventListener('click', async (
         alert("Failed to update profile picture");
     }
 });
-
 
 // ===============================
 // USERNAME
@@ -127,7 +111,7 @@ document.getElementById('usernameBtn')?.addEventListener('click', async () => {
     if (!username) return alert("Enter username");
 
     try {
-        const res = await fetch(`${BASE_URL}/api/users/username`, {
+        const res = await fetch(`/api/users/username`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id, username })
@@ -145,7 +129,6 @@ document.getElementById('usernameBtn')?.addEventListener('click', async () => {
     }
 });
 
-
 // ===============================
 // EMAIL
 // ===============================
@@ -155,7 +138,7 @@ document.getElementById('emailBtn')?.addEventListener('click', async () => {
     if (!email) return alert("Enter email");
 
     try {
-        const res = await fetch(`${BASE_URL}/api/users/email`, {
+        const res = await fetch(`/api/users/email`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id, email })
@@ -173,7 +156,6 @@ document.getElementById('emailBtn')?.addEventListener('click', async () => {
     }
 });
 
-
 // ===============================
 // PASSWORD
 // ===============================
@@ -188,7 +170,7 @@ document.getElementById('passwordBtn')?.addEventListener('click', async () => {
     }
 
     try {
-        const res = await fetch(`${BASE_URL}/api/users/password`, {
+        const res = await fetch(`/api/users/password`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user_id, newPassword })
@@ -206,14 +188,13 @@ document.getElementById('passwordBtn')?.addEventListener('click', async () => {
     }
 });
 
-
 // ===============================
 // DELETE ACCOUNT
 // ===============================
 document.querySelector('#confirm-delete')?.addEventListener('click', async () => {
 
     try {
-        const res = await fetch(`${BASE_URL}/api/users/${user_id}`, {
+        const res = await fetch(`/api/users/${user_id}`, {
             method: 'DELETE'
         });
 
@@ -222,7 +203,9 @@ document.querySelector('#confirm-delete')?.addEventListener('click', async () =>
         alert(data.message || "Account deleted");
 
         localStorage.removeItem("user");
-        window.location.replace("login.html");
+
+        //FIXED path
+        window.location.replace("/login.html");
 
     } catch (err) {
         console.error(err);

@@ -79,8 +79,8 @@
         <span id="favorite-text">Add to Library</span>
     </button>
 </div>
-<div class="references" id="references-section">
-    <h3>References</h3>
+<div class="sources" id="sources-section">
+    <h3>Sources</h3>
     <div id="sources-list" class="sources-list">
         <!-- link will be automatically loaded here -->
     </div>
@@ -90,36 +90,27 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     
- <script type="module">
-// ===============================
-// IMPORT AUTH
-// ===============================
+<script type="module">
 import { requireAuth, getUser, setupLogout } from "./auth.js";
 
+// ================= AUTH =================
 requireAuth();
 setupLogout();
 
-// ===============================
-// BASE URL
-// ===============================
+// ================= BASE URL =================
 const BASE_URL =
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
     ? "http://localhost:3000"
-    : "https://your-backend-name.onrender.com";
+    : window.location.origin;
 
-// ===============================
-// GLOBAL STATE
-// ===============================
+// ================= GLOBAL =================
 let isFavorited = false;
 
-
-// ===============================
-// INIT
-// ===============================
+// ================= INIT =================
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);
-  const postId = params.get("id"); //standardized
+  const postId = params.get("id");
 
   if (!postId) {
     showError("Post ID missing");
@@ -140,17 +131,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     const res = await fetch(`${BASE_URL}/api/posts/${postId}`);
 
-    if (!res.ok) {
-      const text = await res.text();
-      console.error("Server error:", text);
-      throw new Error("Post fetch failed");
-    }
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
     const post = await res.json();
 
+    // TITLE
     document.getElementById("post-title").textContent =
       post.title || "Untitled";
 
+    // AUTHOR
     document.getElementById("author-name").textContent =
       post.username || "Anonymous";
 
@@ -176,13 +165,35 @@ document.addEventListener("DOMContentLoaded", async () => {
       ? post.content.replace(/\n/g, "<br><br>")
       : "<p>No content available</p>";
 
+    // ================= SOURCES =================
+    const sourcesList = document.getElementById("sources-list");
+
+    if (post.sources && post.sources.length > 0) {
+      sourcesList.innerHTML = "";
+
+      post.sources.forEach(ref => {
+        sourcesList.innerHTML += `
+          <div class="mb-2">
+            <a href="${ref}" target="_blank" rel="noopener noreferrer">
+              ${ref}
+            </a>
+          </div>
+        `;
+      });
+
+    } else {
+      sourcesList.innerHTML = `
+        <p class="text-muted">No sources provided</p>
+      `;
+    }
+
   } catch (err) {
-    console.error(err);
+    console.error("POST LOAD ERROR:", err);
     showError("Failed to load post");
     return;
   }
 
-  // ================= LOAD HEADER PROFILE =================
+  // ================= PROFILE =================
   loadUserProfileImages();
 
   // ================= CHECK FAVORITE =================
@@ -235,10 +246,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-
-// ===============================
-// FAVORITE UI
-// ===============================
+// ================= FAVORITE UI =================
 function updateFavoriteUI() {
   const icon = document.getElementById("favorite-icon");
   const text = document.getElementById("favorite-text");
@@ -259,10 +267,7 @@ function updateFavoriteUI() {
   }
 }
 
-
-// ===============================
-// PROFILE IMAGE (HEADER)
-// ===============================
+// ================= PROFILE IMAGE =================
 async function loadUserProfileImages() {
   const user = getUser();
   const user_id = user?.id;
@@ -271,6 +276,9 @@ async function loadUserProfileImages() {
 
   try {
     const res = await fetch(`${BASE_URL}/api/users/${user_id}`);
+
+    if (!res.ok) throw new Error();
+
     const data = await res.json();
 
     const imagePath = data.profile_pic
@@ -279,6 +287,7 @@ async function loadUserProfileImages() {
 
     document.querySelectorAll(".profile-img").forEach(img => {
       img.src = imagePath;
+
       img.onerror = () => {
         img.src = "./images/profilepic.jpg";
       };
@@ -289,10 +298,7 @@ async function loadUserProfileImages() {
   }
 }
 
-
-// ===============================
-// ERROR UI
-// ===============================
+// ================= ERROR UI =================
 function showError(msg) {
   const card = document.getElementById("post-card");
 

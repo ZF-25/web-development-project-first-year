@@ -3,30 +3,35 @@
 // ===============================
 
 /**
- * Gets the saved user from localStorage.
+ * Get the currently logged-in user from localStorage.
  *
- * What this does:
- * - Looks for a value stored under the key "user".
- * - If nothing is saved, or the value is literally the text "undefined",
- *   then it returns null (meaning: no user is logged in).
- * - If something IS saved, it tries to turn the JSON string into a real object.
- * - If that fails (maybe the data is broken), it returns null.
+ * What it does:
+ * - Reads the value stored under the key "user".
+ * - If nothing is stored, or it's "undefined" or "null" as a string,
+ *   it returns null (meaning: no user is logged in).
+ * - If something is stored, it tries to convert the JSON string
+ *   back into a JavaScript object.
+ * - If that conversion fails (broken JSON), it returns null instead of crashing.
  *
- * Why this matters:
- * - This function is used everywhere to check if the user is logged in.
+ * Why this is important:
+ * - This function is the single source of truth for "who is logged in".
+ * - All other auth functions use this to check login status.
  */
 function getUser() {
-  // Get the raw string value stored under the "user" key
+  // Read the raw string from localStorage
   const data = localStorage.getItem("user");
 
-  // If no user data exists, or it's the string "undefined", treat as logged out
-  if (!data || data === "undefined") return null;
+  // Safer checks:
+  // - !data → nothing stored
+  // - data === "undefined" → someone stored the literal string "undefined"
+  // - data === "null" → someone stored the literal string "null"
+  if (!data || data === "undefined" || data === "null") return null;
 
   try {
-    // Convert the JSON string back into a JavaScript object
+    // Try to parse the JSON string into a JavaScript object
     return JSON.parse(data);
   } catch {
-   // If JSON is invalid or corrupted, return null instead of crashing 
+    // If parsing fails (invalid JSON), treat it as no user
     return null;
   }
 }
@@ -36,24 +41,23 @@ function getUser() {
 // ===============================
 
 /**
- * Makes sure the user is logged in before viewing a page.
+ * Protects pages that should only be visible to logged-in users.
  *
  * How it works:
- * - Calls getUser() to check if a user exists.
- * - If no user is found, the page immediately redirects to login.html.
+ * - Calls getUser() to see if a user is stored.
+ * - If no user is found, it redirects to /login.html.
  *
- * Why this is used:
- * - You put this at the top of pages that should only be seen by logged‑in users.
- * - Example: home.html, dashboard.html, profile.html, etc.
+ * Why the path starts with "/":
+ * - Using an absolute path ("/login.html") makes sure it works
+ *   no matter which folder the current page is in.
+ * - This is especially important when you deploy your site.
  */
 export function requireAuth() {
   const user = getUser();
 
-  // If there is no logged-in user, force navigation to the login page
+  // If there is no logged-in user, send them to the login page
   if (!user) {
-    // window.location.replace() changes the current page and
-    // removes it from the session history, so the user can't go "Back" to it.
-    window.location.replace("login.html");
+    window.location.replace("/login.html");
   }
 }
 
@@ -62,18 +66,22 @@ export function requireAuth() {
 // ===============================
 
 /**
- * Redirects the user away from pages like login/register if they are already logged in.
+ * Redirects logged-in users away from pages like login or register.
  *
  * How it works:
- * - Calls getUser() to check if a user exists in localStorage.
- * - If a user is found, it redirects to "home.html".
- * - Typically used on login or signup pages to avoid showing them to logged-in users.
+ * - Calls getUser() to check if a user exists.
+ * - If a user is found, it redirects to /home.html.
+ *
+ * Where to use this:
+ * - On login.html and register.html, so logged-in users
+ *   don’t see those pages again.
  */
 export function redirectIfLoggedIn() {
   const user = getUser();
 
+  // If a user is already logged in, send them to the home page
   if (user) {
-    window.location.replace("home.html");
+    window.location.replace("/home.html");
   }
 }
 
@@ -82,50 +90,55 @@ export function redirectIfLoggedIn() {
 // ===============================
 
 /**
- * Makes all elements with class "logout-btn" log the user out.
+ * Sets up logout behavior for all elements with the class "logout-btn".
  *
- * What happens when a logout button is clicked:
- * - Prevents the default link behavior (so the page doesn’t jump).
- * - Removes the "user" data from localStorage.
- * - Redirects the user back to login.html.
+ * What it does:
+ * - Finds all elements with class "logout-btn".
+ * - Adds a click event listener to each one.
+ * - When clicked:
+ *   - Prevents the default link behavior.
+ *   - Removes "user" from localStorage (logs the user out).
+ *   - Redirects to /login.html.
  *
- * Why this is needed:
- * - You may have multiple logout buttons on different pages.
- * - This function attaches the logout behavior to all of them.
+ * Why this is useful:
+ * - You can have multiple logout buttons on different pages.
+ * - Calling setupLogout() once will make all of them work.
  */
+
 export function setupLogout() {
-  // Select all elements that should trigger a logout when clicked
+  // Get all elements that should act as logout buttons
   const logoutBtns = document.querySelectorAll(".logout-btn");
 
-  // Attach a click handler to each logout button
+  // Add a click handler to each logout button
   logoutBtns.forEach(btn => {
     btn.addEventListener("click", (e) => {
-      // Prevent default link behavior (e.g., navigating to href)
-      e.preventDefault(); 
+      // Stop the default action (like following a link)
+      e.preventDefault();
 
-      // Remove the stored user data, effectively logging the user out
+      // Remove the stored user data → user is now logged out
       localStorage.removeItem("user");
 
-      // Redirect the user back to the login page
-      window.location.replace("login.html");
+      // Redirect to the login page using an absolute path
+      window.location.replace("/login.html");
     });
   });
 }
+
 // ===============================
 // PREVENT BACK BUTTON ACCESS
 // ===============================
 
 /**
- * Stops users from returning to protected pages using the Back button.
+ * Helps prevent users from accessing protected pages via the Back button
+ * after they have logged out or been redirected.
  *
- * Why this is needed:
- * - Browsers sometimes load pages from a special memory called "bfcache".
- * - This means the page might appear even if the user is logged out.
- *
- * How this fixes it:
- * - The "pageshow" event fires when a page is shown.
- * - If event.persisted === true, it means the page came from cache.
- * - So we reload the page, forcing all auth checks to run again.
+ * How it works:
+ * - Listens for the "pageshow" event, which fires when a page becomes visible.
+ * - event.persisted is true when the page is loaded from the browser's
+ *   back/forward cache (bfcache), not from the server.
+ * - If the page comes from cache, we force a reload.
+ * - Reloading makes your auth checks (like requireAuth) run again,
+ *   so logged-out users can’t see old protected pages.
  */
 export function preventBackAccess() {
   window.addEventListener("pageshow", (event) => {
@@ -140,6 +153,7 @@ export function preventBackAccess() {
 // ===============================
 
 /**
- * Export getUser so other files can import and use it.
+ * Export getUser so other modules (like login.js, register.js, home.js)
+ * can import it and check who is logged in.
  */
 export { getUser };

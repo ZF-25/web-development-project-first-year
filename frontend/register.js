@@ -5,41 +5,22 @@ import { redirectIfLoggedIn } from "./auth.js";
  *
  * Why:
  * - If a logged‑in user tries to open the register page,
- *   we don’t want them to register again.
- * - redirectIfLoggedIn() will send them to home.html automatically.
+ *   they should not be able to register again.
+ * - redirectIfLoggedIn() will automatically send them to home.html.
  */
 redirectIfLoggedIn();
 
-// ===============================
-// BASE URL FOR BACKEND
-// ===============================
-
-/**
- * BASE_URL decides which backend server to use.
- *
- * How it works:
- * - If the website is running on your computer (localhost),
- *   use the local backend at http://localhost:3000.
- * - If the website is running online (not localhost),
- *   use your deployed backend on Render.
- *
- * This allows the same code to work in both development and production.
- */
-const BASE_URL =
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-    ? "http://localhost:3000"
-    : "https://your-backend-name.onrender.com";
-
- 
 // ===============================
 // DOM ELEMENTS
 // ===============================
 
 /**
- * Get references to the form and the error message area.
- * These will be used to read input values and show messages.
- */   
+ * Get references to important elements in the HTML:
+ * - form: the registration form.
+ * - errorMsg: the area where we show error messages.
+ *
+ * These will be used throughout the script.
+ */
 const form = document.getElementById("register-form");
 const errorMsg = document.getElementById("error-msg");
 
@@ -48,7 +29,7 @@ const errorMsg = document.getElementById("error-msg");
 // ===============================
 
 /**
- * Allows the user to show/hide password fields.
+ * Allows users to show or hide their password fields.
  *
  * How it works:
  * - Finds all elements with class "toggle-password".
@@ -63,23 +44,24 @@ document.querySelectorAll(".toggle-password").forEach(icon => {
     input.type = input.type === "password" ? "text" : "password";
   });
 });
+
 // ===============================
 // FORM SUBMISSION HANDLER
 // ===============================
 
 /**
- * This runs when the user submits the registration form.
+ * This function runs when the registration form is submitted.
  *
  * Steps:
  * 1. Stop the form from refreshing the page.
- * 2. Read all input values.
+ * 2. Read all input values (username, email, dob, password, confirmPassword).
  * 3. Validate that all fields are filled.
  * 4. Check if passwords match.
- * 5. Send the data to the backend /api/auth/register endpoint.
- * 6. Handle the response:
+ * 5. Send a POST request to /api/auth/register.
+ * 6. Handle the backend response:
  *    - If registration fails → show error message.
  *    - If registration succeeds → save a flag and redirect to login page.
- * 7. If something goes wrong (server down, network error),
+ * 7. If something goes wrong (server offline, network error),
  *    show a generic error message.
  */
 form.addEventListener("submit", async (e) => {
@@ -110,12 +92,12 @@ form.addEventListener("submit", async (e) => {
   try {
     /**
      * Send registration data to the backend.
-     * The backend will:
-     * - Validate the data
-     * - Create a new user
-     * - Return a success or error message
+     *
+     * IMPORTANT:
+     * - We use a relative path `/api/auth/register`
+     *   so it works both locally and when deployed.
      */
-    const res = await fetch(`${BASE_URL}/api/auth/register`, {
+    const res = await fetch(`/api/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json" // tell server we're sending JSON
@@ -132,11 +114,11 @@ form.addEventListener("submit", async (e) => {
       return;
     }
 
-    /**
+     /**
      * Registration successful!
      *
-     * We set a flag in localStorage so the login page
-     * can show a "Registration successful" message.
+     * - We set a flag in localStorage so the login page
+     *   can show a "Registration successful" message.
      */
     localStorage.setItem("justRegistered", "true");
 
