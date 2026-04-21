@@ -5,12 +5,12 @@ console.log("SERVER FILE LOADED");
 // ===============================
 
 /**
- * Loads environment variables from a .env file into process.env.
+ * Loads environment variables from the .env file.
  *
  * Why this matters:
- * - You can store sensitive values (like database URLs, API keys, JWT secrets)
- *   in a .env file instead of hardcoding them.
- * - Keeps your code cleaner and more secure.
+ * - Keeps sensitive information (like DATABASE_URL, API keys, secrets)
+ *   OUT of your code.
+ * - Makes your project safer and easier to deploy.
  */
 require('dotenv').config();
 
@@ -21,7 +21,7 @@ require('dotenv').config();
 /**
  * express  → main web server framework
  * cors     → allows frontend + backend to communicate safely
- * path     → helps build file paths in a safe way
+ * path     → helps build file paths correctly on all systems
  */
 const express = require('express');
 const cors = require('cors');
@@ -33,7 +33,11 @@ const path = require('path');
 
 /**
  * Create the Express application.
- * This "app" object will handle routes, middleware, and server logic.
+ * This "app" object will handle:
+ * - routes
+ * - middleware
+ * - static files
+ * - server startup
  */
 const app = express();
 
@@ -62,26 +66,43 @@ app.use(cors({
 }));
 
 // ===============================
+// PATH SETUP (IMPORTANT FIX)
+// ===============================
+
+/**
+ * __dirnamePath:
+ * - Using a custom variable name avoids confusion with bundlers or tools.
+ *
+ * frontendPath:
+ * - Points to your frontend folder (HTML, CSS, JS).
+ *
+ * uploadPath:
+ * - Points to your uploads folder (profile pictures, images, etc.)
+ */
+const __dirnamePath = __dirname; // safer naming
+
+const frontendPath = path.join(__dirnamePath, '../frontend');
+const uploadPath = path.join(__dirnamePath, 'uploads');
+
+// ===============================
 // STATIC FILES
 // ===============================
 
 /**
- * Serve uploaded files (like profile pictures).
+ * Serve uploaded files.
  * Example:
- *   http://localhost:3000/uploads/myphoto.jpg
+ *   http://localhost:3000/uploads/photo.jpg
  */
-const uploadPath = path.join(__dirname, 'uploads');
 app.use('/uploads', express.static(uploadPath));
 
 /**
- * Serve your frontend files (HTML, CSS, JS).
+ * Serve your frontend files.
  * This makes your backend act like a full website host.
  *
  * Example:
  *   http://localhost:3000/login.html
  *   http://localhost:3000/home.html
  */
-const frontendPath = path.join(__dirname, '../frontend');
 app.use(express.static(frontendPath));
 
 // ===============================
@@ -104,11 +125,11 @@ app.use('/api/favorites', require('./routes/favorites'));
 app.use('/api', require('./routes/categories'));
 
 // ===============================
-// DEBUG ROUTE
+// TEST ROUTE
 // ===============================
 
 /**
- * Simple test route to confirm the server is running.
+ * Simple route to confirm the server is running.
  * Visit:
  *   http://localhost:3000/test
  */
@@ -131,17 +152,35 @@ app.use('/api', (req, res) => {
   res.status(404).json({ error: "API route not found" });
 });
 
-// ===============================
-// FRONTEND FALLBACK
-// ===============================
+// =================
+// ROOT ROUTE 
+// =================
 
 /**
- * If the user visits ANY route that is not an API route
- * and not a static file, send them the landing page.
+ * When the user visits the root URL ("/"),
+ * send them the landing page.
  *
- * This is useful for:
- * - Single Page Applications (SPA)
- * - Handling unknown frontend routes
+ * Example:
+ *   http://localhost:3000/
+ */
+app.get('/', (req, res) => {
+  res.sendFile(path.join(frontendPath, 'landingPage.html'));
+});
+
+// =====================
+// FRONTEND FALLBACK 
+// =====================
+
+/**
+ * This catches ANY route that is not:
+ * - an API route
+ * - a static file
+ *
+ * and sends the landing page instead.
+ *
+ * Why this is useful:
+ * - Prevents "Cannot GET /something" errors.
+ * - Supports frontend routing if you ever add it.
  */
 app.use((req, res) => {
   res.sendFile(path.join(frontendPath, 'landingPage.html'));
