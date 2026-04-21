@@ -12,18 +12,22 @@ https://web-development-project-first-year.onrender.com/
 * User registration and login
 * Secure authentication handling
 * Profile management
+
 **Notes System:**
 * Create and upload study notes
 * View notes by subject and topic
 * Detailed note pages
+
 **Filtering:**
 * Filter by:
 * Category (Natural, Social, etc.)
 * Subcategory (Physics, Biology, etc.)
 * Topic (Optics, Genetics, etc.)
+
 **Favorites(Library):**
 * Save notes to your personal library
 * Easily revisit saved content
+
 **Settings:**
 * User profile and settings
 
@@ -88,6 +92,7 @@ DATABASE_URL → PostgreSQL connection string
 
 **Subjects, Categories & Topics**
 <img width="613" height="769" alt="image" src="https://github.com/user-attachments/assets/7d187b4a-391c-4a60-8d8e-aca3ec9bb237" />
+
 <img width="1893" height="502" alt="image" src="https://github.com/user-attachments/assets/da2b93c0-1375-4da4-871f-00b6c3ac2732" />
 
 **Note View**
