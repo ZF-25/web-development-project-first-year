@@ -127,7 +127,9 @@ DATABASE_URL → PostgreSQL connection string
 ## Team
 This project was developed collaboratively as part of a web development course.
 **Zainab** — Project board management, Backend setup, database integration, User authentication, deployment
+
 **Marina** — Content structure (categories, subcategories, topics)
+
 **Ruvindra** — Posts system, favorites (Library), user settings
 
 ## Development Method
