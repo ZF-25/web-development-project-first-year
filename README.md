@@ -24,7 +24,7 @@ https://web-development-project-first-year.onrender.com/
 * Subcategory (Physics, Biology, etc.)
 * Topic (Optics, Genetics, etc.)
 
-**Favorites(Library):**
+**Favorites (Library):**
 * Save notes to your personal library
 * Easily revisit saved content
 
@@ -49,11 +49,14 @@ https://web-development-project-first-year.onrender.com/
 * HTML
 * CSS
 * JavaScript (Vanilla)
+
 **Backend**
 * Node.js
 * Express.js
+
 **Database**
 * PostgreSQL (hosted on Render)
+
 **Deployment**
 * Render (Web Service)
 
@@ -62,18 +65,21 @@ https://web-development-project-first-year.onrender.com/
 
 ## Environment Variables
 Create a .env file inside /backend:
-DATABASE_URL=your_postgresql_connection_string
-PORT=3000
-Do NOT commit .env to GitHub
+* DATABASE_URL=your_postgresql_connection_string
+* PORT=3000
+* Do NOT commit .env to GitHub
 
 ## Running Locally
 **1. Clone the repo**
 git clone https://github.com/ZF-25/web-development-project-first-year.git
 cd web-development-project-first-year/backend
+
 **2. Install dependencies**
 npm install
+
 **3. Start server**
 node server.js
+
 **4. Open in browser**
 http://localhost:3000
 
@@ -82,6 +88,7 @@ http://localhost:3000
 Root Directory: backend
 Build Command: npm install
 Start Command: node server.js
+
 **Environment Variables:**
 DATABASE_URL → PostgreSQL connection string
 
