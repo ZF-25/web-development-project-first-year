@@ -97,13 +97,16 @@ DATABASE_URL → PostgreSQL connection string
 <img width="1888" height="804" alt="image" src="https://github.com/user-attachments/assets/24b4f5fe-33f6-4baa-8f6c-8843487b5132" />
 <img width="1897" height="993" alt="image" src="https://github.com/user-attachments/assets/27c612b0-3c85-4230-9d9a-dcb2218e6ea1" />
 
+
 **Subjects, Categories & Topics**
 <img width="613" height="769" alt="image" src="https://github.com/user-attachments/assets/7d187b4a-391c-4a60-8d8e-aca3ec9bb237" />
 
 <img width="1893" height="502" alt="image" src="https://github.com/user-attachments/assets/da2b93c0-1375-4da4-871f-00b6c3ac2732" />
 
+
 **Note View**
 <img width="1470" height="991" alt="image" src="https://github.com/user-attachments/assets/91758bcb-cf8b-45ff-86b8-8aa8410916bd" />
+
 
 **Favorites**
 <img width="1704" height="976" alt="image" src="https://github.com/user-attachments/assets/3ba5cc9a-dadc-40b3-ae7b-63d23b62d531" />
