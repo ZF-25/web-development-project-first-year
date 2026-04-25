@@ -33,7 +33,7 @@
     }
 }
 
-/* 🔥 Small phones */
+/* Small phones */
 @media (max-width: 480px) {
     .title {
         font-size: 16px;
