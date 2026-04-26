@@ -47,15 +47,7 @@ CREATE TABLE files (
   file_url TEXT NOT NULL
 );
 
--- ================= RATINGS =================
-CREATE TABLE ratings (
-  id SERIAL PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  post_id INTEGER REFERENCES posts(id) ON DELETE CASCADE,
-  rating INTEGER CHECK (rating >= 1 AND rating <= 5)
-);
-
--- ================= FAVOURITES =================
+-- ================= LIBRARY =================
 CREATE TABLE favourites (
   id SERIAL PRIMARY KEY,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
