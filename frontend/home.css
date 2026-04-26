@@ -22,7 +22,6 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-
     background-color: #cfe3e6;
     background-image: url("./images/app-background-image.jpg");
     background-repeat: repeat;
@@ -44,24 +43,21 @@ body {
     padding: 30px 15px;
     position: relative;
     justify-content: space-between !important;
-    padding: 40px;
+    padding: 15px 20px;
 }
 .logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-
+    position: static;
+    transform: none;
     display: flex;
     align-items: center;
     gap: 12px;
-
     font-size: 36px;   
     font-weight: 750;
 }
 
 .logo-img {
-    height: 115px;
-    margin: -56px;
+    height: 80px;
+    margin: 0;
     width: auto;
     object-fit: contain;
      display: flex;
@@ -147,8 +143,8 @@ html, body {
 }
 
 .profile-img {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     border: 3px solid #3a5560;
     object-fit: cover;
@@ -196,7 +192,6 @@ html, body {
     display: block;
 }
 
-
 .dropdown a {
     display: block;
     padding: 12px 20px;
@@ -213,12 +208,12 @@ html, body {
     color: #2a8c9c;
     padding-left: 28px;
 }
+
 /* =====  sub DROPDOWN ===== */
 
 .subject {
     cursor: pointer;
 }
-
 
 .sub-dropdown {
     max-height: 0;
@@ -227,12 +222,10 @@ html, body {
     padding-left: 15px;
 }
 
-
 .subject.active .sub-dropdown {
     max-height: 200px;
     margin-top: 5px;
 }
-
 
 .sub-dropdown a {
     display: block;
@@ -240,12 +233,14 @@ html, body {
     font-size: 20px;
     font-weight: 500;
 }
+
 .dropdown-item-subject{
     text-align: start;
     padding-left:15px;
     padding-top:5px;
 
 }
+
 .subject {
     color: #3a5560;
     font-size: 22px;   
@@ -255,6 +250,7 @@ html, body {
 /* ====================== RESPONSIVE IMPROVEMENTS ====================== */
 
 @media (max-width: 576px) {
+
     .card {
         font-size: 22px;
         padding: 20px 12px;
@@ -263,16 +259,18 @@ html, body {
     .card-title {
         font-size: 24px;
     }
+
     .profile{
     width: 40px;
     height: 40px;
     margin-right: -30px;
     }
-        .logo {
-        position: static;
+        
+    .logo {
         transform: none;
         justify-content: flex-start;
     }
+
     .logo-img {
     height: 70px;
     padding-left: 30px;
@@ -286,11 +284,91 @@ html, body {
     .background {
         padding: 15px 8px;
     }
-    @media (max-width: 767px) {
+}
+
+    @media (max-width: 768px) {
+
+    .header .row {
+        align-items: center;
+    }
+
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
     .background {
         display: block;
         padding: 20px 10px;
     }
+
+    .logo-img {
+        height: 55px;
+    }
+
+    .profile-img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .header {
+        padding: 10px;
+    }
 }
+
+@media (min-width: 768px) {
+
+    /* FORCE HEADER INTO CLEAN FLEX LAYOUT */
+    .header .row {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    /* LEFT SIDE (LOGO BLOCK) */
+    .header .col-6:first-child,
+    .header .col-md-4 {
+        display: flex;
+        align-items: center;
+    }
+
+    /* CENTER LOGO (IMPORTANT PART) */
+    .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .logo-img {
+        height: 55px;
+    }
+
+    /* RIGHT SIDE (PROFILE BLOCK) */
+    .header .col-6:last-child,
+    .header .col-md-8 {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .profile-menu {
+        display: flex;
+        align-items: center;
+    }
+
+    .profile-img {
+        width: 45px;
+        height: 45px;
+    }
+
+    /* HEADER SPACING */
+    .header {
+        padding: 12px 20px;
+        position: relative;
+    }
 }
 
