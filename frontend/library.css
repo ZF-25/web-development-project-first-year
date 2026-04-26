@@ -1,24 +1,44 @@
 @media (max-width: 768px) {
 
+    .header {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px;
+        flex-wrap: nowrap;
+    }
+
+    .home {
+        margin-left: 10px;
+        width: 40px;
+        height: 40px;
+    }
+
     .logo {
-        width: 200px;
-        height: 110px;
+        width: 140px;
+        max-height: 60px;
+       /* height: auto;*/
     }
 
     .profile-img {
-        width: 60px;
-        height: 60px;
+        width: 40px;
+        height: 40px;
     }
 
     .settings-title {
-        font-size: smaller;
-        font-weight: normal;
+        flex: 1;
+        justify-content: center;
+        text-align: center;
         gap: 2px;
     }
 
-    .library-icon {
-        width: 20px;
-        height: 20px;
+    .settings-title img {
+        width: 30px !important;
+        height: 30px !important;
+    }
+
+    .title {
+        font-size: 18px;
     }
 
      .library-card {
@@ -31,6 +51,8 @@
 
 html,body{
     height: 100%;
+    overflow-x: hidden;
+    margin: 0;
 }
 
 /* Header */
@@ -40,11 +62,18 @@ html,body{
     justify-content:space-between;
     align-items:center;
     padding:12px 20px;
+    flex-wrap: nowrap; /* force single row */
+    gap: 10px;
+}
+
+.header-left,
+.settings-title,
+.dropdown {
+    display: flex;
+    align-items: center;
 }
 
 .header-left{
-    display:flex;
-    align-items:center;
     gap:12px;
 }
 
@@ -54,11 +83,12 @@ html,body{
 
 .home {
     cursor:pointer;
-    margin-left: 50px;
+    margin-left: 20px;
     background: #c9f1f4f2;
     border: 3px solid #0f5e78;
     border-radius: 12px;
     transition: 0.2s;
+    max-width: 50px;
 }
 
 .home:hover {
@@ -67,15 +97,20 @@ html,body{
     filter: brightness(0.8);
 }
 
+.logo {
+    height: clamp(60px, 10vw, 115px);
+    width: auto;
+}
+
 .settings-title {
-    display: flex;
+    flex: 1; 
     justify-content: center;
-    align-items: center;
-    gap: 5px;
+    min-width: 0;  
+    gap: 8px;
 }
 
 .title{
-    font-size:50px;
+    font-size: clamp(18px, 4vw, 50px);
     color:#0d2b3e;
     font-weight:bold;
 }
@@ -90,8 +125,9 @@ html,body{
 }
 
 .profile-img {
-    width: 60px;
-    height: 60px;
+    width: clamp(40px, 6vw, 60px);
+    height: clamp(40px, 6vw, 60px);
+    flex-shrink: 0;
     border-radius: 50%;
     border: 3px solid #3a5560;
     object-fit: cover;
@@ -140,9 +176,10 @@ html,body{
 .main {
     background-image:url("./images/app-background-image.jpg"); /* your pattern */
     background-repeat:repeat;
-    padding:30px;
+    padding:20px;
     background-size: 500px;
-    min-height: calc(100vh - 100px); /* adjust based on header height */
+    min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .library-card {
