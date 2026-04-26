@@ -44,6 +44,13 @@
      .library-card {
         padding: 20px;
     }
+
+    .category-btn,
+    .sub-btn,
+    .article-card {
+        font-size: 14px !important;
+        padding: 8px 12px;
+    }
 }
 
 
