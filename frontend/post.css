@@ -166,12 +166,13 @@ body {
 
 /* TITLE */
 .title {
-  position: absolute;
-  left: 50%;
-  padding-top:25px;
-  transform: translateX(-50%);
   text-align: center;
-  white-space: nowrap;
+  font-weight: bold;
+  font-size: clamp(20px, 4vw, 36px);
+  white-space: normal;
+  margin: 10px 0 0;
+  position: static;
+  transform: none;
 }
 
 
