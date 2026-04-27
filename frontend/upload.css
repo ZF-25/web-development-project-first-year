@@ -33,7 +33,7 @@
     }
 }
 
-/* Small phones */
+/*  Small phones */
 @media (max-width: 480px) {
     .title {
         font-size: 16px;
@@ -104,7 +104,8 @@ body{
 }
 
 .title{
-    font-size: clamp(18px, 4vw, 50px);
+    white-space: nowrap;
+    font-size: clamp(14px, 3vw, 40px);
     color:#0d2b3e;
     font-weight:bold;
 }
